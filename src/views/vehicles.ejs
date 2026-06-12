@@ -1,29 +1,63 @@
 <%- include('partials/header') %>
+
 <main>
-    <h1><%= title %></h1>
-    
+  <h1><%= title %></h1>
 
-<div class="vehicle-list">
+  <p>
+    Browse our available vehicles and click on any car to view detailed
+    specifications and pricing.
+  </p>
 
-    <div class="vehicle-card">
-      <img src="images/car1.jpg" alt="Car">
-      <div class="vehicle-info">
-        <h3>Toyota Corolla 2020</h3>
-        <p>Reliable compact car</p>
-        <p class="price">$12,000</p>
+  
+  <div class="category-filter">
+    <span>Browse by category: </span>
+
+    <a href="/vehicles"
+       class="<%= currentCategory === 'All' ? 'active' : '' %>">
+      All
+    </a>
+
+    <a href="/vehicles?category=Car"
+       class="<%= currentCategory === 'Car' ? 'active' : '' %>">
+      Cars
+    </a>
+
+    <a href="/vehicles?category=SUV"
+       class="<%= currentCategory === 'SUV' ? 'active' : '' %>">
+      SUVs
+    </a>
+
+    <a href="/vehicles?category=Truck"
+       class="<%= currentCategory === 'Truck' ? 'active' : '' %>">
+      Trucks
+    </a>
+  </div>
+
+  <!-- ✅ VEHICLE LIST -->
+  <div class="vehicle-list">
+
+    <% vehicles.forEach(vehicle => { %>
+      <div class="vehicle-card">
+
+        <h3>
+          <a href="/vehicles/<%= vehicle.id %>">
+            <%= vehicle.name %>
+          </a>
+        </h3>
+
+        <p class="vehicle-id">
+          $<%= vehicle.price %>
+        </p>
+
+        <p class="vehicle-description">
+          <%= vehicle.description %>
+        </p>
+
       </div>
-    </div>
-
-    <div class="vehicle-card">
-      <img src="images/suv1.jpg" alt="SUV">
-      <div class="vehicle-info">
-        <h3>Ford Explorer 2019</h3>
-        <p>Spacious family SUV</p>
-        <p class="price">$18,500</p>
-      </div>
-    </div>
+    <% }); %>
 
   </div>
 
 </main>
+
 <%- include('partials/footer') %>
