@@ -1,167 +1,100 @@
-// Enhanced vehicles data object 
-const vehicles = {
+import db from '../db.js';
 
-  'TC2020': {
-    id: 'TC2020',
-    name: 'Toyota Corolla 2020',
-    category: 'Car',
-    description: 'Reliable compact car with great fuel efficiency.',
-    price: 12000,
-    specs: [
-      { feature: 'Mileage', value: '35 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'Red' }
-    ]
-  },
+const getVehicles = async (category = null, sortBy = 'price') => {
+    const whereClause = category
+        ? 'WHERE LOWER(c.name) = LOWER($1)'
+        : '';
 
-  'FE2019': {
-    id: 'FE2019',
-    name: 'Ford Explorer 2019',
-    category: 'SUV',
-    description: 'Spacious SUV perfect for family trips.',
-    price: 18500,
-    specs: [
-      { feature: 'Mileage', value: '25 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'Black' }
-    ]
-  },
+    const orderByClause =
+        sortBy === 'name'
+            ? 'v.name'
+            : 'v.price';
 
-  'HC2021': {
-    id: 'HC2021',
-    name: 'Honda Civic 2021',
-    category: 'Car',
-    description: 'Modern sedan with advanced safety features.',
-    price: 14300,
-    specs: [
-      { feature: 'Mileage', value: '32 MPG' },
-      { feature: 'Transmission', value: 'Manual' },
-      { feature: 'Color', value: 'Blue' }
-    ]
-  },
+    const query = `
+        SELECT v.id, v.name, v.description, v.price, v.slug,
+               c.name AS category
+        FROM vehicles v
+        JOIN categories c ON v.category_id = c.id
+        ${whereClause}
+        ORDER BY ${orderByClause}
+    `;
 
-  'CS2018': {
-    id: 'CS2018',
-    name: 'Chevrolet Silverado 2018',
-    category: 'Truck',
-    description: 'Powerful pickup truck with great towing capacity.',
-    price: 22000,
-    specs: [
-      { feature: 'Mileage', value: '20 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'White' }
-    ]
-  },
+    const params = category ? [category] : [];
 
-  'NA2020': {
-    id: 'NA2020',
-    name: 'Nissan Altima 2020',
-    category: 'Car',
-    description: 'Comfortable sedan with smooth driving experience.',
-    price: 13000,
-    specs: [
-      { feature: 'Mileage', value: '34 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'Silver' }
-    ]
-  },
+    const result = await db.query(query, params);
 
-  'JW2017': {
-    id: 'JW2017',
-    name: 'Jeep Wrangler 2017',
-    category: 'SUV',
-    description: 'Rugged off-road vehicle built for adventure.',
-    price: 19500,
-    specs: [
-      { feature: 'Mileage', value: '18 MPG' },
-      { feature: 'Transmission', value: 'Manual' },
-      { feature: 'Color', value: 'Green' }
-    ]
-  },
-
-  'B3S2021': {
-    id: 'B3S2021',
-    name: 'BMW 3 Series 2021',
-    category: 'Car',
-    description: 'Luxury sedan with advanced technology and performance.',
-    price: 28000,
-    specs: [
-      { feature: 'Mileage', value: '30 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'Gray' }
-    ]
-  },
-
-  'HT2022': {
-    id: 'HT2022',
-    name: 'Hyundai Tucson 2022',
-    category: 'SUV',
-    description: 'Modern compact SUV with safety and comfort features.',
-    price: 21000,
-    specs: [
-      { feature: 'Mileage', value: '28 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'Blue' }
-    ]
-  },
-
- 
-  'CM2021': {
-    id: 'CM2021',
-    name: 'Chevrolet Malibu 2021',
-    category: 'Car',
-    description: 'Stylish midsize sedan with comfortable interior.',
-    price: 17500,
-    specs: [
-      { feature: 'Mileage', value: '29 MPG' },
-      { feature: 'Transmission', value: 'Automatic' },
-      { feature: 'Color', value: 'White' }
-    ]
-  }
-
-};
-// Model functions for vehicle data
-
-// Get all vehicles
-const getAllVehicles = () => {
-  return Object.values(vehicles);
+    return result.rows.map(vehicle => ({
+        id: vehicle.id,
+        name: vehicle.name,
+        description: vehicle.description,
+        price: vehicle.price,
+        category: vehicle.category,
+        slug: vehicle.slug
+    }));
 };
 
-// Get vehicle by ID
-const getVehicleById = (vehicleId) => {
-  return vehicles[vehicleId] || null;
+const getVehicleDetail = async (identifier, identifierType = 'id', sortBy = 'feature') => {
+
+    const whereClause =
+        identifierType === 'slug'
+            ? 'v.slug = $1'
+            : 'v.id = $1';
+
+    const orderByClause =
+        sortBy === 'value'
+            ? 'vs.value NULLS LAST'
+            : 'vs.feature NULLS LAST';
+
+    const query = `
+        SELECT v.id, v.name, v.description, v.price, v.slug,
+               c.name AS category,
+               d.name AS dealer_name,
+               d.location AS dealer_location,
+               vs.feature, vs.value
+        FROM vehicles v
+        JOIN categories c ON v.category_id = c.id
+        LEFT JOIN listings l ON v.id = l.vehicle_id
+        LEFT JOIN dealers d ON l.dealer_id = d.id
+        LEFT JOIN vehicle_specs vs ON v.id = vs.vehicle_id
+        WHERE ${whereClause}
+        ORDER BY ${orderByClause}
+    `;
+
+    const result = await db.query(query, [identifier]);
+
+    if (result.rows.length === 0) return {};
+
+    return {
+        id: result.rows[0].id,
+        name: result.rows[0].name,
+        description: result.rows[0].description,
+        price: result.rows[0].price,
+        category: result.rows[0].category,
+        slug: result.rows[0].slug,
+        dealer: result.rows[0].dealer_name,
+        location: result.rows[0].dealer_location,
+        specs: result.rows
+            .filter(row => row.feature !== null)   // Filter out rows without specs
+            .map(row => ({
+                feature: row.feature,
+                value: row.value
+            }))
+    };
 };
 
-// Sort vehicle specifications
-const getSortedSpecs = (specs, sortBy) => {
-  const sortedSpecs = [...specs];
+const getAllVehicles = () => getVehicles();
 
-  switch (sortBy) {
-    case 'feature':
-      return sortedSpecs.sort((a, b) =>
-        a.feature.localeCompare(b.feature)
-      );
+const getVehiclesByCategory = (category) => getVehicles(category);
 
-    case 'value':
-      return sortedSpecs.sort((a, b) =>
-        a.value.localeCompare(b.value)
-      );
+const getVehicleById = (id, sortBy) =>
+    getVehicleDetail(id, 'id', sortBy);
 
-    default:
-      return sortedSpecs; // keep original order
-  }
+const getVehicleBySlug = (slug, sortBy) =>
+    getVehicleDetail(slug, 'slug', sortBy);
+
+export {
+    getAllVehicles,
+    getVehiclesByCategory,
+    getVehicleById,
+    getVehicleBySlug
 };
-
-// Get vehicles by specific category
-const getVehiclesByCategory = (category) => {
-  if (!category) {
-    return Object.values(vehicles);
-  }
-
-  return Object.values(vehicles).filter(vehicle => {
-    return vehicle.category &&
-      vehicle.category.toLowerCase() === category.toLowerCase();
-  });
-};
-
-export { getAllVehicles, getVehicleById, getSortedSpecs, getVehiclesByCategory };

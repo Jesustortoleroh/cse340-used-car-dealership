@@ -1,42 +1,40 @@
 // Import model functions
-import { getAllVehicles, getVehicleById, getSortedSpecs, getVehiclesByCategory } from '../../models/vehicles/vehicles.js';
+import {
+  getAllVehicles,
+  getVehicleBySlug,
+  getVehiclesByCategory
+} from '../../models/vehicles/vehicles.js';
 
-//  Vehicles list page
-const vehiclesPage = (req, res) => {
+// Vehicles list page
+const vehiclesPage = async (req, res) => {
   const category = req.query.category;
 
-  
-  const vehicles = getVehiclesByCategory(category);
+  const vehicles = await getVehiclesByCategory(category);
 
-  res.render('vehicles', {
+  res.render('vehicles/vehicles', {
     title: 'Available Vehicles',
-    vehicles: vehicles,
-    currentCategory: category || 'All'  
+    vehicles,
+    currentCategory: category || 'All'
   });
 };
 
+// Vehicle detail page
+const vehicleDetailPage = async (req, res, next) => {
+  const vehicleSlug = req.params.slugId;
 
-//  Vehicle detail page
-const vehicleDetailPage = (req, res, next) => {
-  const vehicleId = req.params.vehicleId;
+  const sortBy = req.query.sort || 'feature';
 
-  const vehicle = getVehicleById(vehicleId);
+  const vehicle = await getVehicleBySlug(vehicleSlug, sortBy);
 
-  // If vehicle doesn't exist → 404
-  if (!vehicle) {
-    const err = new Error(`Vehicle ${vehicleId} not found`);
+  if (!vehicle || Object.keys(vehicle).length === 0) {
+    const err = new Error(`Vehicle ${vehicleSlug} not found`);
     err.status = 404;
     return next(err);
   }
 
-  // Sorting specs (query param)
-  const sortBy = req.query.sort || 'feature';
-
-  const sortedSpecs = getSortedSpecs(vehicle.specs, sortBy);
-
-  res.render('vehicle-detail', {
+  res.render('vehicles/vehicle-detail', {
     title: vehicle.name,
-    vehicle: { ...vehicle, specs: sortedSpecs },
+    vehicle,
     currentSort: sortBy
   });
 };

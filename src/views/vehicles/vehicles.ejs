@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+
+<main>
+  <h1><%= title %></h1>
+
+  <div class="vehicle-list">
+    <% vehicles.forEach(vehicle => { %>
+      <div class="vehicle-card">
+
+        <h3>
+          <a href="/vehicles/<%= vehicle.slug %>">
+            <%= vehicle.name %>
+          </a>
+        </h3>
+
+        <p>$<%= vehicle.price %></p>
+        <p>Category: <%= vehicle.category %></p>
+
+      </div>
+    <% }) %>
+  </div>
+
+</main>
+
+<%- include('../partials/footer') %>

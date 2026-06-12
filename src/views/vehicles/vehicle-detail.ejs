@@ -1,8 +1,7 @@
-<%- include('partials/header') %>
+<%- include('../partials/header') %>
 
 <main>
 
-  <!-- Vehicle Header -->
   <div class="vehicle-header">
     <h1><%= vehicle.name %></h1>
 
@@ -11,15 +10,20 @@
     </p>
 
     <p class="vehicle-meta">
-      ID: <%= vehicle.id %> • $<%= vehicle.price %>
+      $<%= vehicle.price %>
     </p>
 
     <p class="vehicle-description">
       <%= vehicle.description %>
     </p>
+
+    <% if (vehicle.dealer) { %>
+      <p class="vehicle-dealer">
+        Dealer: <%= vehicle.dealer %> • <%= vehicle.location %>
+      </p>
+    <% } %>
   </div>
 
-  <!-- Specifications -->
   <div class="specs">
     <div class="sections-header">
       <h2>Specifications</h2>
@@ -27,12 +31,12 @@
       <div class="sort-options">
         <span>Sort by: </span>
 
-        <a href="/vehicles/<%= vehicle.id %>?sort=feature"
+        <a href="/vehicles/<%= vehicle.slug %>?sort=feature"
            class="<%= currentSort === 'feature' ? 'active' : '' %>">
           Feature
         </a>
 
-        <a href="/vehicles/<%= vehicle.id %>?sort=value"
+        <a href="/vehicles/<%= vehicle.slug %>?sort=value"
            class="<%= currentSort === 'value' ? 'active' : '' %>">
           Value
         </a>
@@ -40,16 +44,19 @@
     </div>
 
     <div class="specs-list">
-      <% vehicle.specs.forEach(spec => { %>
-        <div class="spec-card">
-          <strong><%= spec.feature %>:</strong>
-          <span><%= spec.value %></span>
-        </div>
-      <% }); %>
+      <% if (vehicle.specs && vehicle.specs.length > 0) { %>
+        <% vehicle.specs.forEach(spec => { %>
+          <div class="spec-card">
+            <strong><%= spec.feature %>:</strong>
+            <span><%= spec.value %></span>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No specifications available.</p>
+      <% } %>
     </div>
   </div>
 
-  <!-- Navigation -->
   <div class="navigation">
     <a href="/vehicles<%= vehicle.category ? '?category=' + vehicle.category : '' %>">
       &larr; Back to Vehicles
@@ -58,4 +65,5 @@
 
 </main>
 
-<%- include('partials/footer') %>
+<%- include('../partials/footer') %>
+

@@ -128,7 +128,7 @@ body {
             font-weight: bold;
 
             &:hover {
-                background-color: #1d4ed8;
+                color: #60a5fa;
             }
         }
     }
