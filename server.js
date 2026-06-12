@@ -66,6 +66,50 @@ app.get('/contact', (req, res) => {
   res.render('contact', { title: 'Contact' });
 });
 
+
+app.get('/test-error', (req, res, next) => {
+  const err = new Error('Test server error');
+  err.status = 500;
+  next(err);
+});
+
+// 404 handler
+app.use((req, res, next) => {
+  const err = new Error('Page Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    // Prevent infinite loops, if a response has already been sent, do nothing
+    if (res.headersSent || res.finished) {
+        return next(err);
+    }
+
+    // Determine status and template
+    const status = err.status || 500;
+    const template = status === 404 ? '404' : '500';
+
+    // Prepare data for the template
+    const context = {
+        title: status === 404 ? 'Page Not Found' : 'Server Error',
+        error: NODE_ENV === 'production' ? 'An error occurred' : err.message,
+        stack: NODE_ENV === 'production' ? null : err.stack,
+        NODE_ENV // Our WebSocket check needs this and its convenient to pass along
+    };
+
+    // Render the appropriate error template with fallback
+    try {
+        res.status(status).render(`errors/${template}`, context);
+    } catch (renderErr) {
+        // If rendering fails, send a simple error page instead
+        if (!res.headersSent) {
+            res.status(status).send(`<h1>Error ${status}</h1><p>An error occurred.</p>`);
+        }
+    }
+});
+
 // When in development mode, start a WebSocket server for live reloading
 if (NODE_ENV.includes('dev')) {
     const ws = await import('ws');
