@@ -1,0 +1,116 @@
+<%- include('../../partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    <p>
+        Create your dealership account to leave vehicle reviews,
+        request maintenance services, and manage your interactions
+        with our dealership.
+    </p>
+
+    <form
+        method="POST"
+        action="/register"
+        class="registration-form">
+
+        <!-- Full Name -->
+
+        <div class="form-group">
+            <label for="name">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                minlength="2"
+                required>
+        </div>
+
+        <!-- Email Address -->
+
+        <div class="form-group">
+            <label for="email">
+                Email Address
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="your@email.com"
+                required>
+        </div>
+
+        <!-- Confirm Email -->
+
+        <div class="form-group">
+            <label for="emailConfirm">
+                Confirm Email Address
+            </label>
+
+            <input
+                type="email"
+                id="emailConfirm"
+                name="emailConfirm"
+                placeholder="Re-enter your email address"
+                required>
+        </div>
+
+        <!-- Password -->
+
+        <div class="form-group">
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                minlength="8"
+                pattern="(?=.*[0-9])(?=.*[!@#$%^&*]).*"
+                required>
+
+            <div class="help-text">
+                Must be at least 8 characters and include
+                at least one number and one special character.
+            </div>
+        </div>
+
+        <!-- Confirm Password -->
+
+        <div class="form-group">
+            <label for="passwordConfirm">
+                Confirm Password
+            </label>
+
+            <input
+                type="password"
+                id="passwordConfirm"
+                name="passwordConfirm"
+                minlength="8"
+                required>
+        </div>
+
+        <!-- Submit -->
+
+        <button type="submit">
+            Create Account
+        </button>
+
+    </form>
+
+    <p class="contact-link">
+        <a href="/register/list">
+            View Registered Customers
+        </a>
+    </p>
+
+</main>
+
+<%- include('../../partials/footer') %>

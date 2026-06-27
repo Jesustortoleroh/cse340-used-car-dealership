@@ -28,13 +28,27 @@
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/vehicles">Vehicles</a></li>
-                <li><a href="/dealers">Dealers</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/contact/responses">Inquiries</a></li>
-            </ul>
-        </nav>
+    <ul>
+        <!-- Always visible links -->
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/vehicles">Vehicles</a></li>
+        <li><a href="/dealers">Dealers</a></li>
+        <li><a href="/contact">Contact</a></li>
+
+        <!-- Only visible when logged in -->
+        <% if (isLoggedIn) { %>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/register/list">Customers</a></li>
+            <li><a href="/contact/responses">Inquiries</a></li>
+            <li><a href="/logout">Logout</a></li>
+        <% } %>
+
+        <!-- Only visible when NOT logged in -->
+        <% if (!isLoggedIn) { %>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Create Account</a></li>
+        <% } %>
+    </ul>
+</nav>
     </header>

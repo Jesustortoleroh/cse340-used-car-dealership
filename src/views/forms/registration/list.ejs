@@ -1,0 +1,98 @@
+<%- include('../../partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    <p>
+        Below is a list of registered customers who have created
+        accounts with our dealership.
+    </p>
+
+    <% if (users && users.length > 0) { %>
+
+        <div class="users-list">
+
+            <% users.forEach(user => { %>
+
+                <div class="user-card">
+
+                    <div class="user-header">
+
+                        <h3>
+                            <%= user.name %>
+                        </h3>
+
+                        <span class="user-id">
+                            ID: <%= user.id %>
+                        </span>
+
+                    </div>
+
+                    <div class="user-details">
+
+                        <div class="detail-item">
+
+                            <div class="label">
+                                Email
+                            </div>
+
+                            <div class="value">
+                                <%= user.email %>
+                            </div>
+
+                        </div>
+
+                        <% if (user.role) { %>
+
+                            <div class="detail-item">
+
+                                <div class="label">
+                                    Role
+                                </div>
+
+                                <div class="value">
+                                    <%= user.role %>
+                                </div>
+
+                            </div>
+
+                        <% } %>
+
+                        <div class="detail-item">
+
+                            <div class="label">
+                                Registered
+                            </div>
+
+                            <div class="value">
+                                <%= new Date(user.created_at).toLocaleDateString() %>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }); %>
+
+        </div>
+
+    <% } else { %>
+
+        <p class="no-users">
+            No customers have registered yet.
+        </p>
+
+    <% } %>
+
+    <p class="contact-link">
+        <a href="/register">
+            Create Another Account
+        </a>
+    </p>
+
+</main>
+
+<%- include('../../partials/footer') %>

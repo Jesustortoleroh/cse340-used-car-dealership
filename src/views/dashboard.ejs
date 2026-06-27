@@ -1,0 +1,91 @@
+<%- include('partials/header') %>
+
+<main>
+
+    <div class="dashboard">
+
+        <h1>Welcome to Your Dealership Dashboard</h1>
+
+        <p>
+            You are successfully logged in to your dealership account.
+            From here you will be able to manage your profile, track
+            service requests, leave vehicle reviews, and access future
+            customer features.
+        </p>
+
+        <div class="user-info">
+
+            <h2>Account Information</h2>
+
+            <div class="user-detail">
+                <span class="label">Name:</span>
+                <span class="value">
+                    <%= user.name %>
+                </span>
+            </div>
+
+            <div class="user-detail">
+                <span class="label">Email:</span>
+                <span class="value">
+                    <%= user.email %>
+                </span>
+            </div>
+
+            <% if (user.role) { %>
+                <div class="user-detail">
+                    <span class="label">Role:</span>
+                    <span class="value">
+                        <%= user.role %>
+                    </span>
+                </div>
+            <% } %>
+
+            <div class="user-detail">
+                <span class="label">Member Since:</span>
+                <span class="value">
+                    <%= new Date(user.created_at).toLocaleDateString() %>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="session-debug">
+
+            <h3>Session Information (Development Only)</h3>
+
+            <p>
+                <em>
+                    This section displays the current session data so
+                    you can verify that authentication is working correctly.
+                </em>
+            </p>
+
+            <pre><%= JSON.stringify(sessionData, null, 2) %></pre>
+
+            <p>
+                <strong>
+                    If a password property appears anywhere above,
+                    your authentication system has a security issue and
+                    should be fixed immediately.
+                </strong>
+            </p>
+
+        </div>
+
+        <div class="dashboard-actions">
+
+            <a href="/vehicles" class="logout-button">
+                Browse Vehicles
+            </a>
+
+            <a href="/logout" class="logout-button">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<%- include('partials/footer') %>

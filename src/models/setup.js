@@ -27,21 +27,29 @@ const setupDatabase = async () => {
     hasData = false;
   }
 
-  //  If already seeded → skip
+  // If already seeded → skip
   if (hasData) {
     console.log('Vehicles database already seeded ✅');
-    return true;
+  } else {
+
+    // Run seed.sql
+    console.log('Seeding vehicles database...');
+
+    const seedPath = join(__dirname, 'sql', 'seed.sql');
+    const seedSQL = fs.readFileSync(seedPath, 'utf8');
+
+    await db.query(seedSQL);
+
+    console.log('Vehicles database seeded successfully ✅');
   }
 
-  // Run seed.sql
-  console.log('Seeding vehicles database...');
+  // Run practice.sql
+  const practicePath = join(__dirname, 'sql', 'practice.sql');
+  const practiceSQL = fs.readFileSync(practicePath, 'utf8');
 
-  const seedPath = join(__dirname, 'sql', 'seed.sql');
-  const seedSQL = fs.readFileSync(seedPath, 'utf8');
+  await db.query(practiceSQL);
 
-  await db.query(seedSQL);
-
-  console.log('Vehicles database seeded successfully ✅');
+  console.log('Practice tables verified ✅');
 
   return true;
 };
