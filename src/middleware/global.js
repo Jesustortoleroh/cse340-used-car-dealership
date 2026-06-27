@@ -16,10 +16,44 @@ const getCurrentGreeting = () => {
 };
 
 /**
+ * Express middleware that adds head asset management functionality.
+ */
+const setHeadAssetsFunctionality = (res) => {
+    res.locals.styles = [];
+    res.locals.scripts = [];
+
+    res.addStyle = (css, priority = 0) => {
+        res.locals.styles.push({ content: css, priority });
+    };
+
+    res.addScript = (js, priority = 0) => {
+        res.locals.scripts.push({ content: js, priority });
+    };
+
+    res.locals.renderStyles = () => {
+        return res.locals.styles
+            .sort((a, b) => b.priority - a.priority)
+            .map(item => item.content)
+            .join('\n');
+    };
+
+    res.locals.renderScripts = () => {
+        return res.locals.scripts
+            .sort((a, b) => b.priority - a.priority)
+            .map(item => item.content)
+            .join('\n');
+    };
+};
+
+/**
  * Middleware to add local variables to res.locals for use in all templates.
  * Templates can access these values but are not required to use them.
  */
 const addLocalVariables = (req, res, next) => {
+
+    // Agrega el sistema dinámico de assets
+    setHeadAssetsFunctionality(res);
+
     // Set current year for use in templates
     res.locals.currentYear = new Date().getFullYear();
 

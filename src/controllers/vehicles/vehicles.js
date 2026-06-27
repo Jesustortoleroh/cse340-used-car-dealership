@@ -11,7 +11,7 @@ const vehiclesPage = async (req, res) => {
 
   const vehicles = await getVehiclesByCategory(category);
 
-  res.render('vehicles/vehicles', {
+  res.render('vehicles/list', {
     title: 'Available Vehicles',
     vehicles,
     currentCategory: category || 'All'
@@ -32,7 +32,7 @@ const vehicleDetailPage = async (req, res, next) => {
     return next(err);
   }
 
-  res.render('vehicles/vehicle-detail', {
+  res.render('vehicles/detail', {
     title: vehicle.name,
     vehicle,
     currentSort: sortBy
