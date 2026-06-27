@@ -1,11 +1,48 @@
 <%- include('../partials/header') %>
 
-<h1><%= dealer.name %></h1>
+<main>
 
-<p>Location: <%= dealer.location %></p>
-<p>Phone: <%= dealer.phone %></p>
-<p>Email: <%= dealer.email %></p>
+    <section class="dealer-profile">
 
-<a href="/dealers">Back to Dealers</a>
+        <div class="dealer-card-detail">
+
+            <h1><%= dealer.name %></h1>
+
+            <div class="dealer-info">
+
+                <p>
+                    <strong>Location:</strong>
+                    <%= dealer.location %>
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    <%= dealer.phone %>
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    <%= dealer.email %>
+                </p>
+
+            </div>
+
+            <div class="dealer-actions">
+
+                <a href="/dealers" class="back-button">
+                    ← Back to Dealers
+                </a>
+
+                <a href="/vehicles" class="inventory-button">
+                    View Inventory
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
 
 <%- include('../partials/footer') %>

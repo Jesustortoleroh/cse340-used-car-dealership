@@ -1,0 +1,59 @@
+.dealer-profile {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dealer-card-detail {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.dealer-card-detail h1 {
+    text-align: center;
+    color: #2563eb;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.dealer-info p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.dealer-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.back-button,
+.inventory-button {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-button {
+    background-color: #6b7280;
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #4b5563;
+}
+
+.inventory-button {
+    background-color: #2563eb;
+    color: white;
+}
+
+.inventory-button:hover {
+    background-color: #1d4ed8;
+}
