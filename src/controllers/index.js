@@ -2,25 +2,27 @@
 
 // Home page
 const homePage = (req, res) => {
-  res.render('home', { title: 'Used Car Dealership' });
+    res.render('home', {
+        title: 'Used Car Dealership'
+    });
 };
 
 // About page
 const aboutPage = (req, res) => {
-  res.render('about', { title: 'About Us' });
+    res.render('about', {
+        title: 'About Us'
+    });
 };
 
-// Contact page (agregado para tu proyecto)
-const contactPage = (req, res) => {
-  res.render('contact', { title: 'Contact Us' });
-};
-
-// Test error (para probar errores 500)
+// Test error (for testing 500 errors)
 const testErrorPage = (req, res, next) => {
-  const err = new Error('Test server error for Used Car Dealersh');
-  err.status = 500;
-  next(err);
+    const err = new Error('Test server error for Used Car Dealership');
+    err.status = 500;
+    next(err);
 };
 
-
-export { homePage, aboutPage, contactPage, testErrorPage };
+export {
+    homePage,
+    aboutPage,
+    testErrorPage
+};

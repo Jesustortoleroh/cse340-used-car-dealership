@@ -1,0 +1,69 @@
+<%- include('../../partials/header') %>
+
+<main>
+    <h1>Customer Inquiries</h1>
+
+    <p>
+        Below are the inquiries submitted by potential customers interested in
+        our vehicles and services.
+    </p>
+
+    <% if (contactForms && contactForms.length > 0) { %>
+
+        <div class="contact-responses">
+
+            <% contactForms.forEach(form => { %>
+
+                <div class="response-item">
+
+                    <h3 class="response-subject">
+                        <%= form.subject %>
+                    </h3>
+
+                    <p>
+                        <strong>Customer:</strong>
+                        <%= form.customer_name %>
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        <%= form.email %>
+                    </p>
+
+                    <p>
+                        <strong>Phone:</strong>
+                        <%= form.phone || 'Not Provided' %>
+                    </p>
+
+                    <p class="response-message">
+                        <%= form.message %>
+                    </p>
+
+                    <p class="response-date">
+                        Submitted:
+                        <%= new Date(form.submitted).toLocaleDateString() %>
+                    </p>
+
+                </div>
+
+            <% }); %>
+
+        </div>
+
+    <% } else { %>
+
+        <p class="no-responses">
+            No customer inquiries have been submitted yet.
+        </p>
+
+    <% } %>
+
+    <p class="contact-link">
+        <a href="/contact">
+            Submit a New Inquiry
+        </a>
+    </p>
+
+</main>
+
+<%- include('../../partials/footer') %>
