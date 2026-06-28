@@ -146,24 +146,26 @@ const showDashboard = (req, res) => {
 
     // Security: Ensure password is never exposed
     if (user && user.password) {
-        console.error('Security error: password found in user object');
+        console.error(
+            'Security error: password found in user object'
+        );
         delete user.password;
     }
 
     // Only expose safe user data to template
+    // Using roleName (consistent with login) and created_at (consistent with database)
     const safeUser = user ? {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role || 'customer',
-        createdAt: user.createdAt
+        roleName: user.roleName,  // ← Corregido: roleName en lugar de role
+        created_at: user.created_at  // ← Corregido: created_at en lugar de createdAt
     } : null;
 
     res.render('dashboard', {
         title: 'Customer Dashboard',
         user: safeUser,
-        // Only include minimal session data for debugging
-        sessionId: req.session.id || null
+        sessionData: req.session  // ← Agregado: sessionData para la vista
     });
 };
 

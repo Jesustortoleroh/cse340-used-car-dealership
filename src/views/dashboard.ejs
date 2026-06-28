@@ -1,91 +1,47 @@
-<%- include('partials/header') %>
+<%- include('../../partials/header') %>
 
 <main>
+    <h1><%= title %></h1>
 
-    <div class="dashboard">
-
-        <h1>Welcome to Your Dealership Dashboard</h1>
-
-        <p>
-            You are successfully logged in to your dealership account.
-            From here you will be able to manage your profile, track
-            service requests, leave vehicle reviews, and access future
-            customer features.
-        </p>
-
-        <div class="user-info">
-
-            <h2>Account Information</h2>
-
-            <div class="user-detail">
-                <span class="label">Name:</span>
-                <span class="value">
-                    <%= user.name %>
-                </span>
-            </div>
-
-            <div class="user-detail">
-                <span class="label">Email:</span>
-                <span class="value">
-                    <%= user.email %>
-                </span>
-            </div>
-
-            <% if (user.roleName) { %>
-                <div class="user-detail">
-                    <span class="label">Role:</span>
-                    <span class="value">
-                        <%= user.roleName %>
-                    </span>
+    <% if (user) { %>
+        <div class="dashboard-container">
+            <div class="user-profile">
+                <h2>Welcome, <%= user.name %>!</h2>
+                
+                <div class="user-details">
+                    <div class="detail-item">
+                        <span class="label">Name:</span>
+                        <span class="value"><%= user.name %></span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="label">Email:</span>
+                        <span class="value"><%= user.email %></span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="label">Role:</span>
+                        <span class="value"><%= user.roleName %></span>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <span class="label">Member Since:</span>
+                        <span class="value"><%= new Date(user.created_at).toLocaleDateString() %></span>
+                    </div>
                 </div>
-            <% } %>
-
-            <div class="user-detail">
-                <span class="label">Member Since:</span>
-                <span class="value">
-                    <%= new Date(user.created_at).toLocaleDateString() %>
-                </span>
             </div>
-
         </div>
+    <% } else { %>
+        <p>Please log in to view your dashboard.</p>
+    <% } %>
 
-        <div class="session-debug">
-
-            <h3>Session Information (Development Only)</h3>
-
-            <p>
-                <em>
-                    This section displays the current session data so
-                    you can verify that authentication is working correctly.
-                </em>
-            </p>
-
+    <!-- Debug: Session data (remove in production) -->
+    <% if (sessionData) { %>
+        <details>
+            <summary>Session Data (Debug)</summary>
             <pre><%= JSON.stringify(sessionData, null, 2) %></pre>
-
-            <p>
-                <strong>
-                    If a password property appears anywhere above,
-                    your authentication system has a security issue and
-                    should be fixed immediately.
-                </strong>
-            </p>
-
-        </div>
-
-        <div class="dashboard-actions">
-
-            <a href="/vehicles" class="logout-button">
-                Browse Vehicles
-            </a>
-
-            <a href="/logout" class="logout-button">
-                Logout
-            </a>
-
-        </div>
-
-    </div>
-
+        </details>
+    <% } %>
 </main>
 
-<%- include('partials/footer') %>
+<%- include('../../partials/footer') %>
