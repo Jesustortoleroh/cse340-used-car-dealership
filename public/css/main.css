@@ -142,3 +142,54 @@ body {
         font-size: 14px;
     }
 }
+
+/* Flash Messages */
+
+.flash-messages {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+.flash {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border-left: 5px solid;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Success */
+
+.flash.success {
+    background-color: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+/* Error */
+
+.flash.error {
+    background-color: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+/* Warning */
+
+.flash.warning {
+    background-color: #fef3c7;
+    border-color: #f59e0b;
+    color: #92400e;
+}
+
+/* Information */
+
+.flash.info {
+    background-color: #dbeafe;
+    border-color: #2563eb;
+    color: #1e3a8a;
+}
