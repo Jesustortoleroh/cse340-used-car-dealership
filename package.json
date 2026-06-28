@@ -1,7 +1,8 @@
 {
   "name": "cse340-used-car-dealership",
   "version": "1.0.0",
-  "description": "",
+  "description": "Used Car Dealership - CSE 340 Final Project",
+  "type": "module",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "connect-pg-simple": "^10.0.0",
@@ -14,13 +15,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --env-file=.env server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "db:reset": "node scripts/reset-db.js",
+    "db:check": "node scripts/check-db.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.28.2",
-  "type": "module",
   "devDependencies": {
     "nodemon": "^3.1.11",
     "ws": "^8.20.0"
