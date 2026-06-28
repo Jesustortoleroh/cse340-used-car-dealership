@@ -56,13 +56,16 @@ CREATE TABLE vehicle_images (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
 );
 
--- DEALERS
+-- Dealers table
 CREATE TABLE dealers (
     id SERIAL PRIMARY KEY,
     name VARCHAR(150) NOT NULL,
     location VARCHAR(100),
     phone VARCHAR(20),
-    email VARCHAR(150) UNIQUE
+    email VARCHAR(150) UNIQUE,
+    slug VARCHAR(200) UNIQUE,  -- <-- AGREGAR ESTA LÍNEA
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- LISTINGS
@@ -201,12 +204,12 @@ INSERT INTO vehicle_images (vehicle_id, image_url, is_primary) VALUES
 (11, '/images/vehicles/ford-f-150-2021.jpg', true),
 (12, '/images/vehicles/honda-cr-v-2020.jpg', true);
 
--- INSERT DEALERS
-INSERT INTO dealers (name, location, phone, email) VALUES
-('AutoWorld Motors', 'New York', '123-456-7890', 'info@autoworld.com'),
-('Prime Cars', 'California', '222-333-4444', 'sales@primecars.com'),
-('City Auto Sales', 'Texas', '555-666-7777', 'contact@cityauto.com'),
-('Elite Motors', 'Florida', '888-999-0000', 'elite@motors.com');
+-- Insert dealers
+INSERT INTO dealers (name, location, phone, email, slug) VALUES
+('AutoWorld Motors', 'New York', '123-456-7890', 'info@autoworld.com', 'autoworld-motors'),
+('Prime Cars', 'California', '222-333-4444', 'sales@primecars.com', 'prime-cars'),
+('City Auto Sales', 'Texas', '555-666-7777', 'contact@cityauto.com', 'city-auto-sales'),
+('Elite Motors', 'Florida', '888-999-0000', 'elite@motors.com', 'elite-motors');
 
 -- INSERT LISTINGS
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
