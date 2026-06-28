@@ -13,18 +13,26 @@
 
         <div class="users-list">
 
-            <% users.forEach(user => { %>
+            <% users.forEach(listUser => { %>
+                <% 
+                    // Calculate permissions for this user card
+                    // 'user' variable contains the current logged-in user (from session)
+                    // 'listUser' is the user from the users array we're currently rendering
+                    const currentUser = typeof user !== 'undefined' && user ? user : null;
+                    const canEdit = currentUser && (currentUser.id === listUser.id || currentUser.roleName === 'admin');
+                    const canDelete = currentUser && currentUser.roleName === 'admin' && currentUser.id !== listUser.id;
+                %>
 
                 <div class="user-card">
 
                     <div class="user-header">
 
                         <h3>
-                            <%= user.name %>
+                            <%= listUser.name %>
                         </h3>
 
                         <span class="user-id">
-                            ID: <%= user.id %>
+                            ID: <%= listUser.id %>
                         </span>
 
                     </div>
@@ -38,12 +46,12 @@
                             </div>
 
                             <div class="value">
-                                <%= user.email %>
+                                <%= listUser.email %>
                             </div>
 
                         </div>
 
-                        <% if (user.role) { %>
+                        <% if (listUser.roleName) { %>
 
                             <div class="detail-item">
 
@@ -52,7 +60,9 @@
                                 </div>
 
                                 <div class="value">
-                                    <%= user.role %>
+                                    <span class="role-badge role-<%= listUser.roleName %>">
+                                        <%= listUser.roleName %>
+                                    </span>
                                 </div>
 
                             </div>
@@ -66,12 +76,34 @@
                             </div>
 
                             <div class="value">
-                                <%= new Date(user.created_at).toLocaleDateString() %>
+                                <%= new Date(listUser.created_at).toLocaleDateString() %>
                             </div>
 
                         </div>
 
                     </div>
+
+                    <!-- User Actions - Only shown if user has permissions -->
+                    <% if (canEdit || canDelete) { %>
+                        <div class="user-actions">
+                            <% if (canEdit) { %>
+                                <a href="/register/<%= listUser.id %>/edit" class="btn-edit">
+                                    ✏️ Edit
+                                </a>
+                            <% } %>
+                            <% if (canDelete) { %>
+                                <form method="POST" action="/register/<%= listUser.id %>/delete" style="display: inline;">
+                                    <button 
+                                        type="submit" 
+                                        class="btn-delete" 
+                                        onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
+                                    >
+                                        🗑️ Delete
+                                    </button>
+                                </form>
+                            <% } %>
+                        </div>
+                    <% } %>
 
                 </div>
 

@@ -10,13 +10,17 @@
         with our dealership.
     </p>
 
+    <!-- 
+        novalidate attribute is added for testing server-side validation.
+        Remove it in production to let HTML5 validation help users.
+    -->
     <form
         method="POST"
         action="/register"
-        class="registration-form">
+        class="registration-form"
+        novalidate>
 
         <!-- Full Name -->
-
         <div class="form-group">
             <label for="name">
                 Full Name
@@ -28,11 +32,18 @@
                 name="name"
                 placeholder="Enter your full name"
                 minlength="2"
-                required>
+                maxlength="100"
+                pattern="[a-zA-Z\s'-]+"
+                title="Letters, spaces, hyphens, and apostrophes only"
+                required
+                autocomplete="name">
+            
+            <div class="help-text">
+                Between 2 and 100 characters. Letters, spaces, hyphens, and apostrophes only.
+            </div>
         </div>
 
         <!-- Email Address -->
-
         <div class="form-group">
             <label for="email">
                 Email Address
@@ -43,11 +54,16 @@
                 id="email"
                 name="email"
                 placeholder="your@email.com"
-                required>
+                maxlength="255"
+                required
+                autocomplete="email">
+            
+            <div class="help-text">
+                Valid email address required (max 255 characters).
+            </div>
         </div>
 
         <!-- Confirm Email -->
-
         <div class="form-group">
             <label for="emailConfirm">
                 Confirm Email Address
@@ -58,11 +74,16 @@
                 id="emailConfirm"
                 name="emailConfirm"
                 placeholder="Re-enter your email address"
-                required>
+                maxlength="255"
+                required
+                autocomplete="email">
+            
+            <div class="help-text">
+                Must match the email address above.
+            </div>
         </div>
 
         <!-- Password -->
-
         <div class="form-group">
             <label for="password">
                 Password
@@ -73,17 +94,25 @@
                 id="password"
                 name="password"
                 minlength="8"
-                pattern="(?=.*[0-9])(?=.*[!@#$%^&*]).*"
-                required>
+                maxlength="128"
+                pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*"
+                title="At least 8 characters with uppercase, lowercase, number, and special character"
+                required
+                autocomplete="new-password">
 
             <div class="help-text">
-                Must be at least 8 characters and include
-                at least one number and one special character.
+                <strong>Password must contain:</strong>
+                <ul>
+                    <li>Between 8 and 128 characters</li>
+                    <li>At least one uppercase letter (A-Z)</li>
+                    <li>At least one lowercase letter (a-z)</li>
+                    <li>At least one number (0-9)</li>
+                    <li>At least one special character (!@#$%^&*()_+-=[]{};':"\|,.<>/? )</li>
+                </ul>
             </div>
         </div>
 
         <!-- Confirm Password -->
-
         <div class="form-group">
             <label for="passwordConfirm">
                 Confirm Password
@@ -94,12 +123,17 @@
                 id="passwordConfirm"
                 name="passwordConfirm"
                 minlength="8"
-                required>
+                maxlength="128"
+                required
+                autocomplete="new-password">
+            
+            <div class="help-text">
+                Must match the password above.
+            </div>
         </div>
 
         <!-- Submit -->
-
-        <button type="submit">
+        <button type="submit" class="btn-primary">
             Create Account
         </button>
 

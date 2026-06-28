@@ -1,0 +1,45 @@
+<%- include('../../partials/header') %>
+
+<main>
+    <h1><%= title %></h1>
+    
+    <p class="text-muted">Update your account information below.</p>
+
+    <form method="POST" action="/register/<%= user.id %>/edit">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                value="<%= user.name %>" 
+                required 
+                minlength="2" 
+                maxlength="100"
+                pattern="[a-zA-Z\s'-]+"
+                title="Letters, spaces, hyphens, and apostrophes only"
+            >
+            <small class="help-text">Between 2 and 100 characters. Letters, spaces, hyphens, and apostrophes only.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                value="<%= user.email %>" 
+                required 
+                maxlength="255"
+            >
+            <small class="help-text">Valid email address required.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Account</button>
+            <a href="/register/list" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</main>
+
+<%- include('../../partials/footer') %>
