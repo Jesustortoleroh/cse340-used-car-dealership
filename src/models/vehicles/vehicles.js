@@ -1,5 +1,8 @@
 import db from '../db.js';
 
+/**
+ * Get all vehicles with category information
+ */
 const getVehicles = async (category = null, sortBy = 'price') => {
     const whereClause = category
         ? 'WHERE LOWER(c.name) = LOWER($1)'
@@ -11,7 +14,7 @@ const getVehicles = async (category = null, sortBy = 'price') => {
             : 'v.price';
 
     const query = `
-        SELECT v.id, v.name, v.description, v.price, v.slug,
+        SELECT v.id, v.name, v.price,
                c.name AS category
         FROM vehicles v
         JOIN categories c ON v.category_id = c.id
@@ -26,71 +29,75 @@ const getVehicles = async (category = null, sortBy = 'price') => {
     return result.rows.map(vehicle => ({
         id: vehicle.id,
         name: vehicle.name,
-        description: vehicle.description,
         price: vehicle.price,
-        category: vehicle.category,
-        slug: vehicle.slug
+        category: vehicle.category
     }));
 };
 
-const getVehicleDetail = async (identifier, identifierType = 'id', sortBy = 'feature') => {
-
-    const whereClause =
-        identifierType === 'slug'
-            ? 'v.slug = $1'
-            : 'v.id = $1';
-
-    const orderByClause =
-        sortBy === 'value'
-            ? 'vs.value NULLS LAST'
-            : 'vs.feature NULLS LAST';
+/**
+ * Get a single vehicle by ID
+ */
+const getVehicleDetail = async (identifier, identifierType = 'id') => {
+    const whereClause = identifierType === 'id'
+        ? 'v.id = $1'
+        : 'v.name ILIKE $1'; // Fallback for name-based lookup
 
     const query = `
-        SELECT v.id, v.name, v.description, v.price, v.slug,
-               c.name AS category,
-               d.name AS dealer_name,
-               d.location AS dealer_location,
-               vs.feature, vs.value
+        SELECT v.id, v.name, v.price,
+               c.name AS category
         FROM vehicles v
         JOIN categories c ON v.category_id = c.id
-        LEFT JOIN listings l ON v.id = l.vehicle_id
-        LEFT JOIN dealers d ON l.dealer_id = d.id
-        LEFT JOIN vehicle_specs vs ON v.id = vs.vehicle_id
         WHERE ${whereClause}
-        ORDER BY ${orderByClause}
     `;
 
     const result = await db.query(query, [identifier]);
 
-    if (result.rows.length === 0) return {};
+    if (result.rows.length === 0) return null;
 
     return {
         id: result.rows[0].id,
         name: result.rows[0].name,
-        description: result.rows[0].description,
         price: result.rows[0].price,
-        category: result.rows[0].category,
-        slug: result.rows[0].slug,
-        dealer: result.rows[0].dealer_name,
-        location: result.rows[0].dealer_location,
-        specs: result.rows
-            .filter(row => row.feature !== null)   // Filter out rows without specs
-            .map(row => ({
-                feature: row.feature,
-                value: row.value
-            }))
+        category: result.rows[0].category
     };
 };
 
-const getAllVehicles = () => getVehicles();
+/**
+ * Get all vehicles (with optional category filter)
+ */
+const getAllVehicles = async () => {
+    return await getVehicles();
+};
 
-const getVehiclesByCategory = (category) => getVehicles(category);
+/**
+ * Get vehicles by category
+ */
+const getVehiclesByCategory = async (category) => {
+    if (!category || category === 'All' || category === 'all') {
+        return await getVehicles();
+    }
+    return await getVehicles(category);
+};
 
-const getVehicleById = (id, sortBy) =>
-    getVehicleDetail(id, 'id', sortBy);
+/**
+ * Get vehicle by ID
+ */
+const getVehicleById = async (id) => {
+    return await getVehicleDetail(id, 'id');
+};
 
-const getVehicleBySlug = (slug, sortBy) =>
-    getVehicleDetail(slug, 'slug', sortBy);
+/**
+ * Get vehicle by name (slug fallback)
+ */
+const getVehicleBySlug = async (slug) => {
+    // Try to find by ID first (since your slugs might be IDs)
+    const id = parseInt(slug);
+    if (!isNaN(id)) {
+        return await getVehicleDetail(id, 'id');
+    }
+    // Fallback: search by name
+    return await getVehicleDetail(slug, 'name');
+};
 
 export {
     getAllVehicles,

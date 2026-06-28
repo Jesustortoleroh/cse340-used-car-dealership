@@ -4,14 +4,12 @@
  * Provides middleware functions for:
  * - Requiring user authentication (requireLogin)
  * - Requiring specific roles (requireRole)
- * - Making auth data available to templates (checkAuth)
  */
 
 /**
  * Middleware that protects routes requiring authentication.
  * 
- * Customers, employees, and owners must be logged in
- * before accessing protected resources.
+ * Users must be logged in before accessing protected resources.
  */
 const requireLogin = (req, res, next) => {
     // Verify that a valid user session exists
@@ -35,13 +33,6 @@ const requireLogin = (req, res, next) => {
  * 
  * @param {string} roleName - The role name required (e.g., 'admin', 'user')
  * @returns {Function} Express middleware function
- * 
- * @example
- * // Protect admin routes
- * router.get('/admin', requireRole('admin'), adminController);
- * 
- * // Protect employee routes
- * router.get('/staff', requireRole('employee'), staffController);
  */
 const requireRole = (roleName) => {
     return (req, res, next) => {
@@ -72,10 +63,6 @@ const requireRole = (roleName) => {
  * This middleware runs on every request and sets:
  * - res.locals.isLoggedIn: boolean indicating if user is authenticated
  * - res.locals.user: the current user object (or null)
- * 
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next function
  */
 const checkAuth = (req, res, next) => {
     const isLoggedIn = !!(req.session && req.session.user);

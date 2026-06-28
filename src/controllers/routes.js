@@ -22,19 +22,17 @@ router.use('/contact', (req, res, next) => {
     next();
 });
 
-// Add registration-specific styles to all registration routes
+// Registration styles
 router.use('/register', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
     next();
 });
 
-// Add login-specific styles to all login routes
+// Login styles
 router.use('/login', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/login.css">');
     next();
 });
-
-
 
 // Basic pages
 router.get('/', homePage);
@@ -56,8 +54,10 @@ router.use('/register', registrationRoutes);
 
 // Login form routes
 router.use('/login', loginRoutes);
+
 // Logout route
 router.get('/logout', processLogout);
+
 // Dashboard route (requires login)
 router.get('/dashboard', requireLogin, showDashboard);
 

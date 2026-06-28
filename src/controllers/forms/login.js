@@ -1,10 +1,7 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
-
-import {
-    findUserByEmail,
-    verifyPassword
-} from '../../models/forms/login.js';
+import bcrypt from 'bcrypt';
+import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
 
 const router = Router();
 
@@ -56,7 +53,6 @@ const processLogin = async (req, res) => {
                 req.flash('error', error.msg);
             }
         });
-
         return res.redirect('/login');
     }
 
@@ -102,12 +98,9 @@ const processLogin = async (req, res) => {
 
     } catch (error) {
         console.error('Login error:', error);
-
-        // Generic error message for server errors
         if (typeof req.flash === 'function') {
             req.flash('error', 'Unable to log in. Please try again later.');
         }
-
         res.redirect('/login');
     }
 };
@@ -143,29 +136,23 @@ const processLogout = (req, res) => {
 const showDashboard = (req, res) => {
     // Get user from session
     const user = req.session.user;
+    const sessionData = req.session;
 
     // Security: Ensure password is never exposed
     if (user && user.password) {
-        console.error(
-            'Security error: password found in user object'
-        );
+        console.error('Security error: password found in user object');
         delete user.password;
     }
 
-    // Only expose safe user data to template
-    // Using roleName (consistent with login) and created_at (consistent with database)
-    const safeUser = user ? {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        roleName: user.roleName,  // ← Corregido: roleName en lugar de role
-        created_at: user.created_at  // ← Corregido: created_at en lugar de createdAt
-    } : null;
+    if (sessionData.user && sessionData.user.password) {
+        console.error('Security error: password found in sessionData.user');
+        delete sessionData.user.password;
+    }
 
     res.render('dashboard', {
         title: 'Customer Dashboard',
-        user: safeUser,
-        sessionData: req.session  // ← Agregado: sessionData para la vista
+        user: user,
+        sessionData: sessionData
     });
 };
 
@@ -182,7 +169,4 @@ router.post('/', loginValidation, processLogin);
 export default router;
 
 // Export additional functions for use in other files
-export {
-    processLogout,
-    showDashboard
-};
+export { processLogout, showDashboard };

@@ -14,10 +14,8 @@ const findUserByEmail = async (email) => {
             users.name, 
             users.email, 
             users.password, 
-            users.created_at,
-            roles.role_name AS "roleName"
+            users.created_at
         FROM users
-        INNER JOIN roles ON users.role_id = roles.id
         WHERE LOWER(users.email) = LOWER($1)
         LIMIT 1
     `;
@@ -32,15 +30,8 @@ const findUserByEmail = async (email) => {
  * @param {string} hashedPassword
  * @returns {Promise<boolean>}
  */
-const verifyPassword = async (
-    plainPassword,
-    hashedPassword
-) => {
-
-    return await bcrypt.compare(
-        plainPassword,
-        hashedPassword
-    );
+const verifyPassword = async (plainPassword, hashedPassword) => {
+    return await bcrypt.compare(plainPassword, hashedPassword);
 };
 
 export {

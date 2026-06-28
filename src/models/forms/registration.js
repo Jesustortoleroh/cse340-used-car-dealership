@@ -23,22 +23,13 @@ const emailExists = async (email) => {
 /**
  * Saves a new dealership user.
  * The role_id will be set automatically to the 'customer' role by the DEFAULT constraint.
- * The role parameter is kept for backward compatibility but not used.
  *
  * @param {string} name
  * @param {string} email
  * @param {string} hashedPassword
- * @param {string} role - Deprecated, kept for compatibility
  * @returns {Promise<Object>}
  */
-const saveUser = async (
-    name,
-    email,
-    hashedPassword,
-    role = 'customer'  // ← Cambiado de 'user' a 'customer'
-) => {
-    // The role_id will be set automatically by the DEFAULT constraint
-    // No need to specify it in the INSERT
+const saveUser = async (name, email, hashedPassword) => {
     const query = `
         INSERT INTO users (
             name,
@@ -73,10 +64,8 @@ const getAllUsers = async () => {
             users.id,
             users.name,
             users.email,
-            users.created_at,
-            roles.role_name AS "roleName"
+            users.created_at
         FROM users
-        INNER JOIN roles ON users.role_id = roles.id
         ORDER BY users.created_at DESC
     `;
 
@@ -85,7 +74,7 @@ const getAllUsers = async () => {
 };
 
 /**
- * Retrieve a single user by ID with role information.
+ * Retrieve a single user by ID.
  *
  * @param {number} id - User ID
  * @returns {Promise<Object|null>}
@@ -96,10 +85,8 @@ const getUserById = async (id) => {
             users.id,
             users.name,
             users.email,
-            users.created_at,
-            roles.role_name AS "roleName"
+            users.created_at
         FROM users
-        INNER JOIN roles ON users.role_id = roles.id
         WHERE users.id = $1
     `;
 
