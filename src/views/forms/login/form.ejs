@@ -11,7 +11,11 @@
         <a href="/register">Create one here</a>.
     </p>
 
-    <form method="POST" action="/login" class="login-form">
+    <form
+        method="POST"
+        action="/login"
+        class="login-form"
+    >
 
         <!-- Email -->
 
@@ -26,7 +30,10 @@
                 id="email"
                 name="email"
                 placeholder="Enter your email address"
-                required>
+                maxlength="255"
+                required
+                autocomplete="email"
+            >
 
         </div>
 
@@ -43,14 +50,20 @@
                 id="password"
                 name="password"
                 minlength="8"
+                maxlength="128"
                 placeholder="Enter your password"
-                required>
+                required
+                autocomplete="current-password"
+            >
 
         </div>
 
         <!-- Submit -->
 
-        <button type="submit">
+        <button
+            type="submit"
+            class="btn-primary"
+        >
             Sign In
         </button>
 

@@ -22,7 +22,7 @@ const emailExists = async (email) => {
 
 /**
  * Saves a new dealership user.
- * The role_id will be set automatically to the 'user' role by the DEFAULT constraint.
+ * The role_id will be set automatically to the 'customer' role by the DEFAULT constraint.
  * The role parameter is kept for backward compatibility but not used.
  *
  * @param {string} name
@@ -35,7 +35,7 @@ const saveUser = async (
     name,
     email,
     hashedPassword,
-    role = 'user'
+    role = 'customer'  // ← Cambiado de 'user' a 'customer'
 ) => {
     // The role_id will be set automatically by the DEFAULT constraint
     // No need to specify it in the INSERT

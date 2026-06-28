@@ -204,7 +204,7 @@ const showAllUsers = async (req, res) => {
 
 /**
  * Display the edit account form.
- * Users can edit their own account, admins can edit any account.
+ * Users can edit their own account, owners can edit any account.
  */
 const showEditAccountForm = async (req, res) => {
     const targetUserId = parseInt(req.params.id);
@@ -220,8 +220,8 @@ const showEditAccountForm = async (req, res) => {
             return res.redirect('/register/list');
         }
 
-        // Check permissions: users can edit themselves, admins can edit anyone
-        const canEdit = currentUser.id === targetUserId || currentUser.roleName === 'admin';
+        // Check permissions: users can edit themselves, owners can edit anyone
+        const canEdit = currentUser.id === targetUserId || currentUser.roleName === 'owner';  // ← admin → owner
 
         if (!canEdit) {
             if (typeof req.flash === 'function') {
@@ -274,7 +274,7 @@ const processEditAccount = async (req, res) => {
         }
 
         // Check permissions
-        const canEdit = currentUser.id === targetUserId || currentUser.roleName === 'admin';
+        const canEdit = currentUser.id === targetUserId || currentUser.roleName === 'owner';  // ← admin → owner
 
         if (!canEdit) {
             if (typeof req.flash === 'function') {
@@ -317,21 +317,21 @@ const processEditAccount = async (req, res) => {
 
 /**
  * Process account deletion.
- * Only admins can delete accounts, and they cannot delete themselves.
+ * Only owners can delete accounts, and they cannot delete themselves.
  */
 const processDeleteAccount = async (req, res) => {
     const targetUserId = parseInt(req.params.id);
     const currentUser = req.session.user;
 
-    // Only admins can delete accounts
-    if (currentUser.roleName !== 'admin') {
+    // Only owners can delete accounts
+    if (currentUser.roleName !== 'owner') {  // ← admin → owner
         if (typeof req.flash === 'function') {
             req.flash('error', 'You do not have permission to delete accounts.');
         }
         return res.redirect('/register/list');
     }
 
-    // Prevent admins from deleting their own account
+    // Prevent owners from deleting their own account
     if (currentUser.id === targetUserId) {
         if (typeof req.flash === 'function') {
             req.flash('error', 'You cannot delete your own account.');
