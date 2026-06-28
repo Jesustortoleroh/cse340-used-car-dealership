@@ -14,14 +14,13 @@
             method="POST"
             action="/register/<%= user.id %>/edit"
             class="account-form"
+            novalidate
         >
 
             <div class="form-group">
-
                 <label for="name">
                     Full Name
                 </label>
-
                 <input
                     type="text"
                     id="name"
@@ -33,19 +32,15 @@
                     pattern="[a-zA-Z\s'-]+"
                     title="Letters, spaces, hyphens, and apostrophes only"
                 >
-
                 <small class="help-text">
-                    Between 2 and 100 characters.
+                    Between 2 and 100 characters. Letters, spaces, hyphens, and apostrophes only.
                 </small>
-
             </div>
 
             <div class="form-group">
-
                 <label for="email">
                     Email Address
                 </label>
-
                 <input
                     type="email"
                     id="email"
@@ -54,29 +49,38 @@
                     required
                     maxlength="255"
                 >
-
                 <small class="help-text">
                     Enter a valid email address.
                 </small>
-
             </div>
 
-            <div class="form-actions">
+            <!-- Role Display (read-only, only shown for owners) -->
+            <% if (user.roleName) { %>
+                <div class="form-group">
+                    <label for="role">
+                        Role
+                    </label>
+                    <input
+                        type="text"
+                        id="role"
+                        name="role"
+                        value="<%= user.roleName %>"
+                        disabled
+                        readonly
+                    >
+                    <small class="help-text">
+                        Role cannot be changed here. Contact an administrator if you need to change your role.
+                    </small>
+                </div>
+            <% } %>
 
-                <button
-                    type="submit"
-                    class="btn-primary"
-                >
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
                     Update Account
                 </button>
-
-                <a
-                    href="/register/list"
-                    class="btn-secondary"
-                >
+                <a href="/register/list" class="btn-secondary">
                     Cancel
                 </a>
-
             </div>
 
         </form>

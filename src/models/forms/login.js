@@ -2,10 +2,10 @@ import bcrypt from 'bcrypt';
 import db from '../db.js';
 
 /**
- * Finds a dealership user by email address.
- *
- * @param {string} email
- * @returns {Promise<Object|null>}
+ * Find a user by email address for login verification.
+ * 
+ * @param {string} email - Email address to search for
+ * @returns {Promise<Object|null>} User object with password hash or null if not found
  */
 const findUserByEmail = async (email) => {
     const query = `
@@ -14,8 +14,10 @@ const findUserByEmail = async (email) => {
             users.name, 
             users.email, 
             users.password, 
-            users.created_at
+            users.created_at,
+            roles.role_name AS "roleName"
         FROM users
+        LEFT JOIN roles ON users.role_id = roles.id
         WHERE LOWER(users.email) = LOWER($1)
         LIMIT 1
     `;
@@ -24,17 +26,14 @@ const findUserByEmail = async (email) => {
 };
 
 /**
- * Verifies a password against its bcrypt hash.
- *
- * @param {string} plainPassword
- * @param {string} hashedPassword
- * @returns {Promise<boolean>}
+ * Verify a plain text password against a stored bcrypt hash.
+ * 
+ * @param {string} plainPassword - The password to verify
+ * @param {string} hashedPassword - The stored password hash
+ * @returns {Promise<boolean>} True if password matches, false otherwise
  */
 const verifyPassword = async (plainPassword, hashedPassword) => {
     return await bcrypt.compare(plainPassword, hashedPassword);
 };
 
-export {
-    findUserByEmail,
-    verifyPassword
-};
+export { findUserByEmail, verifyPassword };

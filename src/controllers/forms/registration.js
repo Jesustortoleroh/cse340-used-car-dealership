@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
-import { emailExists, saveUser, getAllUsers } from '../../models/forms/registration.js';
+import { emailExists, saveUser, getAllUsers, getUserById, updateUser, deleteUser } from '../../models/forms/registration.js';
+import { requireLogin, requireRole } from '../../middleware/auth.js';
 
 const router = Router();
 
@@ -54,6 +55,25 @@ const registrationValidation = [
     body('passwordConfirm')
         .custom((value, { req }) => value === req.body.password)
         .withMessage('Passwords must match')
+];
+
+/**
+ * Validation rules for editing user accounts
+ */
+const editValidation = [
+    body('name')
+        .trim()
+        .isLength({ min: 2, max: 100 })
+        .withMessage('Name must be between 2 and 100 characters')
+        .matches(/^[a-zA-Z\s'-]+$/)
+        .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
+    body('email')
+        .trim()
+        .isEmail()
+        .normalizeEmail()
+        .withMessage('Must be a valid email address')
+        .isLength({ max: 255 })
+        .withMessage('Email address is too long')
 ];
 
 /**
@@ -141,6 +161,160 @@ const showAllUsers = async (req, res) => {
 };
 
 /**
+ * Display edit account form
+ */
+const showEditAccountForm = async (req, res) => {
+    const userId = parseInt(req.params.id);
+    const currentUser = req.session.user;
+
+    try {
+        const targetUser = await getUserById(userId);
+
+        if (!targetUser) {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'User not found.');
+            }
+            return res.redirect('/register/list');
+        }
+
+        // Check permissions: users can edit themselves, owners can edit anyone
+        const canEdit = currentUser.id === userId || currentUser.roleName === 'owner';
+
+        if (!canEdit) {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'You do not have permission to edit this account.');
+            }
+            return res.redirect('/register/list');
+        }
+
+        res.render('forms/registration/edit', {
+            title: 'Edit Account',
+            user: targetUser
+        });
+    } catch (error) {
+        console.error('Error loading edit form:', error);
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'An error occurred while loading the edit form.');
+        }
+        res.redirect('/register/list');
+    }
+};
+
+/**
+ * Process account edit
+ */
+const processEditAccount = async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach(error => {
+            if (typeof req.flash === 'function') {
+                req.flash('error', error.msg);
+            }
+        });
+        return res.redirect(`/register/${req.params.id}/edit`);
+    }
+
+    const userId = parseInt(req.params.id);
+    const currentUser = req.session.user;
+    const { name, email } = req.body;
+
+    try {
+        const targetUser = await getUserById(userId);
+
+        if (!targetUser) {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'User not found.');
+            }
+            return res.redirect('/register/list');
+        }
+
+        // Check permissions
+        const canEdit = currentUser.id === userId || currentUser.roleName === 'owner';
+
+        if (!canEdit) {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'You do not have permission to edit this account.');
+            }
+            return res.redirect('/register/list');
+        }
+
+        // Check if email already exists
+        const emailTaken = await emailExists(email);
+        if (emailTaken && targetUser.email !== email) {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'An account with this email already exists.');
+            }
+            return res.redirect(`/register/${userId}/edit`);
+        }
+
+        // Update user
+        await updateUser(userId, name, email);
+
+        // If user edited their own account, update session
+        if (currentUser.id === userId) {
+            req.session.user.name = name;
+            req.session.user.email = email;
+        }
+
+        if (typeof req.flash === 'function') {
+            req.flash('success', 'Account updated successfully.');
+        }
+        res.redirect('/register/list');
+
+    } catch (error) {
+        console.error('Error updating account:', error);
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'An error occurred while updating the account.');
+        }
+        res.redirect(`/register/${userId}/edit`);
+    }
+};
+
+/**
+ * Process account deletion (only owners)
+ */
+const processDeleteAccount = async (req, res) => {
+    const userId = parseInt(req.params.id);
+    const currentUser = req.session.user;
+
+    // Only owners can delete accounts
+    if (currentUser.roleName !== 'owner') {
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'You do not have permission to delete accounts.');
+        }
+        return res.redirect('/register/list');
+    }
+
+    // Prevent owners from deleting themselves
+    if (currentUser.id === userId) {
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'You cannot delete your own account.');
+        }
+        return res.redirect('/register/list');
+    }
+
+    try {
+        const deleted = await deleteUser(userId);
+        if (deleted) {
+            if (typeof req.flash === 'function') {
+                req.flash('success', 'User account deleted successfully.');
+            }
+        } else {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'User not found or already deleted.');
+            }
+        }
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'An error occurred while deleting the account.');
+        }
+    }
+    res.redirect('/register/list');
+};
+
+/**
  * Routes
  */
 
@@ -151,7 +325,16 @@ router.get('/', showRegistrationForm);
 router.post('/', registrationValidation, processRegistration);
 
 // GET /register/list - Show registered users (requires login)
-router.get('/list', showAllUsers);
+router.get('/list', requireLogin, showAllUsers);
+
+// GET /register/:id/edit - Display edit form (requires login)
+router.get('/:id/edit', requireLogin, showEditAccountForm);
+
+// POST /register/:id/edit - Process edit (requires login)
+router.post('/:id/edit', requireLogin, editValidation, processEditAccount);
+
+// POST /register/:id/delete - Delete user (requires owner role)
+router.post('/:id/delete', requireLogin, requireRole('owner'), processDeleteAccount);
 
 export default router;
 

@@ -11,58 +11,54 @@ const __dirname = dirname(__filename);
  * Checks if vehicles table has data - if not, runs a full re-seed.
  */
 const setupDatabase = async () => {
-
-  // Check if vehicles table has data
-  let hasData = false;
-
-  try {
-    const result = await db.query(
-      "SELECT EXISTS (SELECT 1 FROM vehicles LIMIT 1) as has_data"
-    );
-
-    hasData = result.rows[0]?.has_data || false;
-
-  } catch (error) {
-    // If table doesn't exist → treat as empty
-    hasData = false;
-  }
-
-  // If already seeded → skip
-  if (hasData) {
-    console.log('Vehicles database already seeded ✅');
-  } else {
-
-    // Run seed.sql
+    /**
+     * Check if vehicles table has any rows and wrap in try-catch to handle cases
+     * where table doesn't exist yet.
+     */
+    let hasData = false;
+    try {
+        const result = await db.query(
+            "SELECT EXISTS (SELECT 1 FROM vehicles LIMIT 1) as has_data"
+        );
+        hasData = result.rows[0]?.has_data || false;
+    } catch (error) {
+        /**
+         * If query fails (e.g., table doesn't exist), treat the same as no data.
+         * This allows the seed process to proceed.
+         */
+        hasData = false;
+    }
+    
+    if (hasData) {
+        console.log('Vehicles database already seeded ✅');
+        return true;
+    }
+    
+    // No vehicles found - run full seed
     console.log('Seeding vehicles database...');
-
     const seedPath = join(__dirname, 'sql', 'seed.sql');
     const seedSQL = fs.readFileSync(seedPath, 'utf8');
-
     await db.query(seedSQL);
-
     console.log('Vehicles database seeded successfully ✅');
-  }
 
-  // Run practice.sql
-  const practicePath = join(__dirname, 'sql', 'practice.sql');
-  const practiceSQL = fs.readFileSync(practicePath, 'utf8');
-
-  await db.query(practiceSQL);
-
-  console.log('Practice tables verified ✅');
-
-  return true;
+    // Run practice.sql if it exists (for student assignments)
+    const practicePath = join(__dirname, 'sql', 'practice.sql');
+    if (fs.existsSync(practicePath)) {
+        const practiceSQL = fs.readFileSync(practicePath, 'utf8');
+        await db.query(practiceSQL);
+        console.log('Practice tables verified ✅');
+    }
+    
+    return true;
 };
 
 /**
- * Tests the database connection
+ * Tests the database connection by executing a simple query.
  */
 const testConnection = async () => {
-  const result = await db.query('SELECT NOW() as current_time');
-
-  console.log('Database connection successful:', result.rows[0].current_time);
-
-  return true;
+    const result = await db.query('SELECT NOW() as current_time');
+    console.log('Database connection successful:', result.rows[0].current_time);
+    return true;
 };
 
 export { setupDatabase, testConnection };

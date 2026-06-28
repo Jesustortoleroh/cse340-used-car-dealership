@@ -13,21 +13,29 @@
     <form
         method="POST"
         action="/register"
-        class="registration-form">
+        class="registration-form"
+        novalidate
+    >
 
         <!-- Full Name -->
         <div class="form-group">
             <label for="name">
                 Full Name
             </label>
-
             <input
                 type="text"
                 id="name"
                 name="name"
                 placeholder="Enter your full name"
                 minlength="2"
-                required>
+                maxlength="100"
+                pattern="[a-zA-Z\s'-]+"
+                title="Letters, spaces, hyphens, and apostrophes only"
+                required
+            >
+            <div class="help-text">
+                Between 2 and 100 characters. Letters, spaces, hyphens, and apostrophes only.
+            </div>
         </div>
 
         <!-- Email Address -->
@@ -35,13 +43,14 @@
             <label for="email">
                 Email Address
             </label>
-
             <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="your@email.com"
-                required>
+                maxlength="255"
+                required
+            >
         </div>
 
         <!-- Confirm Email -->
@@ -49,13 +58,14 @@
             <label for="emailConfirm">
                 Confirm Email Address
             </label>
-
             <input
                 type="email"
                 id="emailConfirm"
                 name="emailConfirm"
                 placeholder="Re-enter your email address"
-                required>
+                maxlength="255"
+                required
+            >
         </div>
 
         <!-- Password -->
@@ -63,17 +73,10 @@
             <label for="password">
                 Password
             </label>
-
-            <input
-                type="password"
-                id="password"
-                name="password"
-                minlength="8"
-                required>
-
+            <input type="password" id="password" name="password" minlength="8" maxlength="128" required>            
             <div class="help-text">
-                Must be at least 8 characters and include
-                at least one number and one special character.
+                Must be 8-128 characters and include at least one uppercase letter,
+                one lowercase letter, one number, and one special character.
             </div>
         </div>
 
@@ -82,17 +85,18 @@
             <label for="passwordConfirm">
                 Confirm Password
             </label>
-
             <input
                 type="password"
                 id="passwordConfirm"
                 name="passwordConfirm"
                 minlength="8"
-                required>
+                maxlength="128"
+                required
+            >
         </div>
 
         <!-- Submit -->
-        <button type="submit">
+        <button type="submit" class="btn-primary">
             Create Account
         </button>
 

@@ -34,6 +34,12 @@ router.use('/login', (req, res, next) => {
     next();
 });
 
+
+router.use('/dealers', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/dealers.css">');
+    next();
+});
+
 // Basic pages
 router.get('/', homePage);
 router.get('/about', aboutPage);

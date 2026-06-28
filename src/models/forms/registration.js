@@ -64,8 +64,10 @@ const getAllUsers = async () => {
             users.id,
             users.name,
             users.email,
-            users.created_at
+            users.created_at,
+            roles.role_name AS "roleName"
         FROM users
+        LEFT JOIN roles ON users.role_id = roles.id
         ORDER BY users.created_at DESC
     `;
 
@@ -74,7 +76,7 @@ const getAllUsers = async () => {
 };
 
 /**
- * Retrieve a single user by ID.
+ * Retrieve a single user by ID with role information.
  *
  * @param {number} id - User ID
  * @returns {Promise<Object|null>}
@@ -85,8 +87,10 @@ const getUserById = async (id) => {
             users.id,
             users.name,
             users.email,
-            users.created_at
+            users.created_at,
+            roles.role_name AS "roleName"
         FROM users
+        LEFT JOIN roles ON users.role_id = roles.id
         WHERE users.id = $1
     `;
 
