@@ -8,6 +8,14 @@
 
             <h1><%= dealer.name %></h1>
 
+            <% if (dealer.image_url) { %>
+                <img
+                    src="<%= dealer.image_url %>"
+                    alt="<%= dealer.name %>"
+                    class="dealer-detail-image"
+                >
+            <% } %>
+
             <div class="dealer-info">
 
                 <p>

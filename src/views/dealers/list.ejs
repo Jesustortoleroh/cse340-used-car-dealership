@@ -1,6 +1,7 @@
 <%- include('../partials/header') %>
 
 <main>
+
   <h1>Dealers</h1>
 
   <p>
@@ -9,16 +10,37 @@
     <a href="/dealers?sort=location">Location</a>
   </p>
 
-  <ul>
+  <div class="dealer-list">
+
     <% dealers.forEach(dealer => { %>
-      <li>
-        <a href="/dealers/<%= dealer.slug %>">
-          <%= dealer.name %>
-        </a>
-        - <%= dealer.location %>
-      </li>
+
+      <div class="dealer-card">
+
+        <% if (dealer.image_url) { %>
+          <img
+            src="<%= dealer.image_url %>"
+            alt="<%= dealer.name %>"
+            class="dealer-image"
+          >
+        <% } %>
+
+        <h3>
+          <a href="/dealers/<%= dealer.slug %>">
+            <%= dealer.name %>
+          </a>
+        </h3>
+
+        <p>
+          <strong>Location:</strong>
+          <%= dealer.location %>
+        </p>
+
+      </div>
+
     <% }) %>
-  </ul>
+
+  </div>
+
 </main>
 
 <%- include('../partials/footer') %>

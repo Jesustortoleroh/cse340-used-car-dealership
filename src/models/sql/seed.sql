@@ -61,6 +61,7 @@ CREATE TABLE dealers (
     phone VARCHAR(20),
     email VARCHAR(150) UNIQUE,
     slug VARCHAR(200) UNIQUE,
+    image_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -122,19 +123,105 @@ INSERT INTO vehicles (name, description, price, category_id, slug, year, mileage
 ('Ford F-150 2021', 'Best-selling pickup truck', 38000, 3, 'ford-f-150-2021', 2021, 10000, 'Automatic', 'Gasoline', 'Black', true),
 ('Honda CR-V 2020', 'Reliable SUV with great cargo space', 22000, 2, 'honda-cr-v-2020', 2020, 25000, 'Automatic', 'Gasoline', 'Silver', false);
 
--- Insert dealers with slugs
-INSERT INTO dealers (name, location, phone, email, slug) VALUES
-('AutoWorld Motors', 'New York', '123-456-7890', 'info@autoworld.com', 'autoworld-motors'),
-('City Auto Sales', 'Texas', '555-666-7777', 'contact@cityauto.com', 'city-auto-sales'),
-('Elite Motors', 'Florida', '888-999-0000', 'elite@motors.com', 'elite-motors'),
-('Prime Cars', 'California', '222-333-4444', 'sales@primecars.com', 'prime-cars'),
-('Atlantic Auto Center', 'Virginia', '666-777-8888', 'sales@atlanticauto.com', 'atlantic-auto-center'),
-('Blue Sky Automotive', 'Utah', '801-555-2002', 'sales@blueskyauto.com', 'blue-sky-automotive'),
-('Golden State Cars', 'California', '123-987-4560', 'sales@goldenstatecars.com', 'golden-state-cars'),
-('Metro Auto Mall', 'Illinois', '312-555-6006', 'contact@metroautomall.com', 'metro-auto-mall'),
-('Northstar Motors', 'Minnesota', '999-000-1111', 'info@northstarmotors.com', 'northstar-motors'),
-('Sunshine Auto Group', 'Arizona', '111-222-3333', 'contact@sunshineauto.com', 'sunshine-auto-group');
+-- Insert dealers with images
+INSERT INTO dealers (
+    name,
+    location,
+    phone,
+    email,
+    slug,
+    image_url
+) VALUES
 
+(
+    'AutoWorld Motors',
+    'New York',
+    '123-456-7890',
+    'info@autoworld.com',
+    'autoworld-motors',
+    '/images/dealers/autoworld.jpg'
+),
+
+(
+    'City Auto Sales',
+    'Texas',
+    '555-666-7777',
+    'contact@cityauto.com',
+    'city-auto-sales',
+    '/images/dealers/city-auto.jpg'
+),
+
+(
+    'Elite Motors',
+    'Florida',
+    '888-999-0000',
+    'elite@motors.com',
+    'elite-motors',
+    '/images/dealers/elite-motors.jpg'
+),
+
+(
+    'Prime Cars',
+    'California',
+    '222-333-4444',
+    'sales@primecars.com',
+    'prime-cars',
+    '/images/dealers/prime-cars.jpg'
+),
+
+(
+    'Atlantic Auto Center',
+    'Virginia',
+    '666-777-8888',
+    'sales@atlanticauto.com',
+    'atlantic-auto-center',
+    '/images/dealers/atlantic-auto.jpg'
+),
+
+(
+    'Blue Sky Automotive',
+    'Utah',
+    '801-555-2002',
+    'sales@blueskyauto.com',
+    'blue-sky-automotive',
+    '/images/dealers/blue-sky.jpg'
+),
+
+(
+    'Golden State Cars',
+    'California',
+    '123-987-4560',
+    'sales@goldenstatecars.com',
+    'golden-state-cars',
+    '/images/dealers/golden-state.jpg'
+),
+
+(
+    'Metro Auto Mall',
+    'Illinois',
+    '312-555-6006',
+    'contact@metroautomall.com',
+    'metro-auto-mall',
+    '/images/dealers/metro-auto.jpg'
+),
+
+(
+    'Northstar Motors',
+    'Minnesota',
+    '999-000-1111',
+    'info@northstarmotors.com',
+    'northstar-motors',
+    '/images/dealers/northstar.jpg'
+),
+
+(
+    'Sunshine Auto Group',
+    'Arizona',
+    '111-222-3333',
+    'contact@sunshineauto.com',
+    'sunshine-auto-group',
+    '/images/dealers/sunshine.jpg'
+);
 -- Insert listings
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
 (1, 1, 'Available', 'New York'),

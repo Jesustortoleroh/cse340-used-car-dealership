@@ -14,7 +14,8 @@ const getSortedDealers = async (sortBy = 'name') => {
       location,
       phone,
       email,
-      slug
+      slug, 
+      image_url
     FROM dealers
     ORDER BY ${orderBy}
   `);
