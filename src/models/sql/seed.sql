@@ -274,7 +274,7 @@ INSERT INTO vehicle_specs (vehicle_id, feature, value) VALUES
 (12, 'Drivetrain', 'AWD');
 
 
-NSERT INTO vehicle_images (vehicle_id, image_url, is_primary) VALUES
+INSERT INTO vehicle_images (vehicle_id, image_url, is_primary) VALUES
 (1, '/images/vehicles/toyota-corolla.jpg', true),
 (2, '/images/vehicles/ford-explorer.jpg', true),
 (3, '/images/vehicles/honda-civic.jpg', true),
