@@ -1,18 +1,24 @@
 <%- include('../partials/header') %>
 
-<h1>Dealers</h1>
+<main>
+  <h1>Dealers</h1>
 
-<p>
-  <a href="/dealers?sort=name">Name</a>
-  <a href="/dealers?sort=location">Location</a>
-</p>
+  <p>
+    Sort by:
+    <a href="/dealers?sort=name">Name</a> |
+    <a href="/dealers?sort=location">Location</a>
+  </p>
 
-<ul>
-  <% dealers.forEach(dealer => { %>
-    <li>
-      <a href="/dealers/<%= dealer.slug %>"><%= dealer.name %></a>
-    </li>
-  <% }) %>
-</ul>
+  <ul>
+    <% dealers.forEach(dealer => { %>
+      <li>
+        <a href="/dealers/<%= dealer.slug %>">
+          <%= dealer.name %>
+        </a>
+        - <%= dealer.location %>
+      </li>
+    <% }) %>
+  </ul>
+</main>
 
 <%- include('../partials/footer') %>

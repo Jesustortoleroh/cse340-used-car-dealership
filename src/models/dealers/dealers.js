@@ -1,13 +1,20 @@
 import db from '../db.js';
 
 const getSortedDealers = async (sortBy = 'name') => {
-  const orderBy =
-    sortBy === 'location'
-      ? 'location'
-      : 'name';
+  const allowedSorts = ['name', 'location'];
+
+  const orderBy = allowedSorts.includes(sortBy)
+    ? sortBy
+    : 'name';
 
   const result = await db.query(`
-    SELECT id, name, location, phone, email, slug
+    SELECT
+      id,
+      name,
+      location,
+      phone,
+      email,
+      slug
     FROM dealers
     ORDER BY ${orderBy}
   `);
@@ -17,11 +24,15 @@ const getSortedDealers = async (sortBy = 'name') => {
 
 const getDealerBySlug = async (slug) => {
   const result = await db.query(
-    'SELECT * FROM dealers WHERE slug = $1',
+    `
+    SELECT *
+    FROM dealers
+    WHERE slug = $1
+    `,
     [slug]
   );
 
-  return result.rows[0] || {};
+  return result.rows[0] || null;
 };
 
 export { getSortedDealers, getDealerBySlug };
