@@ -115,56 +115,30 @@ INSERT INTO vehicles (name, description, price, category_id, slug, year, mileage
 -- Insert dealers with slugs
 INSERT INTO dealers (name, location, phone, email, slug) VALUES
 ('AutoWorld Motors', 'New York', '123-456-7890', 'info@autoworld.com', 'autoworld-motors'),
-('Prime Cars', 'California', '222-333-4444', 'sales@primecars.com', 'prime-cars'),
 ('City Auto Sales', 'Texas', '555-666-7777', 'contact@cityauto.com', 'city-auto-sales'),
 ('Elite Motors', 'Florida', '888-999-0000', 'elite@motors.com', 'elite-motors'),
-('Sunshine Auto Group', 'Arizona', '111-222-3333', 'contact@sunshineauto.com', 'sunshine-auto-group'),
-('Mountain View Motors', 'Colorado', '444-555-6666', 'sales@mountainviewmotors.com', 'mountain-view-motors'),
-('Lakeside Vehicles', 'Michigan', '777-888-9999', 'info@lakesidevehicles.com', 'lakeside-vehicles'),
-('Desert Drive Auto', 'Nevada', '333-444-5555', 'contact@desertdriveauto.com', 'desert-drive-auto'),
+('Prime Cars', 'California', '222-333-4444', 'sales@primecars.com', 'prime-cars'),
 ('Atlantic Auto Center', 'Virginia', '666-777-8888', 'sales@atlanticauto.com', 'atlantic-auto-center'),
-('Northstar Motors', 'Minnesota', '999-000-1111', 'info@northstarmotors.com', 'northstar-motors'),
-('Golden State Cars', 'California', '123-987-4560', 'sales@goldenstatecars.com', 'golden-state-cars'),
-('Capital City Motors', 'Washington DC', '202-555-1001', 'info@capitalcitymotors.com', 'capital-city-motors'),
 ('Blue Sky Automotive', 'Utah', '801-555-2002', 'sales@blueskyauto.com', 'blue-sky-automotive'),
-('Southern Wheels', 'Georgia', '404-555-3003', 'contact@southernwheels.com', 'southern-wheels'),
-('Great Plains Auto', 'Kansas', '785-555-4004', 'info@greatplainsauto.com', 'great-plains-auto'),
-('Pacific Coast Cars', 'Oregon', '503-555-5005', 'sales@pacificcoastcars.com', 'pacific-coast-cars'),
+('Golden State Cars', 'California', '123-987-4560', 'sales@goldenstatecars.com', 'golden-state-cars'),
 ('Metro Auto Mall', 'Illinois', '312-555-6006', 'contact@metroautomall.com', 'metro-auto-mall'),
-('Riverfront Motors', 'Missouri', '314-555-7007', 'sales@riverfrontmotors.com', 'riverfront-motors'),
-('Crown Auto Dealers', 'North Carolina', '919-555-8008', 'info@crownauto.com', 'crown-auto-dealers'),
-('Prestige Vehicle Center', 'Washington', '206-555-9009', 'sales@prestigevehicles.com', 'prestige-vehicle-center');
+('Northstar Motors', 'Minnesota', '999-000-1111', 'info@northstarmotors.com', 'northstar-motors'),
+('Sunshine Auto Group', 'Arizona', '111-222-3333', 'contact@sunshineauto.com', 'sunshine-auto-group');
 
 -- Insert listings
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
 (1, 1, 'Available', 'New York'),
-(1, 5, 'Available', 'Arizona'),
-
-(2, 2, 'Available', 'California'),
-(2, 6, 'Available', 'Colorado'),
-
-(3, 3, 'Available', 'Texas'),
-(3, 7, 'Available', 'Michigan'),
-
-(4, 4, 'Sold', 'Florida'),
-(4, 8, 'Available', 'Nevada'),
-
-(5, 9, 'Available', 'Virginia'),
-(5, 17, 'Available', 'Illinois'),
-
-(6, 10, 'Available', 'Minnesota'),
-(6, 18, 'Available', 'Missouri'),
-
-(7, 11, 'Available', 'California'),
-(7, 19, 'Available', 'North Carolina'),
-
-(8, 12, 'Available', 'Washington DC'),
-(8, 20, 'Available', 'Washington'),
-
-(9, 13, 'Available', 'Utah'),
-(10, 14, 'Available', 'Georgia'),
-(11, 15, 'Available', 'Kansas'),
-(12, 16, 'Available', 'Oregon');
+(2, 2, 'Available', 'Texas'),
+(3, 3, 'Available', 'Florida'),
+(4, 4, 'Available', 'California'),
+(5, 5, 'Available', 'Virginia'),
+(6, 6, 'Available', 'Utah'),
+(7, 7, 'Available', 'California'),
+(8, 8, 'Available', 'Illinois'),
+(9, 9, 'Available', 'Minnesota'),
+(10, 10, 'Available', 'Arizona'),
+(11, 1, 'Available', 'New York'),
+(12, 2, 'Available', 'Texas');
 
 -- Insert vehicle specs
 INSERT INTO vehicle_specs (vehicle_id, feature, value) VALUES
