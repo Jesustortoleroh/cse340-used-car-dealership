@@ -1,39 +1,47 @@
 // Import model functions
 import {
-    getAllVehicles,
     getVehicleBySlug,
     getVehiclesByCategory
 } from '../../models/vehicles/vehicles.js';
 
 // Vehicles list page
-const vehiclesPage = async (req, res) => {
-    const category = req.query.category;
+const vehiclesPage = async (req, res, next) => {
+    try {
+        const category = req.query.category;
 
-    const vehicles = await getVehiclesByCategory(category);
+        const vehicles = await getVehiclesByCategory(category);
 
-    res.render('vehicles/list', {
-        title: 'Available Vehicles',
-        vehicles,
-        currentCategory: category || 'All'
-    });
+        res.render('vehicles/list', {
+            title: 'Available Vehicles',
+            vehicles,
+            currentCategory: category || 'All'
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 // Vehicle detail page
 const vehicleDetailPage = async (req, res, next) => {
-    const vehicleId = req.params.slugId;
+    try {
+        const slug = req.params.slugId;
 
-    const vehicle = await getVehicleBySlug(vehicleId);
+        const vehicle = await getVehicleBySlug(slug);
 
-    if (!vehicle) {
-        const err = new Error(`Vehicle not found`);
-        err.status = 404;
-        return next(err);
+        if (!vehicle) {
+            const err = new Error('Vehicle not found');
+            err.status = 404;
+            return next(err);
+        }
+
+        res.render('vehicles/detail', {
+            title: vehicle.name,
+            vehicle,
+            currentSort: req.query.sort || 'feature'
+        });
+    } catch (error) {
+        next(error);
     }
-
-    res.render('vehicles/detail', {
-        title: vehicle.name,
-        vehicle
-    });
 };
 
 export { vehiclesPage, vehicleDetailPage };
