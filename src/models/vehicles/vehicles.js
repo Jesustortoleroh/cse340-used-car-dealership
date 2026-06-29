@@ -37,7 +37,7 @@ const getVehicles = async (category = null, sortBy = 'price') => {
 /**
  * Get vehicle by slug
  */
-const getVehicleBySlug = async (slug) => {
+const getVehicleBySlug = async (slug, sort = 'feature') => {
     const query = `
         SELECT
             v.id,
@@ -66,12 +66,17 @@ const getVehicleBySlug = async (slug) => {
 
     const vehicle = result.rows[0];
 
+    const orderBy =
+        sort === 'value'
+            ? 'value'
+            : 'feature';
+
     const specsResult = await db.query(
         `
         SELECT feature, value
         FROM vehicle_specs
         WHERE vehicle_id = $1
-        ORDER BY feature
+        ORDER BY ${orderBy}
         `,
         [vehicle.id]
     );

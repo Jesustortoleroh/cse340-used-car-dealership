@@ -117,36 +117,160 @@ INSERT INTO dealers (name, location, phone, email, slug) VALUES
 ('AutoWorld Motors', 'New York', '123-456-7890', 'info@autoworld.com', 'autoworld-motors'),
 ('Prime Cars', 'California', '222-333-4444', 'sales@primecars.com', 'prime-cars'),
 ('City Auto Sales', 'Texas', '555-666-7777', 'contact@cityauto.com', 'city-auto-sales'),
-('Elite Motors', 'Florida', '888-999-0000', 'elite@motors.com', 'elite-motors');
+('Elite Motors', 'Florida', '888-999-0000', 'elite@motors.com', 'elite-motors'),
+('Sunshine Auto Group', 'Arizona', '111-222-3333', 'contact@sunshineauto.com', 'sunshine-auto-group'),
+('Mountain View Motors', 'Colorado', '444-555-6666', 'sales@mountainviewmotors.com', 'mountain-view-motors'),
+('Lakeside Vehicles', 'Michigan', '777-888-9999', 'info@lakesidevehicles.com', 'lakeside-vehicles'),
+('Desert Drive Auto', 'Nevada', '333-444-5555', 'contact@desertdriveauto.com', 'desert-drive-auto'),
+('Atlantic Auto Center', 'Virginia', '666-777-8888', 'sales@atlanticauto.com', 'atlantic-auto-center'),
+('Northstar Motors', 'Minnesota', '999-000-1111', 'info@northstarmotors.com', 'northstar-motors'),
+('Golden State Cars', 'California', '123-987-4560', 'sales@goldenstatecars.com', 'golden-state-cars'),
+('Capital City Motors', 'Washington DC', '202-555-1001', 'info@capitalcitymotors.com', 'capital-city-motors'),
+('Blue Sky Automotive', 'Utah', '801-555-2002', 'sales@blueskyauto.com', 'blue-sky-automotive'),
+('Southern Wheels', 'Georgia', '404-555-3003', 'contact@southernwheels.com', 'southern-wheels'),
+('Great Plains Auto', 'Kansas', '785-555-4004', 'info@greatplainsauto.com', 'great-plains-auto'),
+('Pacific Coast Cars', 'Oregon', '503-555-5005', 'sales@pacificcoastcars.com', 'pacific-coast-cars'),
+('Metro Auto Mall', 'Illinois', '312-555-6006', 'contact@metroautomall.com', 'metro-auto-mall'),
+('Riverfront Motors', 'Missouri', '314-555-7007', 'sales@riverfrontmotors.com', 'riverfront-motors'),
+('Crown Auto Dealers', 'North Carolina', '919-555-8008', 'info@crownauto.com', 'crown-auto-dealers'),
+('Prestige Vehicle Center', 'Washington', '206-555-9009', 'sales@prestigevehicles.com', 'prestige-vehicle-center');
 
 -- Insert listings
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
-(1, 1, 'Available', 'New York'),
-(2, 2, 'Available', 'California'),
-(3, 3, 'Available', 'Texas'),
-(4, 4, 'Sold', 'Florida'),
-(5, 1, 'Available', 'New York'),
-(6, 2, 'Available', 'California'),
-(7, 3, 'Sold', 'Texas'),
-(8, 4, 'Available', 'Florida'),
-(9, 1, 'Available', 'New York'),
-(10, 2, 'Available', 'California'),
-(11, 3, 'Available', 'Texas'),
-(12, 4, 'Available', 'Florida');
+(1, 5, 'Available', 'Arizona'),
+(2, 6, 'Available', 'Colorado'),
+(3, 7, 'Available', 'Michigan'),
+(4, 8, 'Available', 'Nevada'),
+(5, 9, 'Available', 'Virginia'),
+(6, 10, 'Available', 'Minnesota'),
+(7, 11, 'Available', 'California'),
+(8, 12, 'Available', 'Washington DC'),
+(9, 13, 'Available', 'Utah'),
+(10, 14, 'Available', 'Georgia'),
+(11, 15, 'Available', 'Kansas'),
+(12, 16, 'Available', 'Oregon');
 
 -- Insert vehicle specs
 INSERT INTO vehicle_specs (vehicle_id, feature, value) VALUES
-(1, 'Mileage', '35 MPG'), (1, 'Transmission', 'Automatic'), (1, 'Color', 'Red'),
-(2, 'Mileage', '25 MPG'), (2, 'Transmission', 'Automatic'), (2, 'Color', 'Black'),
-(3, 'Mileage', '32 MPG'), (3, 'Transmission', 'Manual'), (3, 'Color', 'Blue'),
-(4, 'Mileage', '20 MPG'), (4, 'Transmission', 'Automatic'), (4, 'Color', 'White'),
-(5, 'Mileage', '34 MPG'), (5, 'Transmission', 'Automatic'), (5, 'Color', 'Silver'),
-(6, 'Mileage', '18 MPG'), (6, 'Transmission', 'Manual'), (6, 'Color', 'Green'),
-(7, 'Mileage', '30 MPG'), (7, 'Transmission', 'Automatic'), (7, 'Color', 'Gray'),
-(8, 'Mileage', '28 MPG'), (8, 'Transmission', 'Automatic'), (8, 'Color', 'Blue'),
-(9, 'Mileage', '29 MPG'), (9, 'Transmission', 'Automatic'), (9, 'Color', 'White'),
-(10, 'Mileage', '140 MPGe'), (10, 'Transmission', 'Automatic'), (10, 'Color', 'Red'),
-(11, 'Mileage', '22 MPG'), (11, 'Transmission', 'Automatic'), (11, 'Color', 'Black'),
-(12, 'Mileage', '26 MPG'), (12, 'Transmission', 'Automatic'), (12, 'Color', 'Silver');
+
+-- Toyota Corolla
+(1, 'Mileage', '35 MPG'),
+(1, 'Transmission', 'Automatic'),
+(1, 'Color', 'Red'),
+(1, 'Engine', '1.8L'),
+(1, 'Horsepower', '139 HP'),
+(1, 'Doors', '4'),
+(1, 'Seats', '5'),
+(1, 'Drivetrain', 'FWD'),
+
+-- Ford Explorer
+(2, 'Mileage', '25 MPG'),
+(2, 'Transmission', 'Automatic'),
+(2, 'Color', 'Black'),
+(2, 'Engine', '3.5L V6'),
+(2, 'Horsepower', '300 HP'),
+(2, 'Doors', '4'),
+(2, 'Seats', '7'),
+(2, 'Drivetrain', 'AWD'),
+
+-- Honda Civic
+(3, 'Mileage', '32 MPG'),
+(3, 'Transmission', 'Manual'),
+(3, 'Color', 'Blue'),
+(3, 'Engine', '2.0L'),
+(3, 'Horsepower', '158 HP'),
+(3, 'Doors', '4'),
+(3, 'Seats', '5'),
+(3, 'Drivetrain', 'FWD'),
+
+-- Chevrolet Silverado
+(4, 'Mileage', '20 MPG'),
+(4, 'Transmission', 'Automatic'),
+(4, 'Color', 'White'),
+(4, 'Engine', '5.3L V8'),
+(4, 'Horsepower', '355 HP'),
+(4, 'Doors', '4'),
+(4, 'Seats', '6'),
+(4, 'Towing Capacity', '13000 lbs'),
+
+-- Nissan Altima
+(5, 'Mileage', '34 MPG'),
+(5, 'Transmission', 'Automatic'),
+(5, 'Color', 'Silver'),
+(5, 'Engine', '2.5L'),
+(5, 'Horsepower', '188 HP'),
+(5, 'Doors', '4'),
+(5, 'Seats', '5'),
+(5, 'Drivetrain', 'FWD'),
+
+-- Jeep Wrangler
+(6, 'Mileage', '18 MPG'),
+(6, 'Transmission', 'Manual'),
+(6, 'Color', 'Green'),
+(6, 'Engine', '3.6L V6'),
+(6, 'Horsepower', '285 HP'),
+(6, 'Doors', '4'),
+(6, 'Seats', '5'),
+(6, 'Drivetrain', '4WD'),
+
+-- BMW 3 Series
+(7, 'Mileage', '30 MPG'),
+(7, 'Transmission', 'Automatic'),
+(7, 'Color', 'Gray'),
+(7, 'Engine', '2.0L Turbo'),
+(7, 'Horsepower', '255 HP'),
+(7, 'Doors', '4'),
+(7, 'Seats', '5'),
+(7, 'Drivetrain', 'RWD'),
+
+-- Hyundai Tucson
+(8, 'Mileage', '28 MPG'),
+(8, 'Transmission', 'Automatic'),
+(8, 'Color', 'Blue'),
+(8, 'Engine', '2.5L'),
+(8, 'Horsepower', '187 HP'),
+(8, 'Doors', '4'),
+(8, 'Seats', '5'),
+(8, 'Drivetrain', 'AWD'),
+
+-- Chevrolet Malibu
+(9, 'Mileage', '29 MPG'),
+(9, 'Transmission', 'Automatic'),
+(9, 'Color', 'White'),
+(9, 'Engine', '1.5L Turbo'),
+(9, 'Horsepower', '160 HP'),
+(9, 'Doors', '4'),
+(9, 'Seats', '5'),
+(9, 'Drivetrain', 'FWD'),
+
+-- Tesla Model 3
+(10, 'Mileage', '140 MPGe'),
+(10, 'Transmission', 'Automatic'),
+(10, 'Color', 'Red'),
+(10, 'Battery', '60 kWh'),
+(10, 'Range', '272 Miles'),
+(10, 'Horsepower', '283 HP'),
+(10, 'Seats', '5'),
+(10, 'Charging', 'Supercharger'),
+
+-- Ford F-150
+(11, 'Mileage', '22 MPG'),
+(11, 'Transmission', 'Automatic'),
+(11, 'Color', 'Black'),
+(11, 'Engine', '3.5L EcoBoost'),
+(11, 'Horsepower', '400 HP'),
+(11, 'Doors', '4'),
+(11, 'Seats', '6'),
+(11, 'Towing Capacity', '14000 lbs'),
+
+-- Honda CR-V
+(12, 'Mileage', '26 MPG'),
+(12, 'Transmission', 'Automatic'),
+(12, 'Color', 'Silver'),
+(12, 'Engine', '1.5L Turbo'),
+(12, 'Horsepower', '190 HP'),
+(12, 'Doors', '4'),
+(12, 'Seats', '5'),
+(12, 'Drivetrain', 'AWD');
 
 COMMIT;

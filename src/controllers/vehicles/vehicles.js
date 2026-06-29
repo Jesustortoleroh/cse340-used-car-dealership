@@ -25,8 +25,12 @@ const vehiclesPage = async (req, res, next) => {
 const vehicleDetailPage = async (req, res, next) => {
     try {
         const slug = req.params.slugId;
+        const currentSort = req.query.sort || 'feature';
 
-        const vehicle = await getVehicleBySlug(slug);
+        const vehicle = await getVehicleBySlug(
+            slug,
+            currentSort
+        );
 
         if (!vehicle) {
             const err = new Error('Vehicle not found');
@@ -37,7 +41,7 @@ const vehicleDetailPage = async (req, res, next) => {
         res.render('vehicles/detail', {
             title: vehicle.name,
             vehicle,
-            currentSort: req.query.sort || 'feature'
+            currentSort
         });
     } catch (error) {
         next(error);
