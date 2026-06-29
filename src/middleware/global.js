@@ -64,6 +64,8 @@ const addLocalVariables = (req, res, next) => {
 
     // Set greeting based on time of day
     res.locals.greeting = `<p>${getCurrentGreeting()}</p>`;
+    // Set isLoggedIn based on session data
+    res.locals.isLoggedIn = !!req.session?.accountData;
     
     // Continue to the next middleware or route handler
     next();
