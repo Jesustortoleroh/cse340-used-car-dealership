@@ -89,6 +89,16 @@ CREATE TABLE vehicle_specs (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
 );
 
+-- Vehicle images table
+CREATE TABLE vehicle_images (
+    id SERIAL PRIMARY KEY,
+    vehicle_id INTEGER NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    is_primary BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
+);
+
 -- ============================================
 -- 3. INSERT DATA
 -- ============================================
@@ -262,5 +272,21 @@ INSERT INTO vehicle_specs (vehicle_id, feature, value) VALUES
 (12, 'Doors', '4'),
 (12, 'Seats', '5'),
 (12, 'Drivetrain', 'AWD');
+
+
+NSERT INTO vehicle_images (vehicle_id, image_url, is_primary) VALUES
+(1, '/images/vehicles/toyota-corolla.jpg', true),
+(2, '/images/vehicles/ford-explorer.jpg', true),
+(3, '/images/vehicles/honda-civic.jpg', true),
+(4, '/images/vehicles/chevrolet-silverado.jpg', true),
+(5, '/images/vehicles/nissan-altima.jpg', true),
+(6, '/images/vehicles/jeep-wrangler.jpg', true),
+(7, '/images/vehicles/bmw-3-series.jpg', true),
+(8, '/images/vehicles/hyundai-tucson.jpg', true),
+(9, '/images/vehicles/chevrolet-malibu.jpg', true),
+(10, '/images/vehicles/tesla-model-3.jpg', true),
+(11, '/images/vehicles/ford-f150.jpg', true),
+(12, '/images/vehicles/honda-crv.jpg', true);
+
 
 COMMIT;
