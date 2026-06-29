@@ -4,8 +4,18 @@
   <h1><%= title %></h1>
 
   <div class="vehicle-list">
+
     <% vehicles.forEach(vehicle => { %>
+
       <div class="vehicle-card">
+
+        <% if (vehicle.image_url) { %>
+          <img
+            src="<%= vehicle.image_url %>"
+            alt="<%= vehicle.name %>"
+            class="vehicle-image"
+          >
+        <% } %>
 
         <h3>
           <a href="/vehicles/<%= vehicle.slug %>">
@@ -13,13 +23,19 @@
           </a>
         </h3>
 
-        <p>$<%= vehicle.price %></p>
-        <p>Category: <%= vehicle.category %></p>
+        <p class="vehicle-price">
+          $<%= vehicle.price.toLocaleString() %>
+        </p>
+
+        <p>
+          Category: <%= vehicle.category %>
+        </p>
 
       </div>
-    <% }) %>
-  </div>
 
+    <% }) %>
+
+  </div>
 </main>
 
 <%- include('../partials/footer') %>

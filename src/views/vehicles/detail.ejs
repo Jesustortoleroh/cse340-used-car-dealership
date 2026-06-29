@@ -3,14 +3,23 @@
 <main>
 
   <div class="vehicle-header">
+
     <h1><%= vehicle.name %></h1>
+
+    <% if (vehicle.image_url) { %>
+      <img
+        src="<%= vehicle.image_url %>"
+        alt="<%= vehicle.name %>"
+        class="vehicle-detail-image"
+      >
+    <% } %>
 
     <p class="vehicle-category">
       Category: <%= vehicle.category %>
     </p>
 
     <p class="vehicle-meta">
-      $<%= vehicle.price %>
+      $<%= vehicle.price.toLocaleString() %>
     </p>
 
     <p class="vehicle-description">
@@ -22,45 +31,66 @@
         Dealer: <%= vehicle.dealer %> • <%= vehicle.location %>
       </p>
     <% } %>
+
   </div>
 
   <div class="specs">
+
     <div class="sections-header">
+
       <h2>Specifications</h2>
 
       <div class="sort-options">
-        <span>Sort by: </span>
 
-        <a href="/vehicles/<%= vehicle.slug %>?sort=feature"
-           class="<%= currentSort === 'feature' ? 'active' : '' %>">
+        <span>Sort by:</span>
+
+        <a
+          href="/vehicles/<%= vehicle.slug %>?sort=feature"
+          class="<%= currentSort === 'feature' ? 'active' : '' %>"
+        >
           Feature
         </a>
 
-        <a href="/vehicles/<%= vehicle.slug %>?sort=value"
-           class="<%= currentSort === 'value' ? 'active' : '' %>">
+        <a
+          href="/vehicles/<%= vehicle.slug %>?sort=value"
+          class="<%= currentSort === 'value' ? 'active' : '' %>"
+        >
           Value
         </a>
+
       </div>
+
     </div>
 
     <div class="specs-list">
+
       <% if (vehicle.specs && vehicle.specs.length > 0) { %>
+
         <% vehicle.specs.forEach(spec => { %>
+
           <div class="spec-card">
             <strong><%= spec.feature %>:</strong>
             <span><%= spec.value %></span>
           </div>
+
         <% }) %>
+
       <% } else { %>
+
         <p>No specifications available.</p>
+
       <% } %>
+
     </div>
+
   </div>
 
   <div class="navigation">
+
     <a href="/vehicles<%= vehicle.category ? '?category=' + vehicle.category : '' %>">
       &larr; Back to Vehicles
     </a>
+
   </div>
 
 </main>

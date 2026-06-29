@@ -20,9 +20,14 @@ const getVehicles = async (category = null, sortBy = 'price') => {
             v.slug,
             v.description,
             v.price,
-            c.name AS category
+            c.name AS category,
+            vi.image_url
         FROM vehicles v
-        JOIN categories c ON v.category_id = c.id
+        JOIN categories c
+            ON v.category_id = c.id
+        LEFT JOIN vehicle_images vi
+            ON vi.vehicle_id = v.id
+            AND vi.is_primary = true
         ${whereClause}
         ORDER BY ${orderByClause}
     `;
@@ -47,7 +52,8 @@ const getVehicleBySlug = async (slug, sort = 'feature') => {
             v.price,
             c.name AS category,
             d.name AS dealer,
-            d.location
+            d.location,
+            vi.image_url
         FROM vehicles v
         JOIN categories c
             ON v.category_id = c.id
@@ -55,6 +61,9 @@ const getVehicleBySlug = async (slug, sort = 'feature') => {
             ON l.vehicle_id = v.id
         LEFT JOIN dealers d
             ON d.id = l.dealer_id
+        LEFT JOIN vehicle_images vi
+            ON vi.vehicle_id = v.id
+            AND vi.is_primary = true
         WHERE v.slug = $1
     `;
 
