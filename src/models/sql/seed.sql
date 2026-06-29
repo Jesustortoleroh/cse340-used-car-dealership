@@ -137,14 +137,30 @@ INSERT INTO dealers (name, location, phone, email, slug) VALUES
 
 -- Insert listings
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
+(1, 1, 'Available', 'New York'),
 (1, 5, 'Available', 'Arizona'),
+
+(2, 2, 'Available', 'California'),
 (2, 6, 'Available', 'Colorado'),
+
+(3, 3, 'Available', 'Texas'),
 (3, 7, 'Available', 'Michigan'),
+
+(4, 4, 'Sold', 'Florida'),
 (4, 8, 'Available', 'Nevada'),
+
 (5, 9, 'Available', 'Virginia'),
+(5, 17, 'Available', 'Illinois'),
+
 (6, 10, 'Available', 'Minnesota'),
+(6, 18, 'Available', 'Missouri'),
+
 (7, 11, 'Available', 'California'),
+(7, 19, 'Available', 'North Carolina'),
+
 (8, 12, 'Available', 'Washington DC'),
+(8, 20, 'Available', 'Washington'),
+
 (9, 13, 'Available', 'Utah'),
 (10, 14, 'Available', 'Georgia'),
 (11, 15, 'Available', 'Kansas'),
