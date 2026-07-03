@@ -4,39 +4,53 @@
 
     <h1><%= title %></h1>
 
-    <form action="/service-requests/create" method="POST">
+    <form action="/service-requests/create" method="POST" class="service-form">
 
-        <div>
-
-            <label for="service_type">
+        <div class="form-group">
+            <label for="service_type_id">
                 Service Type
             </label>
-
-            <input
-                type="text"
-                id="service_type"
-                name="service_type"
+            <select
+                id="service_type_id"
+                name="service_type_id"
                 required
             >
-
+                <option value="">Select a service type...</option>
+                <% if (serviceTypes && serviceTypes.length > 0) { %>
+                    <% serviceTypes.forEach(type => { %>
+                        <option value="<%= type.id %>">
+                            <%= type.name %>
+                        </option>
+                    <% }) %>
+                <% } %>
+            </select>
         </div>
 
-        <div>
+        <div class="form-group">
+            <label for="vehicle_id">
+                Vehicle (Optional)
+            </label>
+            <input
+                type="text"
+                id="vehicle_id"
+                name="vehicle_id"
+                placeholder="Enter vehicle ID or leave empty"
+            >
+        </div>
 
+        <div class="form-group">
             <label for="description">
                 Description
             </label>
-
             <textarea
                 id="description"
                 name="description"
                 rows="5"
                 required
             ></textarea>
-
         </div>
 
-        <button type="submit">
+        <button type="submit" class="btn-primary">
             Submit Request
         </button>
 

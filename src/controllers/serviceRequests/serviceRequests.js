@@ -4,6 +4,7 @@ import {
     getAllServiceRequests,
     getServiceRequestById,
     getServiceRequestsByUserId,
+    getAllServiceTypes,
     createServiceRequest,
     updateServiceRequestStatus,
     updateServiceRequestNotes,
@@ -62,17 +63,35 @@ const showServiceRequests = async (
 /**
  * Show create form
  */
-const showCreateRequestForm = (
+const showCreateRequestForm = async (
     req,
     res
 ) => {
 
-    res.render(
-        'serviceRequests/create',
-        {
-            title: 'New Service Request'
-        }
-    );
+    try {
+
+        const serviceTypes =
+            await getAllServiceTypes();
+
+        res.render(
+            'serviceRequests/create',
+            {
+                title: 'New Service Request',
+                serviceTypes
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        req.flash?.(
+            'error',
+            'Unable to load service types.'
+        );
+
+        res.redirect('/service-requests');
+    }
 };
 
 /**
@@ -101,8 +120,8 @@ const processCreateRequest = async (
     }
 
     const {
+        service_type_id,
         vehicle_id,
-        service_type,
         description
     } = req.body;
 
@@ -110,10 +129,10 @@ const processCreateRequest = async (
 
         await createServiceRequest(
             req.session.user.id,
+            parseInt(service_type_id),
             vehicle_id
                 ? parseInt(vehicle_id)
                 : null,
-            service_type,
             description
         );
 
@@ -168,11 +187,15 @@ const showEditRequestForm = async (
             );
         }
 
+        const serviceTypes =
+            await getAllServiceTypes();
+
         res.render(
             'serviceRequests/edit',
             {
                 title: 'Edit Service Request',
-                request
+                request,
+                serviceTypes
             }
         );
 
@@ -203,21 +226,25 @@ const processUpdateRequest = async (
         parseInt(req.params.id);
 
     const {
+        service_type_id,
         status,
         notes
     } = req.body;
 
     try {
 
+        // Update status and notes
         await updateServiceRequestStatus(
             requestId,
             status
         );
 
-        await updateServiceRequestNotes(
-            requestId,
-            notes
-        );
+        if (notes !== undefined) {
+            await updateServiceRequestNotes(
+                requestId,
+                notes
+            );
+        }
 
         req.flash?.(
             'success',

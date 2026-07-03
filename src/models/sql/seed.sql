@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS contact_form CASCADE;
+DROP TABLE IF EXISTS service_types CASCADE;
 
 -- ============================================
 -- 2. CREATE TABLES
@@ -119,6 +120,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
+
 -- Contact form table
 CREATE TABLE contact_form (
     id SERIAL PRIMARY KEY,
@@ -153,41 +155,31 @@ CREATE TABLE reviews (
 
     UNIQUE(user_id, vehicle_id)
 );
+
+-- Service types table
+CREATE TABLE service_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Service requests table
 CREATE TABLE service_requests (
     id SERIAL PRIMARY KEY,
-
     user_id INTEGER NOT NULL,
-
+    service_type_id INTEGER NOT NULL,
     vehicle_id INTEGER,
-
-    service_type VARCHAR(100) NOT NULL,
-
     description TEXT NOT NULL,
-
-    status VARCHAR(50)
-        DEFAULT 'Submitted',
-
+    status VARCHAR(50) DEFAULT 'Submitted',
     notes TEXT,
-
-    requested_date DATE
-        DEFAULT CURRENT_DATE,
-
+    requested_date DATE DEFAULT CURRENT_DATE,
     completed_date DATE,
-
-    created_at TIMESTAMP
-        DEFAULT CURRENT_TIMESTAMP,
-
-    updated_at TIMESTAMP
-        DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (user_id)
-        REFERENCES users(id)
-        ON DELETE CASCADE,
-
-    FOREIGN KEY (vehicle_id)
-        REFERENCES vehicles(id)
-        ON DELETE SET NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (service_type_id) REFERENCES service_types(id),
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
 );
 
 -- Session table
@@ -319,6 +311,7 @@ INSERT INTO dealers (
     'sunshine-auto-group',
     '/images/dealers/sunshine.jpg'
 );
+
 -- Insert listings
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
 (1, 1, 'Available', 'New York'),
@@ -509,6 +502,28 @@ VALUES
     'customer@dealer.com',
     '$2b$10$XGKT3RYknxqr/KWfqvGE6eABgy0JQ4OlcIxbVa/W7J/D/Zm4dhO1i',
     1
-); 
+);
+
+-- Insert service types
+INSERT INTO service_types (name, description) VALUES
+('Oil Change', 'Standard oil change service including filter replacement'),
+('Tire Rotation', 'Rotate tires for even wear and extended tire life'),
+('Brake Repair', 'Inspect and repair brake pads, rotors, and calipers'),
+('Engine Diagnostic', 'Comprehensive engine diagnostic to identify issues'),
+('Transmission Service', 'Transmission fluid change and system inspection'),
+('Battery Replacement', 'Battery testing and replacement service'),
+('Air Conditioning Service', 'AC system inspection, recharge, and repair'),
+('Suspension Repair', 'Suspension system inspection and repair'),
+('Exhaust System Repair', 'Exhaust system inspection and repair'),
+('Electrical System Repair', 'Electrical system diagnostic and repair'),
+('Wheel Alignment', 'Wheel alignment and balancing service'),
+('Fluid Check/Change', 'Check and change all vehicle fluids'),
+('Other', 'Other service not listed');
+
+-- Insert sample service requests
+INSERT INTO service_requests (user_id, service_type_id, vehicle_id, description, status, notes) VALUES
+(3, 1, 1, 'Need oil change and filter replacement', 'Submitted', 'Customer requested synthetic oil'),
+(3, 3, 2, 'Brakes making noise, need inspection', 'In Progress', 'Front brake pads worn out'),
+(3, 4, 3, 'Check engine light is on', 'Submitted', 'Customer reports rough idle');
 
 COMMIT;

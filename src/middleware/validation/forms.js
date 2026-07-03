@@ -179,11 +179,10 @@ const reviewValidation = [
 ];
 
 const serviceRequestValidation = [
-    body('service_type')
-        .trim()
-        .isLength({ min: 3, max: 100 })
+    body('service_type_id')
+        .isInt({ min: 1 })
         .withMessage(
-            'Service type is required'
+            'Please select a valid service type'
         ),
 
     body('description')
@@ -191,8 +190,16 @@ const serviceRequestValidation = [
         .isLength({ min: 10, max: 1000 })
         .withMessage(
             'Description must be between 10 and 1000 characters'
+        ),
+
+    body('vehicle_id')
+        .optional()
+        .isInt({ min: 1 })
+        .withMessage(
+            'Vehicle ID must be a valid number'
         )
 ];
+
 
 
 
