@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    <a href="/service-requests/createCreate Service Request
+    </a>
+
+    <% if (requests && requests.length > 0) { %>
+
+        <% requests.forEach(request => { %>
+
+            <article class="request-card">
+
+                <h3>
+                    <%= request.service_type %>
+                </h3>
+
+                <p>
+                    <strong>Status:</strong>
+                    <%= request.status %>
+                </p>
+
+                <p>
+                    <%= request.description %>
+                </p>
+
+                <% if (request.vehicle_name) { %>
+                    <p>
+                        Vehicle:
+                        <%= request.vehicle_name %>
+                    </p>
+                <% } %>
+
+                service-requests/<%= request.id %>/edit"
+                >
+                    Edit
+                </a>
+
+                /service-requests/<%= request.id %>/delete >
+
+                    <button type="submit">
+                        Delete
+                    </button>
+
+                </form>
+
+            </article>
+
+        <% }) %>
+
+    <% } else { %>
+
+        <p>
+            No service requests found.
+        </p>
+
+    <% } %>
+
+</main>
+
+<%- include('../partials/footer') %>

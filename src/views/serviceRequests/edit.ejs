@@ -1,0 +1,73 @@
+<%- include('../partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    /service-requests/<%= request.id %>/edit    >
+
+        <div>
+
+            <label for="status">
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option
+                    value="Submitted"
+                    <%= request.status === 'Submitted'
+                        ? 'selected'
+                        : '' %>
+                >
+                    Submitted
+                </option>
+
+                <option
+                    value="In Progress"
+                    <%= request.status === 'In Progress'
+                        ? 'selected'
+                        : '' %>
+                >
+                    In Progress
+                </option>
+
+                <option
+                    value="Completed"
+                    <%= request.status === 'Completed'
+                        ? 'selected'
+                        : '' %>
+                >
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label for="notes">
+                Notes
+            </label>
+
+            <textarea
+                id="notes"
+                name="notes"
+                rows="5"
+            ><%= request.notes || '' %></textarea>
+
+        </div>
+
+        <button type="submit">
+            Update Request
+        </button>
+
+    </form>
+
+</main>
+
+<%- include('../partials/footer') %>

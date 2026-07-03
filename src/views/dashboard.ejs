@@ -1,47 +1,154 @@
 <%- include('partials/header') %>
 
 <main>
+
     <h1><%= title %></h1>
 
     <% if (user) { %>
+
         <div class="dashboard-container">
-            <div class="user-profile">
-                <h2>Welcome, <%= user.name %>!</h2>
-                
+
+            <!-- User Profile -->
+            <section class="user-profile">
+
+                <h2>
+                    Welcome, <%= user.name %>!
+                </h2>
+
                 <div class="user-details">
+
                     <div class="detail-item">
                         <span class="label">Name:</span>
-                        <span class="value"><%= user.name %></span>
+                        <span class="value">
+                            <%= user.name %>
+                        </span>
                     </div>
-                    
+
                     <div class="detail-item">
                         <span class="label">Email:</span>
-                        <span class="value"><%= user.email %></span>
+                        <span class="value">
+                            <%= user.email %>
+                        </span>
                     </div>
-                    
+
                     <div class="detail-item">
                         <span class="label">Role:</span>
-                        <span class="value"><%= user.roleName %></span>
+                        <span class="value">
+                            <%= user.roleName %>
+                        </span>
                     </div>
-                    
+
                     <div class="detail-item">
                         <span class="label">Member Since:</span>
-                        <span class="value"><%= new Date(user.created_at).toLocaleDateString() %></span>
+                        <span class="value">
+                            <%= new Date(user.created_at).toLocaleDateString() %>
+                        </span>
                     </div>
+
                 </div>
-            </div>
+
+            </section>
+
+            <!-- Customer Tools -->
+            <section class="dashboard-actions">
+
+                <h2>Customer Tools</h2>
+
+                <ul>
+
+                    <li>
+                        /vehicles
+                            Browse Vehicles
+                        </a>
+                    </li>
+
+                    <li>
+                        /dealers
+                            View Dealers
+                        </a>
+                    </li>
+
+                    <li>
+                        service-requests">
+                            Service Requests
+                        </a>
+                    </li>
+
+                    <li>
+                        -requests/create">
+                            Submit Service Request
+                        </a>
+                    </li>
+
+                    <li>
+                        ">
+                            Contact Dealership
+                        </a>
+                    </li>
+
+                </ul>
+
+            </section>
+
+            <!-- Employee & Owner Tools -->
+            <% if (
+                user.roleName === 'employee' ||
+                user.roleName === 'owner'
+            ) { %>
+
+                <section class="dashboard-actions">
+
+                    <h2>Staff Tools</h2>
+
+                    <ul>
+
+                        <li>
+                            /contact/responses
+                        </li>
+
+                        <li>
+                            ">
+                                Manage Service Requests
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </section>
+
+            <% } %>
+
+            <!-- Owner Tools -->
+            <% if (user.roleName === 'owner') { %>
+
+                <section class="dashboard-actions">
+
+                    <h2>Administration</h2>
+
+                    <ul>
+
+                        <li>
+                            /register/list
+                                Manage Users
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </section>
+
+            <% } %>
+
         </div>
+
     <% } else { %>
-        <p>Please log in to view your dashboard.</p>
+
+        <p>
+            Please log in to view your dashboard.
+        </p>
+
     <% } %>
 
-    <!-- Debug: Session data (remove in production) -->
-    <% if (sessionData) { %>
-        <details>
-            <summary>Session Data (Debug)</summary>
-            <pre><%= JSON.stringify(sessionData, null, 2) %></pre>
-        </details>
-    <% } %>
 </main>
 
 <%- include('partials/footer') %>

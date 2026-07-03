@@ -9,6 +9,7 @@ import { showLoginForm, processLogin, processLogout, showDashboard } from './for
 import reviewsRoutes from '../routes/reviews.js';
 import { requireLogin } from '../middleware/auth.js';
 import { contactValidation, registrationValidation, loginValidation, updateAccountValidation } from '../middleware/validation/forms.js';
+import serviceRequestsRoutes from '../routes/serviceRequests.js';
 
 const router = Router();
 
@@ -37,6 +38,11 @@ router.use('/dealers', (req, res, next) => {
 
 router.use('/vehicles', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/vehicles.css">');
+    next();
+});
+
+router.use('/dashboard', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/dashboard.css">');
     next();
 });
 
@@ -81,5 +87,8 @@ router.get( '/dashboard', requireLogin, showDashboard );
 
 // Reviews routes
 router.use( '/reviews', reviewsRoutes);
+
+// Service Requests routes
+router.use( '/service-requests', serviceRequestsRoutes );
 
 export default router;

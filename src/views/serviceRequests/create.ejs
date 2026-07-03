@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    /service-requests/create"
+    >
+
+        <div>
+
+            <label for="service_type">
+                Service Type
+            </label>
+
+            <input
+                type="text"
+                id="service_type"
+                name="service_type"
+                required
+            >
+
+        </div>
+
+        <div>
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                rows="5"
+                required
+            ></textarea>
+
+        </div>
+
+        <button type="submit">
+            Submit Request
+        </button>
+
+    </form>
+
+</main>
+
+<%- include('../partials/footer') %>

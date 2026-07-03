@@ -178,4 +178,22 @@ const reviewValidation = [
         })
 ];
 
-export {contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation}
+const serviceRequestValidation = [
+    body('service_type')
+        .trim()
+        .isLength({ min: 3, max: 100 })
+        .withMessage(
+            'Service type is required'
+        ),
+
+    body('description')
+        .trim()
+        .isLength({ min: 10, max: 1000 })
+        .withMessage(
+            'Description must be between 10 and 1000 characters'
+        )
+];
+
+
+
+export {contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation };
