@@ -74,4 +74,13 @@ router.post(
     processDeleteRequest
 );
 
+router.get(
+    '/manage',
+    requireLogin,
+    showServiceRequests
+);
+
+
+
+
 export default router;

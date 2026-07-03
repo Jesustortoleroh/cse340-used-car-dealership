@@ -11,6 +11,9 @@ import { requireLogin } from '../middleware/auth.js';
 import { contactValidation, registrationValidation, loginValidation, updateAccountValidation } from '../middleware/validation/forms.js';
 import serviceRequestsRoutes from '../routes/serviceRequests.js';
 
+
+
+
 const router = Router();
 
 
@@ -88,6 +91,7 @@ router.get( '/register/list', requireLogin, showAllUsers );
 router.get( '/register/:id/edit', requireLogin, showEditAccountForm );
 router.post( '/register/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
 router.post( '/register/:id/delete', requireLogin, processDeleteAccount );
+
 
 // Login routes
 router.get( '/login', showLoginForm );
