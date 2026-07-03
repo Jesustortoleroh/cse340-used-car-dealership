@@ -4,9 +4,35 @@
 
     <h1><%= title %></h1>
 
-    <form action="/service-requests/<%= request.id %>/edit" method="POST">
+    <form action="/service-requests/<%= request.id %>/edit" method="POST" class="service-form">
 
-        <div>
+        <div class="form-group">
+
+            <label for="service_type_id">
+                Service Type
+            </label>
+
+            <select
+                id="service_type_id"
+                name="service_type_id"
+                required
+            >
+                <option value="">Select a service type...</option>
+                <% if (serviceTypes && serviceTypes.length > 0) { %>
+                    <% serviceTypes.forEach(type => { %>
+                        <option
+                            value="<%= type.id %>"
+                            <%= request.service_type_id === type.id ? 'selected' : '' %>
+                        >
+                            <%= type.name %>
+                        </option>
+                    <% }) %>
+                <% } %>
+            </select>
+
+        </div>
+
+        <div class="form-group">
 
             <label for="status">
                 Status
@@ -48,7 +74,7 @@
 
         </div>
 
-        <div>
+        <div class="form-group">
 
             <label for="notes">
                 Notes
@@ -62,7 +88,7 @@
 
         </div>
 
-        <button type="submit">
+        <button type="submit" class="btn-primary">
             Update Request
         </button>
 
