@@ -110,14 +110,41 @@ app.use((err, req, res, next) => {
 
     // Determine status and template
     const status = err.status || 500;
-    const template = status === 404 ? '404' : '500';
+    
+    // Mapeo de errores para diferentes códigos de estado
+    let template = '500';
+    let title = 'Server Error';
+    
+    switch (status) {
+        case 400:
+            template = '400';
+            title = 'Bad Request';
+            break;
+        case 403:
+            template = '403';
+            title = 'Access Denied';
+            break;
+        case 404:
+            template = '404';
+            title = 'Page Not Found';
+            break;
+        default:
+            template = '500';
+            title = 'Server Error';
+    }
 
     // Prepare data for the template
     const context = {
-        title: status === 404 ? 'Page Not Found' : 'Server Error',
-        error: NODE_ENV === 'production' ? 'An error occurred' : err.message,
-        stack: NODE_ENV === 'production' ? null : err.stack,
-        NODE_ENV // Our WebSocket check needs this and its convenient to pass along
+        title,
+        error: NODE_ENV === 'production' 
+            ? 'An error occurred.' 
+            : err.message,
+        stack: NODE_ENV === 'production' 
+            ? null 
+            : err.stack,
+        user: req.session?.user || null,
+        requiredRole: err.requiredRole || null,
+        NODE_ENV
     };
 
     // Render the appropriate error template with fallback
@@ -126,7 +153,25 @@ app.use((err, req, res, next) => {
     } catch (renderErr) {
         // If rendering fails, send a simple error page instead
         if (!res.headersSent) {
-            res.status(status).send(`<h1>Error ${status}</h1><p>An error occurred.</p>`);
+            res.status(status).send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Error ${status}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                        h1 { font-size: 2.5em; color: #333; }
+                        p { color: #666; }
+                        a { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #2563eb; color: white; text-decoration: none; border-radius: 5px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>⚠️ Error ${status}</h1>
+                    <p>${status === 404 ? 'Page not found' : 'An error occurred'}</p>
+                    <a href="/">Return Home</a>
+                </body>
+                </html>
+            `);
         }
     }
 });

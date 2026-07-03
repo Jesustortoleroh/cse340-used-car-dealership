@@ -4,6 +4,7 @@
  * Provides middleware functions for:
  * - Requiring user authentication (requireLogin)
  * - Requiring specific roles (requireRole)
+ * - Employee and Owner access control with proper error handling
  */
 
 /**
@@ -46,10 +47,11 @@ const requireRole = (roleName) => {
         // Check if user's role matches the required role
         const userRole = req.session.user.roleName || 'customer';
         if (userRole !== roleName) {
-            if (typeof req.flash === 'function') {
-                req.flash('error', 'You do not have permission to access this page.');
-            }
-            return res.redirect('/');
+            // ✅ MEJORADO: Usar error handler en lugar de redirect
+            const err = new Error('You do not have permission to access this page.');
+            err.status = 403;
+            err.requiredRole = roleName;
+            return next(err);
         }
 
         // User has required role, continue
@@ -62,14 +64,24 @@ const requireRole = (roleName) => {
  * (For employee dashboard access)
  */
 const requireEmployee = (req, res, next) => {
-    const role = req.session.user?.roleName || 'customer';
+    // Check if user is logged in first
+    if (!req.session || !req.session.user) {
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'You must be logged in to access this page.');
+        }
+        return res.redirect('/login');
+    }
+
+    const role = req.session.user.roleName || 'customer';
     if (role === 'employee' || role === 'owner') {
         return next();
     }
-    if (typeof req.flash === 'function') {
-        req.flash('error', 'Employee access required.');
-    }
-    return res.redirect('/');
+    
+    // ✅ MEJORADO: Usar error handler en lugar de redirect
+    const err = new Error('Employee access required.');
+    err.status = 403;
+    err.requiredRole = 'employee';
+    return next(err);
 };
 
 /**
@@ -77,14 +89,24 @@ const requireEmployee = (req, res, next) => {
  * (For admin dashboard access)
  */
 const requireOwner = (req, res, next) => {
-    const role = req.session.user?.roleName || 'customer';
+    // Check if user is logged in first
+    if (!req.session || !req.session.user) {
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'You must be logged in to access this page.');
+        }
+        return res.redirect('/login');
+    }
+
+    const role = req.session.user.roleName || 'customer';
     if (role === 'owner') {
         return next();
     }
-    if (typeof req.flash === 'function') {
-        req.flash('error', 'Owner access required.');
-    }
-    return res.redirect('/');
+    
+    // ✅ MEJORADO: Usar error handler en lugar de redirect
+    const err = new Error('Owner access required.');
+    err.status = 403;
+    err.requiredRole = 'owner';
+    return next(err);
 };
 
 export { 
