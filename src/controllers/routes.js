@@ -12,31 +12,34 @@ import { contactValidation, registrationValidation, loginValidation, updateAccou
 
 const router = Router();
 
-// Styles for specific routes
-router.use('/vehicles', (req, res, next) => {
-    res.addStyle('vehicles.css">');
-    next();
-});
 
-router.use('/dealers', (req, res, next) => {
-    res.addStyle('css/dealers.css">');
-    next();
-});
-
-router.use('/contact', (req, res, next) => {
-    res.addStyle('/css/contact.css');
+// Add login-specific styles to all login routes
+router.use('/login', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/login.css">');
     next();
 });
 
 router.use('/register', (req, res, next) => {
-    res.addStyle('/css/register.css');
+    res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
     next();
 });
 
-router.use('/login', (req, res, next) => {
-    res.addStyle('/css/login.css');
+
+router.use('/contact', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/contact.css">');
     next();
 });
+
+router.use('/dealers', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/dealers.css">');
+    next();
+});
+
+router.use('/vehicles', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/vehicles.css">');
+    next();
+});
+
 
 
 // Basic Pages
