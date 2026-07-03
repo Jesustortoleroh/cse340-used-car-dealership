@@ -16,7 +16,7 @@ A server-side rendered used car dealership web app where users browse inventory,
 
 ## Database Schema
 
-
+./public/images/ERD.png
 
 ## User Roles
 
@@ -49,3 +49,11 @@ Email: customer@dealer.com
 All test accounts use the password:
 
 P@$$w0rd!
+
+## Known Limitations
+
+- Vehicle filtering is currently limited to categories. Advanced filtering by price, mileage, year, and fuel type is not implemented.
+- Vehicle detail pages display only the primary image even though multiple images can be stored in the database.
+- Vehicle keyword search functionality is not currently available.
+- Service request updates do not generate automatic user notifications.
+- No major functional defects are currently known.
