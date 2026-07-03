@@ -38,12 +38,11 @@
 
                     <div class="review-actions">
 
-                        .id %>/edit">
+                        <a href="/reviews/<%= review.id %>/edit">
                             Edit
                         </a>
 
-                        /reviews/<%= review.id %>/delete="POST"
-                        >
+                        <form action="/reviews/<%= review.id %>/delete" method="POST">
                             <button type="submit">
                                 Delete
                             </button>

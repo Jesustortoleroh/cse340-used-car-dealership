@@ -17,6 +17,12 @@ CREATE TABLE IF NOT EXISTS contact_form (
     submitted TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX IF NOT EXISTS idx_contact_status
+ON contact_form(status);
+
+CREATE INDEX IF NOT EXISTS idx_contact_submitted
+ON contact_form(submitted);
+
 -- Users table for registration system
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
@@ -79,6 +85,20 @@ BEGIN
     END IF;
 END $$;
 
+-- Make role_id required
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_name = 'users'
+        AND column_name = 'role_id'
+    ) THEN
+        ALTER TABLE users
+        ALTER COLUMN role_id SET NOT NULL;
+    END IF;
+END $$;
+
 -- Remove old role column if exists
 DO $$
 BEGIN
@@ -97,7 +117,7 @@ CREATE TABLE IF NOT EXISTS reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     vehicle_id INTEGER NOT NULL,
-    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     comment TEXT NOT NULL,
     is_flagged BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -113,8 +133,8 @@ CREATE TABLE IF NOT EXISTS service_requests (
     user_id INTEGER NOT NULL,
     vehicle_id INTEGER,
     service_type VARCHAR(100) NOT NULL,
-    description TEXT,
-    status VARCHAR(50) DEFAULT 'submitted',
+    description TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Submitted',
     notes TEXT,
     requested_date DATE DEFAULT CURRENT_DATE,
     completed_date DATE,

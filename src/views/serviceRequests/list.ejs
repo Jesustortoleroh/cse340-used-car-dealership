@@ -4,7 +4,8 @@
 
     <h1><%= title %></h1>
 
-    <a href="/service-requests/createCreate Service Request
+    <a href="/service-requests/create">
+        Create Service Request
     </a>
 
     <% if (requests && requests.length > 0) { %>
@@ -33,17 +34,14 @@
                     </p>
                 <% } %>
 
-                service-requests/<%= request.id %>/edit"
-                >
+                <a href="/service-requests/<%= request.id %>/edit">
                     Edit
                 </a>
 
-                /service-requests/<%= request.id %>/delete >
-
+                <form action="/service-requests/<%= request.id %>/delete" method="POST">
                     <button type="submit">
                         Delete
                     </button>
-
                 </form>
 
             </article>

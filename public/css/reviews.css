@@ -1,0 +1,127 @@
+/* Reviews Section */
+
+.reviews-section {
+    margin-top: 3rem;
+}
+
+.reviews-section h2 {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+}
+
+/* Review Form */
+
+.review-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.review-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.review-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.review-form input,
+.review-form textarea,
+.review-form select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.review-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.review-form input:focus,
+.review-form textarea:focus,
+.review-form select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Review Cards */
+
+.review-card {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.review-card h3 {
+    margin-top: 0;
+    color: #1f2937;
+}
+
+.review-card .review-meta {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.review-card .review-rating {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #f59e0b;
+    margin-bottom: 0.75rem;
+}
+
+.review-card p {
+    color: #374151;
+    text-align: left;
+}
+
+/* Review Actions */
+
+.review-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.review-actions a,
+.review-actions button {
+    background-color: #1f2937;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.review-actions a:hover,
+.review-actions button:hover {
+    background-color: #2563eb;
+}
+
+/* Empty Reviews */
+
+.no-reviews {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    color: #6b7280;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}

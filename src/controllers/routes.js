@@ -46,6 +46,16 @@ router.use('/dashboard', (req, res, next) => {
     next();
 });
 
+router.use('/reviews', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/reviews.css">');
+    next();
+});
+
+router.use('/service-requests', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/serviceRequests.css">');
+    next();
+});
+
 
 
 // Basic Pages

@@ -100,6 +100,103 @@ CREATE TABLE vehicle_images (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE CASCADE
 );
 
+-- Roles table
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    role_description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+-- Contact form table
+CREATE TABLE contact_form (
+    id SERIAL PRIMARY KEY,
+    customer_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    subject VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Received',
+    submitted TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Reviews table
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    vehicle_id INTEGER NOT NULL,
+    rating INTEGER NOT NULL
+        CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT NOT NULL,
+    is_flagged BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (vehicle_id)
+        REFERENCES vehicles(id)
+        ON DELETE CASCADE,
+
+    UNIQUE(user_id, vehicle_id)
+);
+-- Service requests table
+CREATE TABLE service_requests (
+    id SERIAL PRIMARY KEY,
+
+    user_id INTEGER NOT NULL,
+
+    vehicle_id INTEGER,
+
+    service_type VARCHAR(100) NOT NULL,
+
+    description TEXT NOT NULL,
+
+    status VARCHAR(50)
+        DEFAULT 'Submitted',
+
+    notes TEXT,
+
+    requested_date DATE
+        DEFAULT CURRENT_DATE,
+
+    completed_date DATE,
+
+    created_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP,
+
+    updated_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (vehicle_id)
+        REFERENCES vehicles(id)
+        ON DELETE SET NULL
+);
+
+-- Session table
+CREATE TABLE session (
+    sid VARCHAR PRIMARY KEY,
+    sess JSON NOT NULL,
+    expire TIMESTAMP NOT NULL
+);
+
 -- ============================================
 -- 3. INSERT DATA
 -- ============================================
@@ -375,5 +472,43 @@ INSERT INTO vehicle_images (vehicle_id, image_url, is_primary) VALUES
 (11, '/images/vehicles/ford-f150.jpg', true),
 (12, '/images/vehicles/honda-crv.jpg', true);
 
+INSERT INTO roles (
+    role_name,
+    role_description
+)
+VALUES
+(
+    'customer',
+    'Standard dealership customer account'
+),
+(
+    'employee',
+    'Dealership employee account'
+),
+(
+    'owner',
+    'Full dealership administration access'
+);
+
+
+INSERT INTO users (name, email, password, role_id )
+VALUES
+('Owner User', 
+'owner@dealer.com',
+'$2b$10$kgMMZta6hPNKzf3/eMS57Oct0mZFOFQFIrcUnlDPJRD3GF8PpKJsC',
+    3
+),
+(
+    'Employee User',
+    'employee@dealer.com',
+    '$2b$10$7sEgsA4Ec.FyfZ5ipnWRTOBHuTXZWu5O9uySL.75hnYp1FepqsOWS',
+    2
+),
+(
+    'Customer User',
+    'customer@dealer.com',
+    '$2b$10$XGKT3RYknxqr/KWfqvGE6eABgy0JQ4OlcIxbVa/W7J/D/Zm4dhO1i',
+    1
+); 
 
 COMMIT;
