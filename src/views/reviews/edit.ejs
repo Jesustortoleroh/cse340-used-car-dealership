@@ -1,0 +1,55 @@
+<%- include('../partials/header') %>
+
+<main class="container">
+
+    <h1>Edit Review</h1>
+
+    <formews/<%= review.id %>/edit method="POST"
+        class="review-form"
+    >
+
+        <div class="form-group">
+            <label for="rating">
+                Rating
+            </label>
+
+            <select
+                id="rating"
+                name="rating"
+                required
+            >
+                <% for (let i = 1; i <= 5; i++) { %>
+
+                    <option
+                        value="<%= i %>"
+                        <%= review.rating === i ? 'selected' : '' %>
+                    >
+                        <%= i %> Star<%= i > 1 ? 's' : '' %>
+                    </option>
+
+                <% } %>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">
+                Review
+            </label>
+
+            <textarea
+                id="comment"
+                name="comment"
+                rows="6"
+                required
+            ><%= review.comment %></textarea>
+        </div>
+
+        <button type="submit">
+            Update Review
+        </button>
+
+    </form>
+
+</main>
+
+<%- include('../partials/footer') %>

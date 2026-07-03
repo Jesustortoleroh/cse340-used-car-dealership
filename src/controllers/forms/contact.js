@@ -1,14 +1,6 @@
-import { Router } from 'express';
-import { body, validationResult } from 'express-validator';
-import {
-    createContactForm,
-    getAllContactForms,
-    getContactFormById,
-    updateContactStatus,
-    deleteContactForm
-} from '../../models/forms/contact.js';
+import { validationResult } from 'express-validator';
+import { createContactForm, getAllContactForms, getContactFormById, updateContactStatus, deleteContactForm } from '../../models/forms/contact.js';
 
-const router = Router();
 
 /**
  * Display contact page
@@ -168,91 +160,4 @@ const deleteInquiry = async (req, res) => {
     res.redirect('/contact/responses');
 };
 
-/**
- * GET /contact - Display contact form
- */
-router.get('/', showContactForm);
-
-/**
- * POST /contact - Enhanced validation
- */
-router.post('/', [
-    // Customer Name validation with character restrictions
-    body('customer_name')
-        .trim()
-        .isLength({ min: 2, max: 100 })
-        .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s'-]+$/)
-        .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
-
-    // Email validation with maximum length
-    body('email')
-        .trim()
-        .isEmail()
-        .withMessage('A valid email address is required')
-        .normalizeEmail()
-        .isLength({ max: 255 })
-        .withMessage('Email address is too long'),
-
-    // Phone validation (optional but validated if provided)
-    body('phone')
-        .optional({ checkFalsy: true })
-        .trim()
-        .matches(/^[0-9()+\-\s]{7,20}$/)
-        .withMessage('Please enter a valid phone number'),
-
-    // Subject validation
-    body('subject')
-        .trim()
-        .isLength({ min: 2, max: 255 })
-        .withMessage('Subject must be between 2 and 255 characters')
-        .matches(/^[a-zA-Z0-9\s\-.,!?]+$/)
-        .withMessage('Subject contains invalid characters'),
-
-    // Message validation with spam detection
-    body('message')
-        .trim()
-        .isLength({ min: 10, max: 2000 })
-        .withMessage('Message must be between 10 and 2000 characters')
-        .custom((value) => {
-            // Check for spam patterns (excessive repetition)
-            const words = value.split(/\s+/);
-            const uniqueWords = new Set(words);
-            
-            if (words.length > 20 && uniqueWords.size / words.length < 0.3) {
-                throw new Error('Message appears to be spam');
-            }
-            
-            // Check for common spam phrases
-            const invalidMessages = ['hi', 'hello', 'test', 'ok', 'hey', 'whats up', 'yo'];
-            const trimmedValue = value.toLowerCase().trim();
-            
-            if (invalidMessages.includes(trimmedValue)) {
-                throw new Error('Please provide a more detailed message about your inquiry');
-            }
-
-            return true;
-        })
-], handleContactSubmission);
-
-/**
- * GET /contact/responses - Show all inquiries
- */
-router.get('/responses', showContactResponses);
-
-/**
- * GET /contact/:id - Show inquiry detail
- */
-router.get('/:id', showInquiryDetail);
-
-/**
- * POST /contact/:id/status - Update inquiry status
- */
-router.post('/:id/status', updateInquiryStatus);
-
-/**
- * POST /contact/:id/delete - Delete inquiry
- */
-router.post('/:id/delete', deleteInquiry);
-
-export default router;
+export { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry};

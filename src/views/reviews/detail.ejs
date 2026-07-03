@@ -1,0 +1,66 @@
+<section class="reviews-section">
+
+    <h2>Customer Reviews</h2>
+
+    <% if (reviews && reviews.length > 0) { %>
+
+        <% reviews.forEach(review => { %>
+
+            <article class="review-card">
+
+                <h3>
+                    <%= review.name %>
+                </h3>
+
+                <p>
+                    Rating:
+                    <strong>
+                        <%= review.rating %>/5
+                    </strong>
+                </p>
+
+                <p>
+                    <%= review.comment %>
+                </p>
+
+                <small>
+                    <%= new Date(review.created_at).toLocaleDateString() %>
+                </small>
+
+                <% if (
+                    user &&
+                    (
+                        user.id === review.user_id ||
+                        user.roleName === 'employee' ||
+                        user.roleName === 'owner'
+                    )
+                ) { %>
+
+                    <div class="review-actions">
+
+                        .id %>/edit">
+                            Edit
+                        </a>
+
+                        /reviews/<%= review.id %>/delete="POST"
+                        >
+                            <button type="submit">
+                                Delete
+                            </button>
+                        </form>
+
+                    </div>
+
+                <% } %>
+
+            </article>
+
+        <% }) %>
+
+    <% } else { %>
+
+        <p>No reviews have been submitted yet.</p>
+
+    <% } %>
+
+</section>

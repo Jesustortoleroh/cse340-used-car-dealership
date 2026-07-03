@@ -1,33 +1,6 @@
-import { Router } from 'express';
-import { body, validationResult } from 'express-validator';
-import bcrypt from 'bcrypt';
+import { validationResult } from 'express-validator';
 import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
 
-const router = Router();
-
-/**
- * Enhanced Login Validation Rules
- * Note: Does NOT check password complexity (uppercase, lowercase, special characters)
- * because users created passwords during registration where those rules were enforced.
- * During login, we only verify length to catch obvious errors.
- */
-const loginValidation = [
-    // Email validation with maximum length
-    body('email')
-        .trim()
-        .isEmail()
-        .withMessage('Please provide a valid email address')
-        .normalizeEmail()
-        .isLength({ max: 255 })
-        .withMessage('Email address is too long'),
-
-    // Password validation - length check only (complexity was validated during registration)
-    body('password')
-        .notEmpty()
-        .withMessage('Password is required')
-        .isLength({ min: 8, max: 128 })
-        .withMessage('Password must be between 8 and 128 characters')
-];
 
 /**
  * Display login form
@@ -156,17 +129,5 @@ const showDashboard = (req, res) => {
     });
 };
 
-/**
- * Routes
- */
 
-// GET /login - Display login form
-router.get('/', showLoginForm);
-
-// POST /login - Process login with enhanced validation
-router.post('/', loginValidation, processLogin);
-
-export default router;
-
-// Export additional functions for use in other files
-export { processLogout, showDashboard };
+export { showLoginForm, processLogin, processLogout, showDashboard };

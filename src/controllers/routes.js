@@ -1,73 +1,82 @@
+// Import the necessary modules and controllers
 import { Router } from 'express';
-import { vehiclesPage, vehicleDetailPage } from './vehicles/vehicles.js';
 import { homePage, aboutPage, testErrorPage } from './index.js';
+import { vehiclesPage, vehicleDetailPage } from './vehicles/vehicles.js';
 import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
-import contactRoutes from './forms/contact.js';
-import registrationRoutes from './forms/registration.js';
-import loginRoutes from './forms/login.js';
-import { processLogout, showDashboard } from './forms/login.js';
+import { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry } from './forms/contact.js';
+import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
+import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
+import reviewsRoutes from '../routes/reviews.js';
 import { requireLogin } from '../middleware/auth.js';
+import { contactValidation, registrationValidation, loginValidation, updateAccountValidation } from '../middleware/validation/forms.js';
 
 const router = Router();
 
-// Vehicle styles
+// Styles for specific routes
 router.use('/vehicles', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/vehicles.css">');
+    res.addStyle('vehicles.css">');
     next();
 });
-
-// Contact styles
-router.use('/contact', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/contact.css">');
-    next();
-});
-
-// Registration styles
-router.use('/register', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
-    next();
-});
-
-// Login styles
-router.use('/login', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/login.css">');
-    next();
-});
-
 
 router.use('/dealers', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/dealers.css">');
+    res.addStyle('css/dealers.css">');
     next();
 });
 
-// Basic pages
+router.use('/contact', (req, res, next) => {
+    res.addStyle('/css/contact.css');
+    next();
+});
+
+router.use('/register', (req, res, next) => {
+    res.addStyle('">');
+    next();
+});
+
+router.use('/login', (req, res, next) => {
+    res.addStyle('">');
+    next();
+});
+
+
+// Basic Pages
 router.get('/', homePage);
 router.get('/about', aboutPage);
+router.get('/test-error', testErrorPage);
 
-// Dealers
+
+// Dealers routes
 router.get('/dealers', dealersListPage);
 router.get('/dealers/:dealerSlug', dealerDetailPage);
 
-// Vehicles
-router.get('/vehicles', vehiclesPage);
-router.get('/vehicles/:slugId', vehicleDetailPage);
+// Vehicles routes
+router.get( '/vehicles', vehiclesPage );
+router.get( '/vehicles/:slugId', vehicleDetailPage);
 
 // Contact form routes
-router.use('/contact', contactRoutes);
+router.get( '/contact', showContactForm );
+router.post( '/contact', contactValidation, handleContactSubmission );
+router.get( '/contact/responses', requireLogin, showContactResponses );
+router.get( '/contact/:id', requireLogin, showInquiryDetail );
+router.post( '/contact/:id/status', requireLogin, updateInquiryStatus);
+router.post( '/contact/:id/delete', requireLogin, deleteInquiry );
 
-// Registration form routes
-router.use('/register', registrationRoutes);
 
-// Login form routes
-router.use('/login', loginRoutes);
+// Registration routes
+router.get( '/register', showRegistrationForm );
+router.post( '/register', registrationValidation, processRegistration );
+router.get( '/register/list', requireLogin, showAllUsers );
+router.get( '/register/:id/edit', requireLogin, showEditAccountForm );
+router.post( '/register/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
+router.post( '/register/:id/delete', requireLogin, processDeleteAccount );
 
-// Logout route
-router.get('/logout', processLogout);
+// Login routes
+router.get( '/login', showLoginForm );
+router.post( '/login', loginValidation, processLogin );
+router.get( '/logout', processLogout);
+router.get( '/dashboard', requireLogin, showDashboard );
 
-// Dashboard route (requires login)
-router.get('/dashboard', requireLogin, showDashboard);
-
-// Test error
-router.get('/test-error', testErrorPage);
+// Reviews routes
+router.use( '/reviews', reviewsRoutes);
 
 export default router;

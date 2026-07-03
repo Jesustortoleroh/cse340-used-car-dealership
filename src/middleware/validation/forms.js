@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 
 // Contact validation rules
 const contactValidation = [
-    body('name')
+    body('customer_name')
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
@@ -151,16 +151,27 @@ const reviewValidation = [
         .isInt({ min: 1, max: 5 })
         .withMessage('Rating must be between 1 and 5'),
 
-    body('reviewText')
+    body('comment')
         .trim()
         .isLength({ min: 10, max: 1000 })
         .withMessage('Review must be between 10 and 1000 characters')
         .custom((value) => {
-            const invalidMessages = ['good', 'nice', 'ok', 'great', 'cool', 'test'];
+
+            const invalidMessages = [
+                'good',
+                'nice',
+                'ok',
+                'great',
+                'cool',
+                'test'
+            ];
+
             const review = value.toLowerCase().trim();
 
             if (invalidMessages.includes(review)) {
-                throw new Error('Please provide a more detailed review');
+                throw new Error(
+                    'Please provide a more detailed review'
+                );
             }
 
             return true;

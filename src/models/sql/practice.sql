@@ -5,7 +5,7 @@
 
 BEGIN;
 
--- Contact form table
+-- Create contact_form table
 CREATE TABLE IF NOT EXISTS contact_form (
     id SERIAL PRIMARY KEY,
     customer_name VARCHAR(255) NOT NULL,
@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS contact_form (
     phone VARCHAR(20),
     subject VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Received',
     submitted TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

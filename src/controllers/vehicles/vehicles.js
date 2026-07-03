@@ -1,31 +1,41 @@
-// Import model functions
-import {
-    getVehicleBySlug,
-    getVehiclesByCategory
-} from '../../models/vehicles/vehicles.js';
+// Vehicle model functions
+import { getVehicleBySlug, getVehiclesByCategory } from '../../models/vehicles/vehicles.js';
+import { getReviewsByVehicleId } from '../../models/reviews/reviews.js';
 
-// Vehicles list page
+/**
+ * Vehicles list page
+ */
 const vehiclesPage = async (req, res, next) => {
     try {
+
         const category = req.query.category;
 
-        const vehicles = await getVehiclesByCategory(category);
+        const vehicles = await getVehiclesByCategory(
+            category
+        );
 
         res.render('vehicles/list', {
             title: 'Available Vehicles',
             vehicles,
             currentCategory: category || 'All'
         });
+
     } catch (error) {
         next(error);
     }
 };
 
-// Vehicle detail page
+/**
+ * Vehicle detail page
+ */
 const vehicleDetailPage = async (req, res, next) => {
+
     try {
+
         const slug = req.params.slugId;
-        const currentSort = req.query.sort || 'feature';
+
+        const currentSort =
+            req.query.sort || 'feature';
 
         const vehicle = await getVehicleBySlug(
             slug,
@@ -33,18 +43,36 @@ const vehicleDetailPage = async (req, res, next) => {
         );
 
         if (!vehicle) {
-            const err = new Error('Vehicle not found');
+
+            const err = new Error(
+                'Vehicle not found'
+            );
+
             err.status = 404;
+
             return next(err);
         }
 
-        res.render('vehicles/detail', {
-            title: vehicle.name,
-            vehicle,
-            currentSort
-        });
+        const reviews =
+            await getReviewsByVehicleId(
+                vehicle.id
+            );
+
+        res.render(
+            'vehicles/detail',
+            {
+                title: vehicle.name,
+                vehicle,
+                reviews,
+                user: req.session?.user || null,
+                currentSort
+            }
+        );
+
     } catch (error) {
+
         next(error);
+
     }
 };
 
