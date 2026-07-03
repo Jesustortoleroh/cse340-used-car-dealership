@@ -34,3 +34,18 @@ A server-side rendered used car dealership web app where users browse inventory,
 - Service Requests (status: Submitted, In Progress, Completed)
 - Contact Messages
 - Vehicle Images
+
+## Test Accounts
+
+### Owner
+Email: owner@dealer.com
+
+### Employee
+Email: employee@dealer.com
+
+### Customer
+Email: customer@dealer.com
+
+All test accounts use the password:
+
+P@$$w0rd!
