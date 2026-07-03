@@ -1,35 +1,59 @@
 <%- include('../partials/header') %>
 
 <main class="error-page">
-    <div class="error-icon">🔒</div>
+
+    <div class="error-icon">
+        🔒
+    </div>
+
     <h1>403 - Access Denied</h1>
+
     <p class="error-message">
         You do not have permission to access this area.
     </p>
+
     <p class="error-submessage">
+
         <% if (requiredRole === 'owner') { %>
+
             This section is restricted to dealership owners.
+
         <% } else if (requiredRole === 'employee') { %>
+
             This section is restricted to dealership employees.
+
         <% } else { %>
+
             Access to this page is restricted.
+
         <% } %>
+
     </p>
-    
+
     <div class="error-actions">
-        <a href="/" class="btn-primary">
+
+        /
             Return Home
         </a>
+
+        /vehicles
+            Browse Vehicles
+        </a>
+
         <% if (user) { %>
-            <a href="/dashboard" class="btn-secondary">
+
+            /dashboard class="btn-secondary">
                 Dashboard
             </a>
+
         <% } else { %>
-            <a href="/login" class="btn-secondary">
-                Login
-            </a>
+
+            /login
+
         <% } %>
+
     </div>
+
 </main>
 
 <%- include('../partials/footer') %>

@@ -13,7 +13,6 @@ import serviceRequestsRoutes from '../routes/serviceRequests.js';
 
 
 
-
 const router = Router();
 
 
@@ -59,15 +58,7 @@ router.use('/service-requests', (req, res, next) => {
     next();
 });
 
-router.use('/400', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/error.css">');
-    next();
-});
 
-router.use('/404', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/error.css">');
-    next();
-});
 
 // Basic Pages
 router.get('/', homePage);
