@@ -16,7 +16,7 @@ A server-side rendered used car dealership web app where users browse inventory,
 
 ## Database Schema
 
-./public/images/ERD.png
+![Entity-Relationship Diagram](./RD.png "ERD Diagram")
 
 ## User Roles
 
