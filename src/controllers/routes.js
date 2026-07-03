@@ -29,12 +29,12 @@ router.use('/contact', (req, res, next) => {
 });
 
 router.use('/register', (req, res, next) => {
-    res.addStyle('">');
+    res.addStyle('/css/register.css');
     next();
 });
 
 router.use('/login', (req, res, next) => {
-    res.addStyle('">');
+    res.addStyle('/css/login.css');
     next();
 });
 
