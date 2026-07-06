@@ -47,27 +47,28 @@ const setHeadAssetsFunctionality = (res) => {
 
 /**
  * Middleware to add local variables to res.locals for use in all templates.
- * Templates can access these values but are not required to use them.
  */
 const addLocalVariables = (req, res, next) => {
-    // Agrega el sistema dinámico de assets
+    // Asset system
     setHeadAssetsFunctionality(res);
 
-    // Set current year for use in templates
+    // Current year
     res.locals.currentYear = new Date().getFullYear();
 
-    // Make NODE_ENV available to all templates
-    res.locals.NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
+    // Environment
+    res.locals.NODE_ENV =
+        process.env.NODE_ENV?.toLowerCase() || 'production';
 
-    // Make req.query available to all templates
+    // Query parameters
     res.locals.queryParams = { ...req.query };
 
-    // Set greeting based on time of day
+    // Greeting
     res.locals.greeting = `<p>${getCurrentGreeting()}</p>`;
-    // Set isLoggedIn based on session data
-    res.locals.isLoggedIn = !!req.session?.accountData;
-    
-    // Continue to the next middleware or route handler
+
+    // Authentication data available in ALL views
+    res.locals.user = req.session?.user || null;
+    res.locals.isLoggedIn = !!req.session?.user;
+
     next();
 };
 
