@@ -1,107 +1,6 @@
-/* Service Requests */
-
-.service-form {
-    max-width: 700px;
-    margin: 2rem auto;
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-.service-form .form-group {
-    margin-bottom: 1.5rem;
-}
-
-.service-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #1f2937;
-}
-
-.service-form input,
-.service-form textarea,
-.service-form select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.85rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
-}
-
-.service-form input:focus,
-.service-form textarea:focus,
-.service-form select:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-.service-form textarea {
-    resize: vertical;
-    min-height: 140px;
-}
-
-.btn-primary {
-    display: inline-block;
-    background-color: #1f2937;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 0.9rem 1.5rem;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.btn-primary:hover {
-    background-color: #2563eb;
-}
-
-/* List Page */
-
-.request-card {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-.request-card h3 {
-    margin-top: 0;
-    color: #1f2937;
-}
-
-.request-card p {
-    text-align: left;
-}
-
-.request-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.request-actions a,
-.request-actions button {
-    background-color: #1f2937;
-    color: white;
-    padding: 0.7rem 1rem;
-    text-decoration: none;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.request-actions a:hover,
-.request-actions button:hover {
-    background-color: #2563eb;
-}
+/* ==========================================
+   Service Requests Styles
+   ========================================== */
 
 /* Form Container */
 
@@ -143,7 +42,7 @@
     font-family: inherit;
 }
 
-/* Focus Effect */
+/* Focus Effects */
 
 .form-group input:focus,
 .form-group textarea:focus,
@@ -160,7 +59,7 @@
     min-height: 160px;
 }
 
-/* Button */
+/* Primary Button */
 
 .btn-primary {
     display: inline-block;
@@ -169,24 +68,112 @@
     border-radius: 8px;
     background-color: #1f2937;
     color: #ffffff;
-    font-weight: bold;
     font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: 0.2s;
+    transition: background-color 0.2s ease;
 }
 
 .btn-primary:hover {
     background-color: #2563eb;
 }
 
-/* Responsive */
+/* ==========================================
+   Service Request List
+   ========================================== */
+
+.request-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.request-card h3 {
+    margin-top: 0;
+    color: #1f2937;
+}
+
+.request-card p {
+    text-align: left;
+    margin: 0.5rem 0;
+}
+
+/* Request Actions */
+
+.request-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.request-actions a,
+.request-actions button {
+    background-color: #1f2937;
+    color: #ffffff;
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.2s ease;
+}
+
+.request-actions a:hover,
+.request-actions button:hover {
+    background-color: #2563eb;
+}
+
+/* ==========================================
+   Status Labels
+   ========================================== */
+
+.status-submitted {
+    color: #d97706;
+    font-weight: bold;
+}
+
+.status-progress {
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.status-completed {
+    color: #16a34a;
+    font-weight: bold;
+}
+
+/* Status Badge Style */
+
+.status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* ==========================================
+   Responsive Design
+   ========================================== */
 
 @media (max-width: 768px) {
 
     .service-form {
-        padding: 1.5rem;
         margin: 1rem;
+        padding: 1.5rem;
     }
 
-}
+    .request-actions {
+        flex-direction: column;
+    }
 
+    .request-actions a,
+    .request-actions button {
+        width: 100%;
+        text-align: center;
+    }
+}
