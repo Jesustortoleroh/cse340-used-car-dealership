@@ -11,6 +11,7 @@
 .error-icon {
     font-size: 4rem;
     margin-bottom: 1rem;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .error-page h1 {
@@ -27,7 +28,7 @@
 }
 
 .error-submessage {
-    color: #6b7280;
+    color: #4b5563;
     max-width: 500px;
     margin: 0 auto 1.5rem;
 }
@@ -61,7 +62,7 @@
 
 .btn-primary {
     background: #2563eb;
-    color: white;
+    color: #ffffff;
 }
 
 .btn-primary:hover {
@@ -72,7 +73,7 @@
 
 .btn-secondary {
     background: #1f2937;
-    color: white;
+    color: #ffffff;
 }
 
 .btn-secondary:hover {
@@ -81,7 +82,17 @@
     box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
 }
 
-/* Estilos para detalles de error (500.ejs) */
+/* Accesibilidad para navegación por teclado */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 2px;
+}
+
+/* ==========================================
+   Error Details (500.ejs)
+========================================== */
+
 .error-details {
     margin-top: 2rem;
     max-width: 800px;
@@ -128,12 +139,13 @@
     padding: 1rem;
     border-radius: 6px;
     overflow-x: auto;
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    white-space: pre-wrap;
-    word-break: break-all;
-    max-height: 300px;
     overflow-y: auto;
+    margin-top: 0.5rem;
+    max-height: 300px;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .stack-trace {
@@ -141,23 +153,26 @@
     font-size: 0.75rem;
 }
 
-/* Responsive */
+/* ==========================================
+   Responsive
+========================================== */
+
 @media (max-width: 640px) {
     .error-page h1 {
         font-size: 2rem;
     }
-    
+
     .error-message {
         font-size: 1rem;
     }
-    
+
     .error-actions {
         flex-direction: column;
         align-items: center;
         width: 100%;
         max-width: 300px;
     }
-    
+
     .btn-primary,
     .btn-secondary {
         width: 100%;
@@ -180,16 +195,57 @@
     }
 }
 
-/* Animación sutil para el icono */
-.error-icon {
-    animation: pulse 2s ease-in-out infinite;
+/* ==========================================
+   Reduced Motion Accessibility
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .error-icon {
+        animation: none;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        transition: none;
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: none;
+    }
 }
 
+/* ==========================================
+   Icon Animation
+========================================== */
+
 @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.05);
     }
+}
+
+/* ==========================================
+   Additional Accessibility Improvements
+========================================== */
+
+button.btn-primary,
+button.btn-secondary {
+    font-family: inherit;
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    transform: translateY(0);
+}
+
+.error-details summary:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 2px;
+    border-radius: 4px;
 }

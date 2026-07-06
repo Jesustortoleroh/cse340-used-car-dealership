@@ -1,36 +1,43 @@
 <%- include('../partials/header') %>
 
-<main class="error-page">
+<main class="error-page" role="main">
     <div class="error-icon">🔧</div>
+
     <h1>500 - Server Error</h1>
+
     <p class="error-message">
         The dealership system encountered an unexpected problem.
     </p>
+
     <p class="error-submessage">
         Please try again later. If the problem persists, please contact support.
     </p>
-    
+
     <div class="error-actions">
-        <a href="/" class="btn-primary">
-            Return Home
-        </a>
-        <a href="/vehicles" class="btn-secondary">
-            Browse Vehicles
-        </a>
+        <a href="/" class="btn-primary">Return Home</a>
+
+        <a href="/vehicles" class="btn-secondary">Browse Vehicles</a>
+
         <% if (user) { %>
-            <a href="/dashboard" class="btn-secondary">
-                Dashboard
-            </a>
+            <a href="/dashboard" class="btn-secondary">Dashboard</a>
         <% } %>
     </div>
+
+    <% 
+    // Show detailed error information only in development.
+    // Exposing error messages and stack traces in production can
+    // reveal sensitive implementation details and create security risks.
+    %>
 
     <% if (NODE_ENV === 'development') { %>
         <details open class="error-details">
             <summary>🔍 Error Details (Development Only)</summary>
+
             <div class="detail-item">
                 <h4>Error Message</h4>
-                <pre><%= error %></pre>
+                <pre><%= error || 'No error message available.' %></pre>
             </div>
+
             <% if (stack) { %>
                 <div class="detail-item">
                     <h4>Stack Trace</h4>

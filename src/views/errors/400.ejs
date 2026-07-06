@@ -1,26 +1,30 @@
 <%- include('../partials/header') %>
 
-<main class="error-page">
+<main class="error-page" role="main">
     <div class="error-icon">⚠️</div>
+
     <h1>400 - Bad Request</h1>
+
     <p class="error-message">
         The request could not be processed.
     </p>
+
     <p class="error-submessage">
         <%= error || 'Invalid request parameters. Please check your input and try again.' %>
     </p>
-    
+
     <div class="error-actions">
-        <a href="javascript:history.back()" class="btn-secondary">
+        <button
+            type="button"
+            class="btn-secondary"
+            onclick="history.back()">
             ← Go Back
-        </a>
-        <a href="/" class="btn-primary">
-            Return Home
-        </a>
+        </button>
+
+        <a href="/" class="btn-primary">Home</a>
+
         <% if (user) { %>
-            <a href="/dashboard" class="btn-secondary">
-                Dashboard
-            </a>
+            <a href="/dashboard" class="btn-secondary">Dashboard</a>
         <% } %>
     </div>
 </main>
