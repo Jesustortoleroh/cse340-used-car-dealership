@@ -47,7 +47,7 @@ const requireRole = (roleName) => {
         // Check if user's role matches the required role
         const userRole = req.session.user.roleName || 'customer';
         if (userRole !== roleName) {
-            // ✅ MEJORADO: Usar error handler en lugar de redirect
+            // ✅ Improved: Use error handler instead of redirect for unauthorized access
             const err = new Error('You do not have permission to access this page.');
             err.status = 403;
             err.requiredRole = roleName;
@@ -77,7 +77,7 @@ const requireEmployee = (req, res, next) => {
         return next();
     }
     
-    // ✅ MEJORADO: Usar error handler en lugar de redirect
+    // ✅ Improved: Use error handler instead of redirect for unauthorized access
     const err = new Error('Employee access required.');
     err.status = 403;
     err.requiredRole = 'employee';
@@ -102,7 +102,7 @@ const requireOwner = (req, res, next) => {
         return next();
     }
     
-    // ✅ MEJORADO: Usar error handler en lugar de redirect
+    // ✅ Improved: Use error handler instead of redirect for unauthorized access
     const err = new Error('Owner access required.');
     err.status = 403;
     err.requiredRole = 'owner';
