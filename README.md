@@ -48,10 +48,6 @@ Email: employee@dealer.com
 ### Customer
 Email: customer@dealer.com
 
-All test accounts use the password:
-
-P@$$w0rd!
-
 ## Known Limitations
 
 - Vehicle filtering is currently limited to categories. Advanced filtering by price, mileage, year, and fuel type is not implemented.
