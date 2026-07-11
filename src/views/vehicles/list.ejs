@@ -2,21 +2,97 @@
 
 <main>
 
-    <!-- Mostrar mensajes flash -->
     <% if (flash) { %>
+
         <% if (flash.error) { %>
             <div class="flash error">
                 <%= flash.error %>
             </div>
         <% } %>
+
         <% if (flash.success) { %>
             <div class="flash success">
                 <%= flash.success %>
             </div>
         <% } %>
+
     <% } %>
 
     <h1><%= title %></h1>
+
+    <div class="vehicle-filters">
+
+        <form action="/vehicles" method="GET">
+
+            <label for="category">
+                Category:
+            </label>
+
+            <select
+                id="category"
+                name="category"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value="All"
+                    <%= currentCategory === 'All'
+                        ? 'selected'
+                        : '' %>
+                >
+                    All Vehicles
+                </option>
+
+                <option
+                    value="Car"
+                    <%= currentCategory === 'Car'
+                        ? 'selected'
+                        : '' %>
+                >
+                    Cars
+                </option>
+
+                <option
+                    value="SUV"
+                    <%= currentCategory === 'SUV'
+                        ? 'selected'
+                        : '' %>
+                >
+                    SUVs
+                </option>
+
+                <option
+                    value="Truck"
+                    <%= currentCategory === 'Truck'
+                        ? 'selected'
+                        : '' %>
+                >
+                    Trucks
+                </option>
+
+                <option
+                    value="Luxury"
+                    <%= currentCategory === 'Luxury'
+                        ? 'selected'
+                        : '' %>
+                >
+                    Luxury
+                </option>
+
+                <option
+                    value="Electric"
+                    <%= currentCategory === 'Electric'
+                        ? 'selected'
+                        : '' %>
+                >
+                    Electric
+                </option>
+
+            </select>
+
+        </form>
+
+    </div>
 
     <% if (vehicles && vehicles.length > 0) { %>
 
@@ -27,11 +103,12 @@
                 <div class="vehicle-card">
 
                     <% if (vehicle.image_url) { %>
-                        <img
-                            src="<%= vehicle.image_url %>"
+
+                        <img src="<%= vehicle.image_url %>"
                             alt="<%= vehicle.name %>"
                             class="vehicle-image"
                         >
+
                     <% } %>
 
                     <div class="vehicle-info">
@@ -51,20 +128,37 @@
                         </p>
 
                         <% if (vehicle.average_rating) { %>
+
                             <div class="vehicle-rating">
+
                                 <% for(let i = 0; i < 5; i++) { %>
+
                                     <% if(i < Math.round(vehicle.average_rating)) { %>
-                                        <span class="star filled">★</span>
+
+                                        <span class="star filled">
+                                            ★
+                                        </span>
+
                                     <% } else { %>
-                                        <span class="star">★</span>
+
+                                        <span class="star">
+                                            ★
+                                        </span>
+
                                     <% } %>
+
                                 <% } %>
-                                <span class="rating-count">(<%= vehicle.review_count || 0 %>)</span>
+
+                                <span class="rating-count">
+                                    (<%= vehicle.review_count || 0 %>)
+                                </span>
+
                             </div>
+
                         <% } %>
 
-                        <a href="/vehicles/<%= vehicle.slug %>" class="btn-view">
-                            View Details →
+                        <a href="/vehicles/<%= vehicle.slug %>" class="view-details">
+                            View Details
                         </a>
 
                     </div>
@@ -78,9 +172,19 @@
     <% } else { %>
 
         <div class="empty-state">
-            <span class="empty-icon">🚗</span>
-            <p>No vehicles available in this category.</p>
-            <p class="empty-sub">Check back later for new inventory!</p>
+
+            <span class="empty-icon">
+                🚗
+            </span>
+
+            <p>
+                No vehicles available in this category.
+            </p>
+
+            <p class="empty-sub">
+                Check back later for new inventory!
+            </p>
+
         </div>
 
     <% } %>
