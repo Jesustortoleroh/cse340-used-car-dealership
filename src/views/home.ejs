@@ -1,17 +1,171 @@
 <%- include('partials/header') %>
 
-<main>
+<main class="home-page">
 
- 
-<h1><%= title %></h1>
-    <p>Find high-quality used vehicles at affordable prices.</p>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Find Your Perfect Used Vehicle</h1>
+            <p class="hero-text">
+                Quality pre-owned cars, SUVs, trucks, luxury vehicles,
+                and electric vehicles from trusted dealerships across
+                the country.
+            </p>
+            <div class="cta-buttons">
+                <a href="/vehicles" class="btn btn-primary">Browse Inventory</a>
+                <a href="/contact" class="btn btn-secondary">Contact Us</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="/images/homecar.jpg" alt="Quality pre-owned vehicles" class="hero-img">
+        </div>
+    </section>
 
-    <img src="/images/homecar.jpg" alt="A selection of used cars" class="home-image">
-    
-    <div class="cta-buttons">
-      <a href="/vehicles" class="btn-primary">Browse Vehicles</a>
+    <!-- Browse By Category -->
+<section class="home-section">
+
+    <h2>Featured Vehicles</h2>
+
+    <div class="carousel-container">
+
+        <div class="carousel-track">
+
+            <div class="vehicle-feature-card">
+
+                <img src="/images/vehicles/toyota-corolla.jpg" alt="Toyota Corolla 2020">
+
+                <div class="card-content">
+                    <h3>Toyota Corolla 2020</h3>
+                    <p class="card-price">$12,000</p>
+
+                    <a href="/vehicles/toyota-corolla-2020" class="btn-primary">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="vehicle-feature-card">
+
+                <img src="/images/vehicles/ford-explorer.jpg" alt="Ford Explorer 2019">
+
+                <div class="card-content">
+                    <h3>Ford Explorer 2019</h3>
+                    <p class="card-price">$18,500</p>
+
+                    <a href="/vehicles/ford-explorer-2019" class="btn-primary">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="vehicle-feature-card">
+
+                <img src="/images/vehicles/bmw-3-series.jpg" alt="BMW 3 Series 2021">
+
+                <div class="card-content">
+                    <h3>BMW 3 Series 2021</h3>
+                    <p class="card-price">$28,000</p>
+
+                    <a href="/vehicles/bmw-3-series-2021" class="btn-primary">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="vehicle-feature-card">
+
+                <img src="/images/vehicles/tesla-model-3.jpg" alt="Tesla Model 3 2022">
+
+                <div class="card-content">
+                    <h3>Tesla Model 3 2022</h3>
+                    <p class="card-price">$45,000</p>
+
+                    <a href="/vehicles/tesla-model-3-2022" class="btn-primary">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
+</section>
+
+    <!-- Statistics -->
+    <section class="home-section stats-section">
+        <h2>Dealership Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>12</h3>
+                <p>Vehicles Available</p>
+            </div>
+            <div class="stat-card">
+                <h3>10</h3>
+                <p>Trusted Dealers</p>
+            </div>
+            <div class="stat-card">
+                <h3>7</h3>
+                <p>Vehicle Categories</p>
+            </div>
+            <div class="stat-card">
+                <h3>13</h3>
+                <p>Service Types</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="home-section">
+        <h2>Why Choose Us?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                ✅ Quality Inspected Vehicles
+            </div>
+            <div class="benefit-card">
+                💰 Competitive Pricing
+            </div>
+            <div class="benefit-card">
+                📋 Transparent Vehicle Information
+            </div>
+            <div class="benefit-card">
+                🤝 Trusted Dealership Network
+            </div>
+            <div class="benefit-card">
+                ⭐ Customer Reviews
+            </div>
+            <div class="benefit-card">
+                🛠 Professional Service Support
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Dealer -->
+    <section class="home-section">
+        <h2>Featured Dealer</h2>
+        <div class="dealer-highlight">
+            <h3>Atlantic Auto Center</h3>
+            <p>Virginia</p>
+            <a href="/dealers/atlantic-auto-center" class="btn-primary">Visit Dealer</a>
+        </div>
+    </section>
+
+    <!-- Final Call To Action -->
+    <section class="home-cta">
+        <h2>Ready to Find Your Next Vehicle?</h2>
+        <p>
+            Explore our inventory and discover why drivers continue
+            to trust our dealership for their automotive needs.
+        </p>
+        <div class="cta-buttons">
+            <a href="/vehicles" class="btn btn-primary">Browse Inventory</a>
+            <a href="/contact" class="btn btn-secondary">Contact Us</a>
+        </div>
+    </section>
 
 </main>
 
