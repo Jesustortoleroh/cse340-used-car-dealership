@@ -1,21 +1,7 @@
 import { Router } from 'express';
-
-import {
-    showServiceRequests,
-    showCreateRequestForm,
-    processCreateRequest,
-    showEditRequestForm,
-    processUpdateRequest,
-    processDeleteRequest
-} from '../controllers/serviceRequests/serviceRequests.js';
-
-import {
-    requireLogin
-} from '../middleware/auth.js';
-
-import {
-    serviceRequestValidation
-} from '../middleware/validation/forms.js';
+import { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
+import { requireLogin } from '../middleware/auth.js';
+import { serviceRequestValidation } from '../middleware/validation/forms.js';
 
 const router = Router();
 
