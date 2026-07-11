@@ -1,10 +1,5 @@
 import { Router } from 'express';
-import { 
-    processCreateReview, 
-    showEditReview, 
-    processUpdateReview, 
-    processDeleteReview 
-} from '../controllers/reviews/reviews.js';
+import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
 import { requireLogin } from '../middleware/auth.js';
 import { reviewValidation } from '../middleware/validation/forms.js';
 
