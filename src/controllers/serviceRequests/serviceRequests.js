@@ -18,140 +18,95 @@ import {
 /**
  * Show service requests
  */
-const showServiceRequests = async (
-    req,
-    res
-) => {
-
+const showServiceRequests = async (req, res) => {
     try {
-
         let requests = [];
 
-        if (
-            req.session.user.roleName === 'customer'
-        ) {
-
-            requests =
-                await getServiceRequestsByUserId(
-                    req.session.user.id
-                );
-
+        if (req.session.user.roleName === 'customer') {
+            requests = await getServiceRequestsByUserId(req.session.user.id);
         } else {
-
-            requests =
-                await getAllServiceRequests();
-
+            requests = await getAllServiceRequests();
         }
 
-        res.render(
-            'serviceRequests/list',
-            {
-                title: 'Service Requests',
-                requests
-            }
-        );
+        res.render('serviceRequests/list', {
+            title: 'Service Requests',
+            requests,
+            user: req.session?.user || null
+        });
 
     } catch (error) {
-
-        console.error(error);
-
-        req.flash?.(
-            'error',
-            'Unable to load service requests.'
-        );
-
+        console.error('Error loading service requests:', error);
+        
+        req.flash?.('error', 'Unable to load service requests.');
         res.redirect('/dashboard');
     }
-
 };
 
 /**
  * Show create form
  */
-const showCreateRequestForm = async (
-    req,
-    res
-) => {
-
+const showCreateRequestForm = async (req, res) => {
     try {
+        const serviceTypes = await getAllServiceTypes();
+        const vehicles = await getAllVehicles();
 
-        const serviceTypes =
-            await getAllServiceTypes();
+        // Retrieve session data if exists (to display validation errors)
+        const formData = req.session?.formData || {};
+        const errors = req.session?.errors || {};
+        
+        // Clear session after retrieving
+        delete req.session.formData;
+        delete req.session.errors;
 
-        const vehicles =
-            await getAllVehicles();
-
-        res.render(
-            'serviceRequests/create',
-            {
-                title: 'New Service Request',
-                serviceTypes,
-                vehicles,
-                formData: {},
-                errors: {}
-            }
-        );
+        res.render('serviceRequests/create', {
+            title: 'New Service Request',
+            serviceTypes,
+            vehicles,
+            formData,
+            errors,
+            user: req.session?.user || null
+        });
 
     } catch (error) {
-
-        console.error(error);
-
-        req.flash?.(
-            'error',
-            'Unable to load service request form.'
-        );
-
+        console.error('Error loading create form:', error);
+        
+        req.flash?.('error', 'Unable to load service request form.');
         res.redirect('/service-requests');
     }
-
 };
 
 /**
  * Create service request
  */
-const processCreateRequest = async (
-    req,
-    res
-) => {
-
-    const errors =
-        validationResult(req);
+const processCreateRequest = async (req, res) => {
+    const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
+        try {
+            const serviceTypes = await getAllServiceTypes();
+            const vehicles = await getAllVehicles();
 
-        const serviceTypes =
-            await getAllServiceTypes();
+            const formattedErrors = {};
+            errors.array().forEach(error => {
+                formattedErrors[error.path] = error.msg;
+            });
 
-        const vehicles =
-            await getAllVehicles();
+            // Save in session to keep data between redirects
+            req.session.formData = req.body;
+            req.session.errors = formattedErrors;
 
-        const formattedErrors = {};
-
-        errors.array().forEach(error => {
-            formattedErrors[error.path] = error;
-        });
-
-        return res.render(
-            'serviceRequests/create',
-            {
-                title: 'New Service Request',
-                serviceTypes,
-                vehicles,
-                errors: formattedErrors,
-                formData: req.body
-            }
-        );
-
+            return res.redirect('/service-requests/create');
+            
+        } catch (error) {
+            console.error('Error loading form with errors:', error);
+            req.flash?.('error', 'Unable to load form.');
+            return res.redirect('/service-requests');
+        }
     }
 
-    const {
-        service_type_id,
-        vehicle_id,
-        description
-    } = req.body;
+    const { service_type_id, vehicle_id, description } = req.body;
 
     try {
-
         await createServiceRequest(
             req.session.user.id,
             parseInt(service_type_id),
@@ -159,179 +114,142 @@ const processCreateRequest = async (
             description
         );
 
-        req.flash?.(
-            'success',
-            'Service request submitted successfully.'
-        );
-
-        res.redirect(
-            '/service-requests'
-        );
+        req.flash?.('success', 'Service request submitted successfully.');
+        res.redirect('/service-requests');
 
     } catch (error) {
-
-        console.error(error);
-
-        req.flash?.(
-            'error',
-            'Unable to submit service request.'
-        );
-
-        res.redirect(
-            '/service-requests/create'
-        );
+        console.error('Error creating service request:', error);
+        
+        req.flash?.('error', 'Unable to submit service request.');
+        res.redirect('/service-requests/create');
     }
-
 };
 
 /**
  * Show edit form
  */
-const showEditRequestForm = async (
-    req,
-    res
-) => {
-
+const showEditRequestForm = async (req, res) => {
     try {
-
-        const request =
-            await getServiceRequestById(
-                parseInt(req.params.id)
-            );
+        const request = await getServiceRequestById(parseInt(req.params.id));
 
         if (!request) {
-
-            req.flash?.(
-                'error',
-                'Service request not found.'
-            );
-
-            return res.redirect(
-                '/service-requests'
-            );
-
+            req.flash?.('error', 'Service request not found.');
+            return res.redirect('/service-requests');
         }
 
-        const serviceTypes =
-            await getAllServiceTypes();
+        const serviceTypes = await getAllServiceTypes();
 
-        res.render(
-            'serviceRequests/edit',
-            {
-                title: 'Edit Service Request',
-                request,
-                serviceTypes
-            }
-        );
+        // Retrieve session data if exists (to display validation errors)
+        const formData = req.session?.formData || {};
+        const errors = req.session?.errors || {};
+        
+        // Clear session after retrieving
+        delete req.session.formData;
+        delete req.session.errors;
+
+        // If no session formData, use request data as default values
+        const defaultFormData = Object.keys(formData).length === 0 ? {
+            service_type_id: request.service_type_id,
+            status: request.status,
+            notes: request.notes || ''
+        } : formData;
+
+        res.render('serviceRequests/edit', {
+            title: 'Edit Service Request',
+            request,
+            serviceTypes,
+            formData: defaultFormData,
+            errors,
+            user: req.session?.user || null
+        });
 
     } catch (error) {
-
-        console.error(error);
-
-        req.flash?.(
-            'error',
-            'Unable to load service request.'
-        );
-
-        res.redirect(
-            '/service-requests'
-        );
+        console.error('Error loading edit form:', error);
+        
+        req.flash?.('error', 'Unable to load service request.');
+        res.redirect('/service-requests');
     }
-
 };
 
 /**
  * Update request
  */
-const processUpdateRequest = async (
-    req,
-    res
-) => {
+const processUpdateRequest = async (req, res) => {
+    const requestId = parseInt(req.params.id);
+    const { service_type_id, status, notes } = req.body;
 
-    const requestId =
-        parseInt(req.params.id);
-
-    const {
-        service_type_id,
-        status,
-        notes
-    } = req.body;
-
-    try {
-
-        await updateServiceRequestStatus(
-            requestId,
-            status
-        );
-
-        if (notes !== undefined) {
-
-            await updateServiceRequestNotes(
-                requestId,
-                notes
-            );
-
-        }
-
-        req.flash?.(
-            'success',
-            'Service request updated.'
-        );
-
-        res.redirect(
-            '/service-requests'
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        req.flash?.(
-            'error',
-            'Unable to update service request.'
-        );
-
-        res.redirect(
-            `/service-requests/${requestId}/edit`
-        );
+    // Basic validation
+    const errors = {};
+    if (!service_type_id) errors.service_type_id = 'Service type is required';
+    if (!status) errors.status = 'Status is required';
+    
+    // Validate that status is valid
+    const validStatuses = ['pending', 'in_progress', 'completed', 'cancelled'];
+    if (status && !validStatuses.includes(status)) {
+        errors.status = 'Invalid status value';
     }
 
+    // If there are errors, save in session and redirect
+    if (Object.keys(errors).length > 0) {
+        req.session.formData = { service_type_id, status, notes };
+        req.session.errors = errors;
+        
+        req.flash?.('error', 'Please fix the validation errors.');
+        return res.redirect(`/service-requests/${requestId}/edit`);
+    }
+
+    try {
+        // Verify that the request exists
+        const request = await getServiceRequestById(requestId);
+        if (!request) {
+            req.flash?.('error', 'Service request not found.');
+            return res.redirect('/service-requests');
+        }
+
+        // Update status
+        await updateServiceRequestStatus(requestId, status);
+
+        // Update notes if provided
+        if (notes !== undefined && notes.trim() !== '') {
+            await updateServiceRequestNotes(requestId, notes.trim());
+        }
+
+        req.flash?.('success', 'Service request updated successfully.');
+        res.redirect('/service-requests');
+
+    } catch (error) {
+        console.error('Error updating service request:', error);
+        
+        req.flash?.('error', 'Unable to update service request.');
+        res.redirect(`/service-requests/${requestId}/edit`);
+    }
 };
 
 /**
  * Delete request
  */
-const processDeleteRequest = async (
-    req,
-    res
-) => {
-
+const processDeleteRequest = async (req, res) => {
     try {
+        const requestId = parseInt(req.params.id);
+        
+        // Verify that the request exists before deleting
+        const request = await getServiceRequestById(requestId);
+        if (!request) {
+            req.flash?.('error', 'Service request not found.');
+            return res.redirect('/service-requests');
+        }
 
-        await deleteServiceRequest(
-            parseInt(req.params.id)
-        );
+        await deleteServiceRequest(requestId);
 
-        req.flash?.(
-            'success',
-            'Service request deleted.'
-        );
+        req.flash?.('success', 'Service request deleted successfully.');
 
     } catch (error) {
-
-        console.error(error);
-
-        req.flash?.(
-            'error',
-            'Unable to delete service request.'
-        );
-
+        console.error('Error deleting service request:', error);
+        
+        req.flash?.('error', 'Unable to delete service request.');
     }
 
-    res.redirect(
-        '/service-requests'
-    );
-
+    res.redirect('/service-requests');
 };
 
 export {
