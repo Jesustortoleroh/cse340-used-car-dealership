@@ -1,41 +1,90 @@
 <%- include('../partials/header') %>
 
 <main>
-  <h1><%= title %></h1>
 
-  <div class="vehicle-list">
-
-    <% vehicles.forEach(vehicle => { %>
-
-      <div class="vehicle-card">
-
-        <% if (vehicle.image_url) { %>
-          <img
-            src="<%= vehicle.image_url %>"
-            alt="<%= vehicle.name %>"
-            class="vehicle-image"
-          >
+    <!-- Mostrar mensajes flash -->
+    <% if (flash) { %>
+        <% if (flash.error) { %>
+            <div class="flash error">
+                <%= flash.error %>
+            </div>
         <% } %>
+        <% if (flash.success) { %>
+            <div class="flash success">
+                <%= flash.success %>
+            </div>
+        <% } %>
+    <% } %>
 
-        <h3>
-          <a href="/vehicles/<%= vehicle.slug %>">
-            <%= vehicle.name %>
-          </a>
-        </h3>
+    <h1><%= title %></h1>
 
-        <p class="vehicle-price">
-          $<%= vehicle.price.toLocaleString() %>
-        </p>
+    <% if (vehicles && vehicles.length > 0) { %>
 
-        <p>
-          Category: <%= vehicle.category %>
-        </p>
+        <div class="vehicle-list">
 
-      </div>
+            <% vehicles.forEach(vehicle => { %>
 
-    <% }) %>
+                <div class="vehicle-card">
 
-  </div>
+                    <% if (vehicle.image_url) { %>
+                        <img
+                            src="<%= vehicle.image_url %>"
+                            alt="<%= vehicle.name %>"
+                            class="vehicle-image"
+                        >
+                    <% } %>
+
+                    <div class="vehicle-info">
+
+                        <h3>
+                            <a href="/vehicles/<%= vehicle.slug %>">
+                                <%= vehicle.name %>
+                            </a>
+                        </h3>
+
+                        <p class="vehicle-price">
+                            $<%= vehicle.price.toLocaleString() %>
+                        </p>
+
+                        <p class="vehicle-category">
+                            Category: <%= vehicle.category %>
+                        </p>
+
+                        <% if (vehicle.average_rating) { %>
+                            <div class="vehicle-rating">
+                                <% for(let i = 0; i < 5; i++) { %>
+                                    <% if(i < Math.round(vehicle.average_rating)) { %>
+                                        <span class="star filled">★</span>
+                                    <% } else { %>
+                                        <span class="star">★</span>
+                                    <% } %>
+                                <% } %>
+                                <span class="rating-count">(<%= vehicle.review_count || 0 %>)</span>
+                            </div>
+                        <% } %>
+
+                        <a href="/vehicles/<%= vehicle.slug %>" class="btn-view">
+                            View Details →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="empty-state">
+            <span class="empty-icon">🚗</span>
+            <p>No vehicles available in this category.</p>
+            <p class="empty-sub">Check back later for new inventory!</p>
+        </div>
+
+    <% } %>
+
 </main>
 
 <%- include('../partials/footer') %>

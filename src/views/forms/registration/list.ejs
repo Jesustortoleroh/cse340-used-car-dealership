@@ -9,6 +9,20 @@
         accounts with our dealership.
     </p>
 
+    <!-- Mostrar mensajes flash -->
+    <% if (flash) { %>
+        <% if (flash.error) { %>
+            <div class="flash error">
+                <%= flash.error %>
+            </div>
+        <% } %>
+        <% if (flash.success) { %>
+            <div class="flash success">
+                <%= flash.success %>
+            </div>
+        <% } %>
+    <% } %>
+
     <% if (users && users.length > 0) { %>
 
         <div class="users-list">
@@ -119,17 +133,13 @@
 
     <% } %>
 
-    <div class="action-links">
-        <p class="contact-link">
-            <a href="/register">
-                Create Another Account
-            </a>
-        </p>
-        <p class="contact-link">
-            <a href="/dashboard">
-                Back to Dashboard
-            </a>
-        </p>
+    <div class="page-actions">
+        <a href="/register" class="btn-primary">
+            Create Another Account
+        </a>
+        <a href="/dashboard" class="btn-secondary">
+            Back to Dashboard
+        </a>
     </div>
 
 </main>

@@ -1,9 +1,10 @@
 // Vehicle model functions
 import { getVehicleBySlug, getVehiclesByCategory } from '../../models/vehicles/vehicles.js';
-import { getReviewsByVehicleId } from '../../models/reviews/reviews.js';
+import { getReviewStats } from '../../models/reviews/reviews.js';
 
 /**
  * Vehicles list page
+ * Renders the list of available vehicles filtered by category
  */
 const vehiclesPage = async (req, res, next) => {
     try {
@@ -27,6 +28,7 @@ const vehiclesPage = async (req, res, next) => {
 
 /**
  * Vehicle detail page
+ * Renders detailed information for a specific vehicle including reviews and statistics
  */
 const vehicleDetailPage = async (req, res, next) => {
 
@@ -53,19 +55,50 @@ const vehicleDetailPage = async (req, res, next) => {
             return next(err);
         }
 
-        const reviews =
-            await getReviewsByVehicleId(
-                vehicle.id
-            );
+        // Get review statistics using the model function
+        const reviewStats = await getReviewStats(vehicle.id);
+
+        // Obtener datos flash
+        let flashMessages = {};
+        let formData = {};
+        
+        if (typeof req.flash === 'function') {
+            // Obtener todos los mensajes flash
+            const success = req.flash('success');
+            const error = req.flash('error');
+            const warning = req.flash('warning');
+            const info = req.flash('info');
+            
+            // Guardar solo si hay mensajes
+            if (success.length) flashMessages.success = success[0];
+            if (error.length) flashMessages.error = error[0];
+            if (warning.length) flashMessages.warning = warning[0];
+            if (info.length) flashMessages.info = info[0];
+            
+            // Obtener datos del formulario (si existen)
+            const formDataFlash = req.flash('formData');
+            if (formDataFlash.length) {
+                formData = formDataFlash[0];
+            }
+        }
 
         res.render(
             'vehicles/detail',
             {
                 title: vehicle.name,
                 vehicle,
-                reviews,
                 user: req.session?.user || null,
-                currentSort
+                currentSort,
+                // Review data from the model
+                reviews: reviewStats.reviews,
+                totalReviews: reviewStats.totalReviews,
+                averageRating: reviewStats.averageRating,
+                ratingCounts: reviewStats.ratingCounts,
+                ratingPercentages: reviewStats.ratingPercentages,
+                // Flash messages
+                flash: flashMessages,
+                // Form data for preserving input
+                formData: formData
             }
         );
 

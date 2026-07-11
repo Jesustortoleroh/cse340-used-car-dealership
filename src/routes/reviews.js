@@ -1,28 +1,42 @@
 import { Router } from 'express';
-import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
+import { 
+    processCreateReview, 
+    showEditReview, 
+    processUpdateReview, 
+    processDeleteReview 
+} from '../controllers/reviews/reviews.js';
 import { requireLogin } from '../middleware/auth.js';
-import { reviewValidation} from '../middleware/validation/forms.js';
+import { reviewValidation } from '../middleware/validation/forms.js';
 
 const router = Router();
 
 /**
- * Create review
+ * Review routes
+ * All routes require user authentication
  */
-router.post( '/create', requireLogin, reviewValidation, processCreateReview );
 
 /**
- * Show edit form
+ * Create a new review
+ * POST /reviews/create
  */
-router.get( '/:id/edit', requireLogin, showEditReview );
+router.post('/create', requireLogin, reviewValidation, processCreateReview);
 
 /**
- * Update review
+ * Show edit review form
+ * GET /reviews/:id/edit
  */
-router.post( '/:id/edit', requireLogin, reviewValidation, processUpdateReview );
+router.get('/:id/edit', requireLogin, showEditReview);
 
 /**
- * Delete review
+ * Update an existing review
+ * POST /reviews/:id/edit
  */
-router.post( '/:id/delete', requireLogin, processDeleteReview );
+router.post('/:id/edit', requireLogin, reviewValidation, processUpdateReview);
+
+/**
+ * Delete a review
+ * POST /reviews/:id/delete
+ */
+router.post('/:id/delete', requireLogin, processDeleteReview);
 
 export default router;

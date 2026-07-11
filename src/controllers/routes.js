@@ -40,6 +40,7 @@ router.use('/dealers', (req, res, next) => {
 
 router.use('/vehicles', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/vehicles.css">');
+    res.addStyle('<link rel="stylesheet" href="/css/reviews.css">');
     next();
 });
 

@@ -149,4 +149,64 @@ const deleteReview = async (reviewId) => {
     return result.rowCount > 0;
 };
 
-export { getReviewsByVehicleId, getReviewById, createReview, updateReview, deleteReview };
+/**
+ * Get review statistics for a vehicle
+ * Returns: reviews, totalReviews, averageRating, ratingCounts, ratingPercentages
+ */
+const getReviewStats = async (vehicleId) => {
+
+    const reviews = await getReviewsByVehicleId(vehicleId);
+
+    const totalReviews = reviews.length;
+    let averageRating = 0;
+    const ratingCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    if (totalReviews > 0) {
+        const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+        averageRating = parseFloat((sum / totalReviews).toFixed(1));
+
+        reviews.forEach(review => {
+            if (review.rating >= 1 && review.rating <= 5) {
+                ratingCounts[review.rating] = (ratingCounts[review.rating] || 0) + 1;
+            }
+        });
+    }
+
+    // Calculate percentages
+    const ratingPercentages = {};
+    for (let i = 1; i <= 5; i++) {
+        ratingPercentages[i] = totalReviews > 0
+            ? Math.round((ratingCounts[i] / totalReviews) * 100)
+            : 0;
+    }
+
+    return {
+        reviews,
+        totalReviews,
+        averageRating,
+        ratingCounts,
+        ratingPercentages
+    };
+};
+
+/**
+ * Check if a user can edit/delete a review
+ */
+const canUserModifyReview = (user, review) => {
+    if (!user) return false;
+    return (
+        user.id === review.user_id ||
+        user.roleName === 'employee' ||
+        user.roleName === 'owner'
+    );
+};
+
+export {
+    getReviewsByVehicleId,
+    getReviewById,
+    createReview,
+    updateReview,
+    deleteReview,
+    getReviewStats,
+    canUserModifyReview
+};

@@ -1,8 +1,10 @@
 /* ==========================================
    Service Requests Styles
-   ========================================== */
+========================================== */
 
-/* Form Container */
+/* ==========================================
+   Form Container
+========================================== */
 
 .service-form {
     max-width: 700px;
@@ -13,13 +15,17 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Form Groups */
+/* ==========================================
+   Form Groups
+========================================== */
 
 .form-group {
     margin-bottom: 1.5rem;
 }
 
-/* Labels */
+/* ==========================================
+   Labels
+========================================== */
 
 .form-group label {
     display: block;
@@ -28,7 +34,9 @@
     color: #1f2937;
 }
 
-/* Inputs */
+/* ==========================================
+   Inputs
+========================================== */
 
 .form-group input,
 .form-group textarea,
@@ -42,7 +50,9 @@
     font-family: inherit;
 }
 
-/* Focus Effects */
+/* ==========================================
+   Focus Effects
+========================================== */
 
 .form-group input:focus,
 .form-group textarea:focus,
@@ -52,14 +62,18 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* Textarea */
+/* ==========================================
+   Textarea
+========================================== */
 
 .form-group textarea {
     resize: vertical;
     min-height: 160px;
 }
 
-/* Primary Button */
+/* ==========================================
+   Primary Button
+========================================== */
 
 .btn-primary {
     display: inline-block;
@@ -71,16 +85,40 @@
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-primary:hover {
     background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* ==========================================
+   Secondary Button
+========================================== */
+
+.btn-secondary {
+    display: inline-block;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #6b7280;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563;
+    transform: translateY(-2px);
 }
 
 /* ==========================================
    Service Request List
-   ========================================== */
+========================================== */
 
 .request-card {
     background-color: #ffffff;
@@ -88,6 +126,12 @@
     padding: 1.5rem;
     margin-bottom: 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.request-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .request-card h3 {
@@ -98,67 +142,199 @@
 .request-card p {
     text-align: left;
     margin: 0.5rem 0;
+    color: #374151;
 }
 
-/* Request Actions */
+.request-card p strong {
+    color: #1f2937;
+}
+
+/* ==========================================
+   Page Header
+========================================== */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-header h1 {
+    margin: 0;
+    color: #1f2937;
+}
+
+/* ==========================================
+   Request Actions
+========================================== */
 
 .request-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
 }
 
 .request-actions a,
 .request-actions button {
-    background-color: #1f2937;
-    color: #ffffff;
-    padding: 0.7rem 1rem;
+    padding: 0.7rem 1.2rem;
     text-decoration: none;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-family: inherit;
-    transition: background-color 0.2s ease;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
 
-.request-actions a:hover,
-.request-actions button:hover {
+/* Edit Button */
+.btn-edit {
+    background-color: #1f2937;
+    color: #ffffff;
+}
+
+.btn-edit:hover {
     background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* Delete Button */
+.btn-delete {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.btn-delete:hover {
+    background-color: #b91c1c;
+    transform: translateY(-2px);
+}
+
+.delete-form {
+    margin: 0;
 }
 
 /* ==========================================
-   Status Labels
-   ========================================== */
-
-.status-submitted {
-    color: #d97706;
-    font-weight: bold;
-}
-
-.status-progress {
-    color: #2563eb;
-    font-weight: bold;
-}
-
-.status-completed {
-    color: #16a34a;
-    font-weight: bold;
-}
-
-/* Status Badge Style */
+   Status Badges
+========================================== */
 
 .status-badge {
     display: inline-block;
-    padding: 0.35rem 0.75rem;
+    padding: 0.35rem 0.85rem;
     border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-submitted {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-in-progress {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-completed {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+/* ==========================================
+   Request Header (for cards)
+========================================== */
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.request-header h3 {
+    margin: 0;
+    color: #1f2937;
+}
+
+.request-body p {
+    margin: 0.5rem 0;
+    color: #374151;
+}
+
+.request-body p strong {
+    color: #1f2937;
+}
+
+.request-description {
+    margin-bottom: 0.75rem;
+}
+
+/* ==========================================
+   Empty State
+========================================== */
+
+.empty-state {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: #6b7280;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    border: 1px dashed #d1d5db;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    margin: 0.25rem 0;
+}
+
+.empty-sub {
     font-size: 0.9rem;
-    font-weight: bold;
+    color: #9ca3af;
+    margin-top: 0.5rem;
+}
+
+.empty-state .btn-primary {
+    margin-top: 1rem;
+}
+
+/* ==========================================
+   Validation
+========================================== */
+
+.text-danger {
+    color: #dc2626;
+}
+
+.invalid-feedback {
+    margin-top: 0.5rem;
+    color: #dc2626;
+    font-size: 0.9rem;
+}
+
+.invalid-feedback.d-block {
+    display: block;
 }
 
 /* ==========================================
    Responsive Design
-   ========================================== */
+========================================== */
 
 @media (max-width: 768px) {
 
@@ -167,13 +343,32 @@
         padding: 1.5rem;
     }
 
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .request-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .request-actions {
         flex-direction: column;
+        align-items: stretch;
     }
 
     .request-actions a,
     .request-actions button {
         width: 100%;
         text-align: center;
+    }
+
+    .request-card {
+        padding: 1rem;
+    }
+
+    .empty-state {
+        padding: 2rem 1rem;
     }
 }

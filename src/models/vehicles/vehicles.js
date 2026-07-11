@@ -3,7 +3,11 @@ import db from '../db.js';
 /**
  * Get all vehicles with category information
  */
-const getVehicles = async (category = null, sortBy = 'price') => {
+const getVehicles = async (
+    category = null,
+    sortBy = 'price'
+) => {
+
     const whereClause = category
         ? 'WHERE LOWER(c.name) = LOWER($1)'
         : '';
@@ -32,9 +36,14 @@ const getVehicles = async (category = null, sortBy = 'price') => {
         ORDER BY ${orderByClause}
     `;
 
-    const params = category ? [category] : [];
+    const params = category
+        ? [category]
+        : [];
 
-    const result = await db.query(query, params);
+    const result = await db.query(
+        query,
+        params
+    );
 
     return result.rows;
 };
@@ -42,7 +51,11 @@ const getVehicles = async (category = null, sortBy = 'price') => {
 /**
  * Get vehicle by slug
  */
-const getVehicleBySlug = async (slug, sort = 'feature') => {
+const getVehicleBySlug = async (
+    slug,
+    sort = 'feature'
+) => {
+
     const query = `
         SELECT
             v.id,
@@ -52,6 +65,7 @@ const getVehicleBySlug = async (slug, sort = 'feature') => {
             v.price,
             c.name AS category,
             d.name AS dealer,
+            d.slug AS dealer_slug,
             d.location,
             vi.image_url
         FROM vehicles v
@@ -67,32 +81,66 @@ const getVehicleBySlug = async (slug, sort = 'feature') => {
         WHERE v.slug = $1
     `;
 
-    const result = await db.query(query, [slug]);
+    const result = await db.query(
+        query,
+        [slug]
+    );
 
     if (result.rows.length === 0) {
         return null;
     }
 
-    const vehicle = result.rows[0];
+    const vehicle =
+        result.rows[0];
 
     const orderBy =
         sort === 'value'
             ? 'value'
             : 'feature';
 
-    const specsResult = await db.query(
-        `
-        SELECT feature, value
-        FROM vehicle_specs
-        WHERE vehicle_id = $1
-        ORDER BY ${orderBy}
-        `,
-        [vehicle.id]
-    );
+    const specsResult =
+        await db.query(
+            `
+            SELECT
+                feature,
+                value
+            FROM vehicle_specs
+            WHERE vehicle_id = $1
+            ORDER BY ${orderBy}
+            `,
+            [vehicle.id]
+        );
 
-    vehicle.specs = specsResult.rows;
+    vehicle.specs =
+        specsResult.rows;
 
     return vehicle;
+};
+
+/**
+ * Get vehicle by ID
+ */
+const getVehicleById = async (
+    vehicleId
+) => {
+
+    const query = `
+        SELECT
+            id,
+            name,
+            slug,
+            description,
+            price
+        FROM vehicles
+        WHERE id = $1
+    `;
+
+    const result = await db.query(
+        query,
+        [vehicleId]
+    );
+
+    return result.rows[0] || null;
 };
 
 /**
@@ -105,16 +153,26 @@ const getAllVehicles = async () => {
 /**
  * Get vehicles by category
  */
-const getVehiclesByCategory = async (category) => {
-    if (!category || category === 'All' || category === 'all') {
+const getVehiclesByCategory = async (
+    category
+) => {
+
+    if (
+        !category ||
+        category === 'All' ||
+        category === 'all'
+    ) {
         return await getVehicles();
     }
 
-    return await getVehicles(category);
+    return await getVehicles(
+        category
+    );
 };
 
 export {
     getAllVehicles,
     getVehiclesByCategory,
-    getVehicleBySlug
+    getVehicleBySlug,
+    getVehicleById
 };

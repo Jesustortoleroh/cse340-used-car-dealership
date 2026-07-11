@@ -1,65 +1,89 @@
-<section class="reviews-section">
+<%- include('../partials/header') %>
 
-    <h2>Customer Reviews</h2>
+<main>
 
-    <% if (reviews && reviews.length > 0) { %>
-
-        <% reviews.forEach(review => { %>
-
-            <article class="review-card">
-
-                <h3>
-                    <%= review.name %>
-                </h3>
-
-                <p>
-                    Rating:
-                    <strong>
-                        <%= review.rating %>/5
-                    </strong>
-                </p>
-
-                <p>
-                    <%= review.comment %>
-                </p>
-
-                <small>
-                    <%= new Date(review.created_at).toLocaleDateString() %>
-                </small>
-
-                <% if (
-                    user &&
-                    (
-                        user.id === review.user_id ||
-                        user.roleName === 'employee' ||
-                        user.roleName === 'owner'
-                    )
-                ) { %>
-
-                    <div class="review-actions">
-
-                        <a href="/reviews/<%= review.id %>/edit">
-                            Edit
-                        </a>
-
-                        <form action="/reviews/<%= review.id %>/delete" method="POST">
-                            <button type="submit">
-                                Delete
-                            </button>
-                        </form>
-
-                    </div>
-
-                <% } %>
-
-            </article>
-
-        <% }) %>
-
-    <% } else { %>
-
-        <p>No reviews have been submitted yet.</p>
-
+    <!-- Mostrar mensajes flash -->
+    <% if (flash) { %>
+        <% if (flash.error) { %>
+            <div class="flash error">
+                <%= flash.error %>
+            </div>
+        <% } %>
+        <% if (flash.success) { %>
+            <div class="flash success">
+                <%= flash.success %>
+            </div>
+        <% } %>
     <% } %>
 
-</section>
+    <div class="review-detail-header">
+        <a href="/vehicles/<%= review.vehicle_id %>" class="btn-back">
+            ← Back to Vehicle
+        </a>
+        <h1>Review Detail</h1>
+    </div>
+
+    <article class="review-detail-card">
+
+        <div class="review-detail-vehicle">
+            <h2>
+                <a href="/vehicles/<%= review.vehicle_id %>">
+                    <%= review.vehicle_name || 'Vehicle' %>
+                </a>
+            </h2>
+        </div>
+
+        <div class="review-detail-meta">
+            <h3><%= review.name %></h3>
+
+            <div class="review-detail-rating">
+                <% for(let i = 0; i < 5; i++) { %>
+                    <% if(i < review.rating) { %>
+                        <span class="star filled">★</span>
+                    <% } else { %>
+                        <span class="star">★</span>
+                    <% } %>
+                <% } %>
+                <span class="rating-number">(<%= review.rating %>/5)</span>
+            </div>
+
+            <small class="review-detail-date">
+                <%= new Date(review.created_at).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }) %>
+            </small>
+        </div>
+
+        <div class="review-detail-comment">
+            <p><%= review.comment %></p>
+        </div>
+
+        <% if (user && (user.id === review.user_id || user.roleName === 'employee' || user.roleName === 'owner')) { %>
+            <div class="review-detail-actions">
+                <a href="/reviews/<%= review.id %>/edit" class="btn-edit">
+                    ✏️ Edit Review
+                </a>
+                <form action="/reviews/<%= review.id %>/delete" method="POST" class="delete-form">
+                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this review?')">
+                        🗑️ Delete Review
+                    </button>
+                </form>
+            </div>
+        <% } %>
+
+    </article>
+
+    <div class="review-detail-navigation">
+        <a href="/vehicles/<%= review.vehicle_id %>" class="btn-secondary">
+            ← Back to Vehicle
+        </a>
+        <a href="/reviews" class="btn-secondary">
+            All Reviews →
+        </a>
+    </div>
+
+</main>
+
+<%- include('../partials/footer') %>

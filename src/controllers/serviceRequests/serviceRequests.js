@@ -11,6 +11,10 @@ import {
     deleteServiceRequest
 } from '../../models/serviceRequest/serviceRequests.js';
 
+import {
+    getAllVehicles
+} from '../../models/vehicles/vehicles.js';
+
 /**
  * Show service requests
  */
@@ -58,6 +62,7 @@ const showServiceRequests = async (
 
         res.redirect('/dashboard');
     }
+
 };
 
 /**
@@ -73,11 +78,17 @@ const showCreateRequestForm = async (
         const serviceTypes =
             await getAllServiceTypes();
 
+        const vehicles =
+            await getAllVehicles();
+
         res.render(
             'serviceRequests/create',
             {
                 title: 'New Service Request',
-                serviceTypes
+                serviceTypes,
+                vehicles,
+                formData: {},
+                errors: {}
             }
         );
 
@@ -87,11 +98,12 @@ const showCreateRequestForm = async (
 
         req.flash?.(
             'error',
-            'Unable to load service types.'
+            'Unable to load service request form.'
         );
 
         res.redirect('/service-requests');
     }
+
 };
 
 /**
@@ -107,16 +119,29 @@ const processCreateRequest = async (
 
     if (!errors.isEmpty()) {
 
+        const serviceTypes =
+            await getAllServiceTypes();
+
+        const vehicles =
+            await getAllVehicles();
+
+        const formattedErrors = {};
+
         errors.array().forEach(error => {
-            req.flash?.(
-                'error',
-                error.msg
-            );
+            formattedErrors[error.path] = error;
         });
 
-        return res.redirect(
-            '/service-requests/create'
+        return res.render(
+            'serviceRequests/create',
+            {
+                title: 'New Service Request',
+                serviceTypes,
+                vehicles,
+                errors: formattedErrors,
+                formData: req.body
+            }
         );
+
     }
 
     const {
@@ -130,9 +155,7 @@ const processCreateRequest = async (
         await createServiceRequest(
             req.session.user.id,
             parseInt(service_type_id),
-            vehicle_id
-                ? parseInt(vehicle_id)
-                : null,
+            parseInt(vehicle_id),
             description
         );
 
@@ -158,6 +181,7 @@ const processCreateRequest = async (
             '/service-requests/create'
         );
     }
+
 };
 
 /**
@@ -185,6 +209,7 @@ const showEditRequestForm = async (
             return res.redirect(
                 '/service-requests'
             );
+
         }
 
         const serviceTypes =
@@ -212,6 +237,7 @@ const showEditRequestForm = async (
             '/service-requests'
         );
     }
+
 };
 
 /**
@@ -233,17 +259,18 @@ const processUpdateRequest = async (
 
     try {
 
-        // Update status and notes
         await updateServiceRequestStatus(
             requestId,
             status
         );
 
         if (notes !== undefined) {
+
             await updateServiceRequestNotes(
                 requestId,
                 notes
             );
+
         }
 
         req.flash?.(
@@ -268,6 +295,7 @@ const processUpdateRequest = async (
             `/service-requests/${requestId}/edit`
         );
     }
+
 };
 
 /**
@@ -297,11 +325,13 @@ const processDeleteRequest = async (
             'error',
             'Unable to delete service request.'
         );
+
     }
 
     res.redirect(
         '/service-requests'
     );
+
 };
 
 export {

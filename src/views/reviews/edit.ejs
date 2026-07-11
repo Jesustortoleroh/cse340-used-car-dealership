@@ -4,49 +4,120 @@
 
     <h1>Edit Review</h1>
 
-    <form action="/reviews/<%= review.id %>/edit" method="POST"
-        class="review-form"
-    >
+    <!-- Mostrar mensajes flash -->
+    <% if (flash) { %>
+        <% if (flash.error) { %>
+            <div class="flash error">
+                <%= flash.error %>
+            </div>
+        <% } %>
+        <% if (flash.success) { %>
+            <div class="flash success">
+                <%= flash.success %>
+            </div>
+        <% } %>
+    <% } %>
+
+    <form action="/reviews/<%= review.id %>/edit" method="POST" class="review-form">
 
         <div class="form-group">
-            <label for="rating">
-                Rating
+
+            <label>
+                Rating <span class="text-danger">*</span>
             </label>
 
-            <select
-                id="rating"
-                name="rating"
-                required
-            >
-                <% for (let i = 1; i <= 5; i++) { %>
+            <div class="star-rating">
 
-                    <option
-                        value="<%= i %>"
-                        <%= review.rating === i ? 'selected' : '' %>
-                    >
-                        <%= i %> Star<%= i > 1 ? 's' : '' %>
-                    </option>
+                <input
+                    type="radio"
+                    id="star5"
+                    name="rating"
+                    value="5"
+                    <%= formData?.rating == 5 || (!formData && review.rating === 5)
+                        ? 'checked'
+                        : '' %>
+                    required
+                >
+                <label for="star5">★</label>
 
-                <% } %>
-            </select>
+                <input
+                    type="radio"
+                    id="star4"
+                    name="rating"
+                    value="4"
+                    <%= formData?.rating == 4 || (!formData && review.rating === 4)
+                        ? 'checked'
+                        : '' %>
+                >
+                <label for="star4">★</label>
+
+                <input
+                    type="radio"
+                    id="star3"
+                    name="rating"
+                    value="3"
+                    <%= formData?.rating == 3 || (!formData && review.rating === 3)
+                        ? 'checked'
+                        : '' %>
+                >
+                <label for="star3">★</label>
+
+                <input
+                    type="radio"
+                    id="star2"
+                    name="rating"
+                    value="2"
+                    <%= formData?.rating == 2 || (!formData && review.rating === 2)
+                        ? 'checked'
+                        : '' %>
+                >
+                <label for="star2">★</label>
+
+                <input
+                    type="radio"
+                    id="star1"
+                    name="rating"
+                    value="1"
+                    <%= formData?.rating == 1 || (!formData && review.rating === 1)
+                        ? 'checked'
+                        : '' %>
+                >
+                <label for="star1">★</label>
+
+            </div>
+
         </div>
 
         <div class="form-group">
+
             <label for="comment">
-                Review
+                Review <span class="text-danger">*</span>
             </label>
 
             <textarea
                 id="comment"
                 name="comment"
                 rows="6"
+                class="form-control"
                 required
-            ><%= review.comment %></textarea>
+            ><%= formData?.comment || review.comment || '' %></textarea>
+
         </div>
 
-        <button type="submit">
-            Update Review
-        </button>
+        <div class="review-actions">
+
+            <a href="/vehicles/<%= review.vehicle_id %>" class="btn-secondary">
+                ← Back to Vehicle
+            </a>
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                Update Review
+            </button>
+
+        </div>
 
     </form>
 

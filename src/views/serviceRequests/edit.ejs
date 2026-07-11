@@ -4,17 +4,32 @@
 
     <h1><%= title %></h1>
 
+    <!-- show flash messages -->
+    <% if (flash) { %>
+        <% if (flash.error) { %>
+            <div class="flash error">
+                <%= flash.error %>
+            </div>
+        <% } %>
+        <% if (flash.success) { %>
+            <div class="flash success">
+                <%= flash.success %>
+            </div>
+        <% } %>
+    <% } %>
+
     <form action="/service-requests/<%= request.id %>/edit" method="POST" class="service-form">
 
         <div class="form-group">
 
             <label for="service_type_id">
-                Service Type
+                Service Type <span class="text-danger">*</span>
             </label>
 
             <select
                 id="service_type_id"
                 name="service_type_id"
+                class="form-control"
                 required
             >
                 <option value="">Select a service type...</option>
@@ -22,11 +37,19 @@
                     <% serviceTypes.forEach(type => { %>
                         <option
                             value="<%= type.id %>"
-                            <%= request.service_type_id === type.id ? 'selected' : '' %>
+                            <%= formData?.service_type_id == type.id
+                                ? 'selected'
+                                : request.service_type_id === type.id
+                                    ? 'selected'
+                                    : '' %>
                         >
                             <%= type.name %>
                         </option>
                     <% }) %>
+                <% } else { %>
+                    <option value="" disabled>
+                        No service types available
+                    </option>
                 <% } %>
             </select>
 
@@ -35,35 +58,34 @@
         <div class="form-group">
 
             <label for="status">
-                Status
+                Status <span class="text-danger">*</span>
             </label>
 
             <select
                 id="status"
                 name="status"
+                class="form-control"
+                required
             >
 
-                <option
-                    value="Submitted"
-                    <%= request.status === 'Submitted'
+                <option value="Submitted"
+                    <%= formData?.status == 'Submitted' || (!formData && request.status === 'Submitted')
                         ? 'selected'
                         : '' %>
                 >
                     Submitted
                 </option>
 
-                <option
-                    value="In Progress"
-                    <%= request.status === 'In Progress'
+                <option value="In Progress"
+                    <%= formData?.status == 'In Progress' || (!formData && request.status === 'In Progress')
                         ? 'selected'
                         : '' %>
                 >
                     In Progress
                 </option>
 
-                <option
-                    value="Completed"
-                    <%= request.status === 'Completed'
+                <option value="Completed"
+                    <%= formData?.status == 'Completed' || (!formData && request.status === 'Completed')
                         ? 'selected'
                         : '' %>
                 >
@@ -84,13 +106,25 @@
                 id="notes"
                 name="notes"
                 rows="5"
-            ><%= request.notes || '' %></textarea>
+                class="form-control"
+            ><%= formData?.notes || request.notes || '' %></textarea>
 
         </div>
 
-        <button type="submit" class="btn-primary">
-            Update Request
-        </button>
+        <div class="request-actions">
+
+            <a href="/service-requests" class="btn-secondary">
+                ← Back to Requests
+            </a>
+
+            <button
+                type="submit"
+                class="btn-primary"
+            >
+                Update Request
+            </button>
+
+        </div>
 
     </form>
 
