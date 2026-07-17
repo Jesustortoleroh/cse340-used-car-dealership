@@ -6,15 +6,12 @@ import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
 import { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry } from './forms/contact.js';
 import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
 import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
-import reviewsRoutes from '../routes/reviews.js';
+import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
+import { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
 import { requireLogin } from '../middleware/auth.js';
-import { contactValidation, registrationValidation, loginValidation, updateAccountValidation } from '../middleware/validation/forms.js';
-import serviceRequestsRoutes from '../routes/serviceRequests.js';
-
-
+import { contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation } from '../middleware/validation/forms.js';
 
 const router = Router();
-
 
 // Add login-specific styles to all login routes
 router.use('/login', (req, res, next) => {
@@ -22,11 +19,11 @@ router.use('/login', (req, res, next) => {
     next();
 });
 
+
 router.use('/register', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
     next();
 });
-
 
 router.use('/contact', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/contact.css">');
@@ -59,49 +56,54 @@ router.use('/service-requests', (req, res, next) => {
     next();
 });
 
-
 // Basic Pages
 router.get('/', homePage);
 router.get('/about', aboutPage);
 router.get('/test-error', testErrorPage);
-
 
 // Dealers routes
 router.get('/dealers', dealersListPage);
 router.get('/dealers/:dealerSlug', dealerDetailPage);
 
 // Vehicles routes
-router.get( '/vehicles', vehiclesPage );
-router.get( '/vehicles/:slugId', vehicleDetailPage);
+router.get('/vehicles', vehiclesPage);
+router.get('/vehicles/:slugId', vehicleDetailPage);
 
 // Contact form routes
-router.get( '/contact', showContactForm );
-router.post( '/contact', contactValidation, handleContactSubmission );
-router.get( '/contact/responses', requireLogin, showContactResponses );
-router.get( '/contact/:id', requireLogin, showInquiryDetail );
-router.post( '/contact/:id/status', requireLogin, updateInquiryStatus);
-router.post( '/contact/:id/delete', requireLogin, deleteInquiry );
-
+router.get('/contact', showContactForm);
+router.post('/contact', contactValidation, handleContactSubmission);
+router.get('/contact/responses', requireLogin, showContactResponses);
+router.get('/contact/:id', requireLogin, showInquiryDetail);
+router.post('/contact/:id/status', requireLogin, updateInquiryStatus);
+router.post('/contact/:id/delete', requireLogin, deleteInquiry);
 
 // Registration routes
-router.get( '/register', showRegistrationForm );
-router.post( '/register', registrationValidation, processRegistration );
-router.get( '/register/list', requireLogin, showAllUsers );
-router.get( '/register/:id/edit', requireLogin, showEditAccountForm );
-router.post( '/register/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
-router.post( '/register/:id/delete', requireLogin, processDeleteAccount );
-
+router.get('/register', showRegistrationForm);
+router.post('/register', registrationValidation, processRegistration);
+router.get('/register/list', requireLogin, showAllUsers);
+router.get('/register/:id/edit', requireLogin, showEditAccountForm);
+router.post('/register/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
+router.post('/register/:id/delete', requireLogin, processDeleteAccount);
 
 // Login routes
-router.get( '/login', showLoginForm );
-router.post( '/login', loginValidation, processLogin );
-router.get( '/logout', processLogout);
-router.get( '/dashboard', requireLogin, showDashboard );
+router.get('/login', showLoginForm);
+router.post('/login', loginValidation, processLogin);
+router.get('/logout', processLogout);
+router.get('/dashboard', requireLogin, showDashboard);
 
 // Reviews routes
-router.use( '/reviews', reviewsRoutes);
+router.post('/reviews/create', requireLogin, reviewValidation, processCreateReview);
+router.get('/reviews/:id/edit', requireLogin, showEditReview);
+router.post('/reviews/:id/edit', requireLogin, reviewValidation, processUpdateReview);
+router.post('/reviews/:id/delete', requireLogin, processDeleteReview);
 
 // Service Requests routes
-router.use( '/service-requests', serviceRequestsRoutes );
+router.get('/service-requests', requireLogin, showServiceRequests );
+router.get('/service-requests/create', requireLogin, showCreateRequestForm );
+router.post('/service-requests/create', requireLogin, serviceRequestValidation, processCreateRequest);
+router.get('/service-requests/:id/edit', requireLogin, showEditRequestForm );
+router.post('/service-requests/:id/edit', requireLogin, processUpdateRequest );
+router.post('/service-requests/:id/delete', requireLogin, processDeleteRequest );
+router.get('/service-requests/manage', requireLogin, showServiceRequests);
 
 export default router;
