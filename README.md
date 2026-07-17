@@ -29,7 +29,7 @@ A server-side rendered used car dealership web app where users browse inventory,
 
 ## Database Tables (Planned)
 
-- Users (role: owner, employee, user)
+- Users (role: owner, employee, costumer)
 - Categories (Trucks, Vans, Cars, SUVs)
 - Vehicles
 - Reviews
