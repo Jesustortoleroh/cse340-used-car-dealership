@@ -1,19 +1,6 @@
 import { validationResult } from 'express-validator';
-
-import {
-    getAllServiceRequests,
-    getServiceRequestById,
-    getServiceRequestsByUserId,
-    getAllServiceTypes,
-    createServiceRequest,
-    updateServiceRequestStatus,
-    updateServiceRequestNotes,
-    deleteServiceRequest
-} from '../../models/serviceRequest/serviceRequests.js';
-
-import {
-    getAllVehicles
-} from '../../models/vehicles/vehicles.js';
+import { getAllServiceRequests, getServiceRequestById, getServiceRequestsByUserId, getAllServiceTypes, createServiceRequest, updateServiceRequestStatus, updateServiceRequestNotes, deleteServiceRequest } from '../../models/serviceRequest/serviceRequests.js';
+import { getAllVehicles } from '../../models/vehicles/vehicles.js';
 
 /**
  * Show service requests
@@ -103,7 +90,7 @@ const processCreateRequest = async (req, res) => {
             return res.redirect('/service-requests');
         }
     }
-
+      // Extract validated data from the request body
     const { service_type_id, vehicle_id, description } = req.body;
 
     try {
@@ -136,7 +123,7 @@ const showEditRequestForm = async (req, res) => {
             req.flash?.('error', 'Service request not found.');
             return res.redirect('/service-requests');
         }
-
+        // Check if the user has permission to edit this request
         const serviceTypes = await getAllServiceTypes();
 
         // Retrieve session data if exists (to display validation errors)
@@ -171,30 +158,18 @@ const showEditRequestForm = async (req, res) => {
     }
 };
 
-/**
- * Update request
- * FIXES APPLIED:
- * 1. Status values now match frontend (Submitted, In Progress, Completed)
- * 2. Customers cannot update status - only employees and owners can
- * 3. Ownership verification added for customers
- * 4. Proper role-based authorization
- */
+// Update service request
 const processUpdateRequest = async (req, res) => {
     const requestId = parseInt(req.params.id);
     const { service_type_id, status, notes } = req.body;
     const userRole = req.session.user.roleName;
     const userId = req.session.user.id;
 
-    // ============================================
-    // FIX 1: Consistent status validation
-    // Align with frontend options (Submitted, In Progress, Completed)
-    // ============================================
+  
+    // Define valid statuses for validation
     const validStatuses = ['Submitted', 'In Progress', 'Completed'];
 
-    // ============================================
-    // FIX 2: Ownership verification
-    // Ensure customers can only modify their own requests
-    // ============================================
+    // Role-based validation: Only employees and owners can update status
     try {
         // Verify that the request exists
         const request = await getServiceRequestById(requestId);
@@ -209,10 +184,7 @@ const processUpdateRequest = async (req, res) => {
             return res.redirect('/service-requests');
         }
 
-        // ============================================
-        // FIX 3: Role-based status update permissions
-        // Only employees and owners can update status
-        // ============================================
+        
         
         // Basic validation for common fields
         const errors = {};
@@ -236,9 +208,6 @@ const processUpdateRequest = async (req, res) => {
             return res.redirect(`/service-requests/${requestId}/edit`);
         }
 
-        // ============================================
-        // Apply updates based on user role
-        // ============================================
 
         // Staff (employees and owners) can update everything
         if (userRole === 'employee' || userRole === 'owner') {
@@ -300,11 +269,4 @@ const processDeleteRequest = async (req, res) => {
     res.redirect('/service-requests');
 };
 
-export {
-    showServiceRequests,
-    showCreateRequestForm,
-    processCreateRequest,
-    showEditRequestForm,
-    processUpdateRequest,
-    processDeleteRequest
-};
+export { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest };

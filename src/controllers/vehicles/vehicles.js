@@ -58,24 +58,24 @@ const vehicleDetailPage = async (req, res, next) => {
         // Get review statistics using the model function
         const reviewStats = await getReviewStats(vehicle.id);
 
-        // Obtener datos flash
+        // Get flash messages and form data from the session if available
         let flashMessages = {};
         let formData = {};
         
         if (typeof req.flash === 'function') {
-            // Obtener todos los mensajes flash
+            // Get flash messages for different types
             const success = req.flash('success');
             const error = req.flash('error');
             const warning = req.flash('warning');
             const info = req.flash('info');
             
-            // Guardar solo si hay mensajes
+            // Keep only the first message of each type for display
             if (success.length) flashMessages.success = success[0];
             if (error.length) flashMessages.error = error[0];
             if (warning.length) flashMessages.warning = warning[0];
             if (info.length) flashMessages.info = info[0];
             
-            // Obtener datos del formulario (si existen)
+            // Get form data from flash if available (for preserving input after validation errors)
             const formDataFlash = req.flash('formData');
             if (formDataFlash.length) {
                 formData = formDataFlash[0];
