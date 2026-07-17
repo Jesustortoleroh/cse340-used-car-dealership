@@ -333,6 +333,25 @@
 }
 
 /* ==========================================
+   Readonly Status
+========================================== */
+
+.readonly-status {
+    width: 100%;
+    padding: 0.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    text-align: center;
+}
+
+.status-note {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/* ==========================================
    Responsive Design
 ========================================== */
 

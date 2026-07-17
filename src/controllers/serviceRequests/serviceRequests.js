@@ -173,31 +173,28 @@ const showEditRequestForm = async (req, res) => {
 
 /**
  * Update request
+ * FIXES APPLIED:
+ * 1. Status values now match frontend (Submitted, In Progress, Completed)
+ * 2. Customers cannot update status - only employees and owners can
+ * 3. Ownership verification added for customers
+ * 4. Proper role-based authorization
  */
 const processUpdateRequest = async (req, res) => {
     const requestId = parseInt(req.params.id);
     const { service_type_id, status, notes } = req.body;
+    const userRole = req.session.user.roleName;
+    const userId = req.session.user.id;
 
-    // Basic validation
-    const errors = {};
-    if (!service_type_id) errors.service_type_id = 'Service type is required';
-    if (!status) errors.status = 'Status is required';
-    
-    // Validate that status is valid
-    const validStatuses = ['pending', 'in_progress', 'completed', 'cancelled'];
-    if (status && !validStatuses.includes(status)) {
-        errors.status = 'Invalid status value';
-    }
+    // ============================================
+    // FIX 1: Consistent status validation
+    // Align with frontend options (Submitted, In Progress, Completed)
+    // ============================================
+    const validStatuses = ['Submitted', 'In Progress', 'Completed'];
 
-    // If there are errors, save in session and redirect
-    if (Object.keys(errors).length > 0) {
-        req.session.formData = { service_type_id, status, notes };
-        req.session.errors = errors;
-        
-        req.flash?.('error', 'Please fix the validation errors.');
-        return res.redirect(`/service-requests/${requestId}/edit`);
-    }
-
+    // ============================================
+    // FIX 2: Ownership verification
+    // Ensure customers can only modify their own requests
+    // ============================================
     try {
         // Verify that the request exists
         const request = await getServiceRequestById(requestId);
@@ -206,15 +203,66 @@ const processUpdateRequest = async (req, res) => {
             return res.redirect('/service-requests');
         }
 
-        // Update status
-        await updateServiceRequestStatus(requestId, status);
-
-        // Update notes if provided
-        if (notes !== undefined && notes.trim() !== '') {
-            await updateServiceRequestNotes(requestId, notes.trim());
+        // Check ownership for customers
+        if (userRole === 'customer' && request.user_id !== userId) {
+            req.flash?.('error', 'You do not have permission to modify this request.');
+            return res.redirect('/service-requests');
         }
 
-        req.flash?.('success', 'Service request updated successfully.');
+        // ============================================
+        // FIX 3: Role-based status update permissions
+        // Only employees and owners can update status
+        // ============================================
+        
+        // Basic validation for common fields
+        const errors = {};
+        if (!service_type_id) errors.service_type_id = 'Service type is required';
+        
+        // Validate status only if user is staff (since they can modify it)
+        if (userRole === 'employee' || userRole === 'owner') {
+            if (!status) {
+                errors.status = 'Status is required';
+            } else if (!validStatuses.includes(status)) {
+                errors.status = 'Invalid status value. Must be: Submitted, In Progress, or Completed';
+            }
+        }
+
+        // If there are errors, save in session and redirect
+        if (Object.keys(errors).length > 0) {
+            req.session.formData = { service_type_id, status, notes };
+            req.session.errors = errors;
+            
+            req.flash?.('error', 'Please fix the validation errors.');
+            return res.redirect(`/service-requests/${requestId}/edit`);
+        }
+
+        // ============================================
+        // Apply updates based on user role
+        // ============================================
+
+        // Staff (employees and owners) can update everything
+        if (userRole === 'employee' || userRole === 'owner') {
+            // Update status
+            await updateServiceRequestStatus(requestId, status);
+
+            // Update notes if provided
+            if (notes !== undefined) {
+                await updateServiceRequestNotes(requestId, notes.trim() || '');
+            }
+
+            req.flash?.('success', 'Service request updated successfully.');
+
+        } else {
+            // Customers can ONLY update notes
+            // Status remains unchanged
+            if (notes !== undefined) {
+                await updateServiceRequestNotes(requestId, notes.trim() || '');
+                req.flash?.('success', 'Service request notes updated successfully.');
+            } else {
+                req.flash?.('info', 'No changes were made to the request.');
+            }
+        }
+
         res.redirect('/service-requests');
 
     } catch (error) {

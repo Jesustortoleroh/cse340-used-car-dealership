@@ -55,44 +55,71 @@
 
         </div>
 
+        <!-- CHANGE: Status is now only editable by employees and owners -->
         <div class="form-group">
 
-            <label for="status">
-                Status <span class="text-danger">*</span>
-            </label>
+            <label>Status</label>
 
-            <select
-                id="status"
-                name="status"
-                class="form-control"
-                required
-            >
-
-                <option value="Submitted"
-                    <%= formData?.status == 'Submitted' || (!formData && request.status === 'Submitted')
-                        ? 'selected'
-                        : '' %>
+            <!-- Only employees and owners can modify the status -->
+            <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
+                
+                <select
+                    id="status"
+                    name="status"
+                    class="form-control"
+                    required
                 >
-                    Submitted
-                </option>
+                    <option value="Submitted"
+                        <%= formData?.status == 'Submitted' || (!formData && request.status === 'Submitted')
+                            ? 'selected'
+                            : '' %>
+                    >
+                        Submitted
+                    </option>
 
-                <option value="In Progress"
-                    <%= formData?.status == 'In Progress' || (!formData && request.status === 'In Progress')
-                        ? 'selected'
-                        : '' %>
-                >
-                    In Progress
-                </option>
+                    <option value="In Progress"
+                        <%= formData?.status == 'In Progress' || (!formData && request.status === 'In Progress')
+                            ? 'selected'
+                            : '' %>
+                    >
+                        In Progress
+                    </option>
 
-                <option value="Completed"
-                    <%= formData?.status == 'Completed' || (!formData && request.status === 'Completed')
-                        ? 'selected'
-                        : '' %>
-                >
-                    Completed
-                </option>
+                    <option value="Completed"
+                        <%= formData?.status == 'Completed' || (!formData && request.status === 'Completed')
+                            ? 'selected'
+                            : '' %>
+                    >
+                        Completed
+                    </option>
+                </select>
 
-            </select>
+            <% } else { %>
+                
+                <!-- Customers can only view the current status with styled badge -->
+                <div class="readonly-status">
+                    <span class="status-badge
+                        <%= request.status === 'Submitted'
+                            ? 'status-submitted'
+                            : request.status === 'In Progress'
+                                ? 'status-in-progress'
+                                : 'status-completed' %>">
+                        <%= request.status %>
+                    </span>
+                </div>
+
+                <p class="status-note">
+                    Only dealership staff can update the service request status.
+                </p>
+
+                <!-- Hidden field to maintain current status value when form is submitted -->
+                <input 
+                    type="hidden" 
+                    name="status" 
+                    value="<%= request.status %>"
+                />
+
+            <% } %>
 
         </div>
 
