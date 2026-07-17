@@ -1,21 +1,4 @@
 /**
- * Helper function to get the current greeting based on the time of day.
- */
-const getCurrentGreeting = () => {
-    const currentHour = new Date().getHours();
-
-    if (currentHour < 12) {
-        return 'Good Morning!';
-    }
-
-    if (currentHour < 18) {
-        return 'Good Afternoon!';
-    }
-
-    return 'Good Evening!';
-};
-
-/**
  * Express middleware that adds head asset management functionality.
  */
 const setHeadAssetsFunctionality = (res) => {
@@ -63,7 +46,10 @@ const addLocalVariables = (req, res, next) => {
     res.locals.queryParams = { ...req.query };
 
     // Greeting
-    res.locals.greeting = `<p>${getCurrentGreeting()}</p>`;
+    res.locals.greeting =
+    req.session?.user
+        ? `Welcome back, ${req.session.user.name}!`
+        : 'Welcome to My Used Car Dealership';
 
     // Authentication data available in ALL views
     res.locals.user = req.session?.user || null;
