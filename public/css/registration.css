@@ -297,3 +297,107 @@
     color: #991b1b;
     border: 1px solid #fca5a5;
 }
+
+/* ==========================================
+   Edit Account
+========================================== */
+
+.account-edit {
+    max-width: 750px;
+    margin: 2rem auto;
+}
+
+.account-edit h1 {
+    text-align: center;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.account-edit .text-muted {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 2rem;
+}
+
+.account-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(
+        0,
+        0,
+        0,
+        0.08
+    );
+}
+
+.account-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.account-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.account-form input {
+    width: 100%;
+    padding: 0.85rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.account-form input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(
+        37,
+        99,
+        235,
+        0.15
+    );
+}
+
+.account-form input[disabled] {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+.help-text {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-actions .btn-primary,
+.form-actions .btn-secondary {
+    flex: 1;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+
+    .account-edit {
+        padding: 0 1rem;
+    }
+
+    .account-form {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+}
