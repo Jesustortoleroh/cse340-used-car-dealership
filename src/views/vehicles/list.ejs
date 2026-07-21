@@ -20,80 +20,95 @@
 
     <h1><%= title %></h1>
 
-    <div class="vehicle-filters">
-
-        <form action="/vehicles" method="GET">
-
-            <label for="category">
-                Category:
-            </label>
-
-            <select
-                id="category"
-                name="category"
-                onchange="this.form.submit()"
+    <!-- ==========================================
+         Vehicle Search Toolbar - One Line Layout
+    ========================================== -->
+    <div class="vehicles-toolbar">
+        <form action="/vehicles" method="GET" class="vehicle-search-form">
+            <!-- Search input -->
+            <input 
+                type="text" 
+                name="search" 
+                placeholder="🔍 Search vehicles by name or description..."
+                value="<%= queryParams && queryParams.search ? queryParams.search : '' %>"
+                class="search-input"
             >
 
-                <option
-                    value="All"
-                    <%= currentCategory === 'All'
-                        ? 'selected'
-                        : '' %>
-                >
-                    All Vehicles
+            <!-- Category filter -->
+            <select name="category" class="category-select">
+                <option value="All" <%= currentCategory === 'All' ? 'selected' : '' %>>
+                    All Categories
                 </option>
-
-                <option
-                    value="Car"
-                    <%= currentCategory === 'Car'
-                        ? 'selected'
-                        : '' %>
-                >
+                <option value="Car" <%= currentCategory === 'Car' ? 'selected' : '' %>>
                     Cars
                 </option>
-
-                <option
-                    value="SUV"
-                    <%= currentCategory === 'SUV'
-                        ? 'selected'
-                        : '' %>
-                >
+                <option value="SUV" <%= currentCategory === 'SUV' ? 'selected' : '' %>>
                     SUVs
                 </option>
-
-                <option
-                    value="Truck"
-                    <%= currentCategory === 'Truck'
-                        ? 'selected'
-                        : '' %>
-                >
+                <option value="Truck" <%= currentCategory === 'Truck' ? 'selected' : '' %>>
                     Trucks
                 </option>
-
-                <option
-                    value="Luxury"
-                    <%= currentCategory === 'Luxury'
-                        ? 'selected'
-                        : '' %>
-                >
+                <option value="Luxury" <%= currentCategory === 'Luxury' ? 'selected' : '' %>>
                     Luxury
                 </option>
-
-                <option
-                    value="Electric"
-                    <%= currentCategory === 'Electric'
-                        ? 'selected'
-                        : '' %>
-                >
+                <option value="Electric" <%= currentCategory === 'Electric' ? 'selected' : '' %>>
                     Electric
                 </option>
-
             </select>
 
-        </form>
+            <!-- Sort filter -->
+            <select name="sort" class="sort-select">
+                <option value="name_asc" <%= queryParams && queryParams.sort === 'name_asc' ? 'selected' : '' %>>
+                    Sort By
+                </option>
+                <option value="price_asc" <%= queryParams && queryParams.sort === 'price_asc' ? 'selected' : '' %>>
+                    Price: Low to High
+                </option>
+                <option value="price_desc" <%= queryParams && queryParams.sort === 'price_desc' ? 'selected' : '' %>>
+                    Price: High to Low
+                </option>
+                <option value="name_asc" <%= queryParams && queryParams.sort === 'name_asc' ? 'selected' : '' %>>
+                    Name: A to Z
+                </option>
+                <option value="name_desc" <%= queryParams && queryParams.sort === 'name_desc' ? 'selected' : '' %>>
+                    Name: Z to A
+                </option>
+                <option value="newest" <%= queryParams && queryParams.sort === 'newest' ? 'selected' : '' %>>
+                    Newest First
+                </option>
+            </select>
 
+            <!-- Search button -->
+            <button type="submit" class="btn-search">
+                Search
+            </button>
+
+            <!-- Clear button (only shows when searching or filtering) -->
+            <% if ((queryParams && queryParams.search) || (queryParams && queryParams.category && queryParams.category !== 'All') || (queryParams && queryParams.sort && queryParams.sort !== 'name_asc')) { %>
+                <a href="/vehicles" class="btn-clear">
+                    ✕ Clear
+                </a>
+            <% } %>
+        </form>
     </div>
 
+    <!-- Results count with sort info -->
+    <p class="results-count">
+        Showing <strong><%= vehicleCount %></strong> <%= vehicleCount === 1 ? 'vehicle' : 'vehicles' %>
+        <% if (queryParams && queryParams.search) { %>
+            matching "<%= queryParams.search %>"
+        <% } %>
+        <% if (currentCategory && currentCategory !== 'All') { %>
+            in <strong><%= currentCategory %></strong>
+        <% } %>
+        <% if (queryParams && queryParams.sort && queryParams.sort !== 'name_asc') { %>
+            <span class="sort-indicator">
+                • Sorted by: <strong><%= sortLabel %></strong>
+            </span>
+        <% } %>
+    </p>
+
+    <!-- Vehicle Grid -->
     <% if (vehicles && vehicles.length > 0) { %>
 
         <div class="vehicle-list">
@@ -157,8 +172,9 @@
 
                         <% } %>
 
-                        <a href="/vehicles/<%= vehicle.slug %>" class="view-details">
-                            View Details
+                        <!-- View Details button - Now a blue button -->
+                        <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
+                            View Details →
                         </a>
 
                     </div>
@@ -178,11 +194,21 @@
             </span>
 
             <p>
-                No vehicles available in this category.
+                <% if (queryParams && queryParams.search) { %>
+                    No vehicles found matching "<%= queryParams.search %>".
+                <% } else { %>
+                    No vehicles available in this category.
+                <% } %>
             </p>
 
             <p class="empty-sub">
-                Check back later for new inventory!
+                <% if (queryParams && queryParams.search) { %>
+                    Try adjusting your search terms or browse all vehicles.
+                    <br>
+                    <a href="/vehicles" class="view-all-link">View all vehicles</a>
+                <% } else { %>
+                    Check back later for new inventory!
+                <% } %>
             </p>
 
         </div>

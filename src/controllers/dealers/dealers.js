@@ -1,6 +1,7 @@
 import {
   getDealerBySlug,
-  getSortedDealers
+  getSortedDealers,
+  getVehiclesByDealerId  
 } from '../../models/dealers/dealers.js';
 
 const dealersListPage = async (req, res, next) => {
@@ -35,9 +36,14 @@ const dealerDetailPage = async (req, res, next) => {
       return next(err);
     }
 
+    // Get vehicles associated with this dealer
+    const vehicles = await getVehiclesByDealerId(dealer.id);
+
     res.render('dealers/detail', {
       title: `${dealer.name} - Dealer Profile`,
-      dealer
+      dealer,
+      vehicles: vehicles,
+      vehicleCount: vehicles.length
     });
   } catch (error) {
     next(error);

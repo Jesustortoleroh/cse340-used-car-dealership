@@ -42,12 +42,100 @@
                 </a>
 
                 <a href="/vehicles" class="inventory-button">
-                    View Inventory
+                    View All Inventory
                 </a>
 
             </div>
 
         </div>
+
+    </section>
+
+    <!-- ==========================================
+         Vehicles Available at this Dealer
+    ========================================== -->
+    <section class="dealer-vehicles-section">
+
+        <div class="dealer-vehicles-header">
+            <h2>
+                Vehicles Available 
+                <span class="vehicle-count-badge">
+                    <%= vehicleCount %>
+                </span>
+            </h2>
+            <p class="dealer-vehicles-subtitle">
+                <%= vehicleCount === 1 
+                    ? 'This dealer has 1 vehicle in stock' 
+                    : `This dealer has ${vehicleCount} vehicles in stock` 
+                %>
+            </p>
+        </div>
+
+        <% if (vehicles && vehicles.length > 0) { %>
+
+            <div class="vehicle-list">
+
+                <% vehicles.forEach(vehicle => { %>
+
+                    <div class="vehicle-card">
+
+                        <% if (vehicle.image_url) { %>
+
+                            <img 
+                                src="<%= vehicle.image_url %>"
+                                alt="<%= vehicle.name %>"
+                                class="vehicle-image"
+                            >
+
+                        <% } %>
+
+                        <div class="vehicle-info">
+
+                            <h3>
+                                <a href="/vehicles/<%= vehicle.slug %>">
+                                    <%= vehicle.name %>
+                                </a>
+                            </h3>
+
+                            <p class="vehicle-price">
+                                $<%= vehicle.price.toLocaleString() %>
+                            </p>
+
+                            <p class="vehicle-category">
+                                Category: <%= vehicle.category %>
+                            </p>
+
+                            <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
+                                View Details →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } else { %>
+
+            <div class="empty-state">
+
+                <span class="empty-icon">
+                    🏢
+                </span>
+
+                <p>
+                    No vehicles currently available at this dealer.
+                </p>
+
+                <p class="empty-sub">
+                    Check back later for new inventory!
+                </p>
+
+            </div>
+
+        <% } %>
 
     </section>
 

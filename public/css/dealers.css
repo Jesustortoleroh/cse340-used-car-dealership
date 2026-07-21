@@ -73,12 +73,10 @@
     background: white;
 }
 
-
 .dealer-card h3 {
     text-align: center;
     margin-top: 15px;
 }
-
 
 .dealer-image {
     width: 100%;
@@ -96,4 +94,155 @@
     margin: 20px auto;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,.15);
+}
+
+/* ==========================================
+   Dealer Vehicles Section
+========================================== */
+
+.dealer-vehicles-section {
+    max-width: 1000px;
+    margin: 2.5rem auto 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.dealer-vehicles-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dealer-vehicles-header h2 {
+    color: #1f2937;
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.vehicle-count-badge {
+    display: inline-block;
+    background: #2563eb;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 0.15rem 0.75rem;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.dealer-vehicles-subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ==========================================
+   Empty State (reused from vehicles)
+========================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+}
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    color: #4b5563;
+    margin: 0.5rem 0;
+}
+
+.empty-state .empty-sub {
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+/* ==========================================
+   Vehicle Cards (reused from vehicles.css)
+   These styles should match your vehicles.css
+========================================== */
+
+.vehicle-list {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.vehicle-card {
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.vehicle-card .vehicle-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.vehicle-card .vehicle-info {
+    padding: 1rem;
+}
+
+.vehicle-card .vehicle-info h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.vehicle-card .vehicle-info h3 a {
+    color: #1f2937;
+    text-decoration: none;
+}
+
+.vehicle-card .vehicle-info h3 a:hover {
+    color: #2563eb;
+}
+
+.vehicle-card .vehicle-info p {
+    margin: 0.2rem 0;
+    color: #555;
+}
+
+.vehicle-card .vehicle-price {
+    margin-top: 0.7rem;
+    font-weight: bold;
+    color: #2563eb;
+    font-size: 1.1rem;
+}
+
+.vehicle-card .vehicle-category {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.vehicle-card .btn-view-details {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.6rem 1.25rem;
+    background-color: #2563eb;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.vehicle-card .btn-view-details:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.02);
 }

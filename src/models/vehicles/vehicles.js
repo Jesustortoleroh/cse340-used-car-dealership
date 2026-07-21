@@ -49,6 +49,64 @@ const getVehicles = async (
 };
 
 /**
+ * Search vehicles by name, category, or description
+ */
+const searchVehicles = async (
+    searchTerm,
+    category = null,
+    sortBy = 'price'
+) => {
+
+    // Build WHERE clause for search
+    let whereClause = `
+        WHERE 
+            LOWER(v.name) LIKE LOWER($1)
+            OR LOWER(v.description) LIKE LOWER($1)
+    `;
+
+    let params = [`%${searchTerm}%`];
+    let paramIndex = 2;
+
+    // Add category filter if provided
+    if (category && category !== 'All' && category !== 'all') {
+        whereClause += ` AND LOWER(c.name) = LOWER($${paramIndex})`;
+        params.push(category);
+        paramIndex++;
+    }
+
+    const orderByClause =
+        sortBy === 'name'
+            ? 'v.name'
+            : 'v.price';
+
+    const query = `
+        SELECT
+            v.id,
+            v.name,
+            v.slug,
+            v.description,
+            v.price,
+            c.name AS category,
+            vi.image_url
+        FROM vehicles v
+        JOIN categories c
+            ON v.category_id = c.id
+        LEFT JOIN vehicle_images vi
+            ON vi.vehicle_id = v.id
+            AND vi.is_primary = true
+        ${whereClause}
+        ORDER BY ${orderByClause}
+    `;
+
+    const result = await db.query(
+        query,
+        params
+    );
+
+    return result.rows;
+};
+
+/**
  * Get vehicle by slug
  */
 const getVehicleBySlug = async (
@@ -174,5 +232,6 @@ export {
     getAllVehicles,
     getVehiclesByCategory,
     getVehicleBySlug,
-    getVehicleById
+    getVehicleById,
+    searchVehicles  
 };
