@@ -27,9 +27,23 @@
     <% } %>
 </head>
 <body>
+    <!-- Main navigation header -->
     <header>
-        <nav>
-            <ul>
+        <nav class="main-nav">
+            <div class="nav-top">
+              
+                <!-- Mobile menu toggle button -->
+                <button
+                    class="menu-toggle"
+                    id="menu-toggle"
+                    aria-label="Toggle navigation"
+                >
+                    ☰
+                </button>
+            </div>
+
+            <!-- Navigation menu list -->
+            <ul id="nav-menu">
                 <!-- Always visible links -->
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
@@ -37,25 +51,33 @@
                 <li><a href="/dealers">Dealers</a></li>
                 <li><a href="/contact">Contact</a></li>
 
-                <!-- Only visible when logged in -->
+                <!-- Conditional content for logged-in users -->
                 <% if (isLoggedIn) { %>
+                    <!-- Dashboard link -->
                     <li><a href="/dashboard">Dashboard</a></li>
-                    <% if (user && (user.roleName === 'employee' || user.roleName === 'owner')) { %>
-                        <li><a href="/register/list">Customers</a></li>
-                        <li><a href="/contact/responses">Inquiries</a></li>
-                    <% } %>
-                    <li><a href="/logout">Logout</a></li>
-                <% } %>
 
-                <!-- Only visible when NOT logged in -->
-                <% if (!isLoggedIn) { %>
+                    <!-- Conditional content for employee or owner roles -->
+                    <% if (user && (user.roleName === 'employee' || user.roleName === 'owner')) { %>
+                        <!-- Vehicle registration list link -->
+                        <li><a href="/register/list">Register List</a></li>
+                        <!-- Inquiries link -->
+                        <li><a href="/responses">Inquiries</a></li>
+                    <% } %>
+
+                    <!-- Logout link -->
+                    <li><a href="/logout">Logout</a></li>
+
+                <% } else { %>
+                    <!-- Login link for non-authenticated users -->
                     <li><a href="/login">Login</a></li>
+                    <!-- Registration link -->
                     <li><a href="/register">Create Account</a></li>
                 <% } %>
             </ul>
         </nav>
     </header>
 
+    <!-- Flash messages display -->
     <%
     const messages =
         typeof flash === 'function'
@@ -83,3 +105,8 @@
             <% }); %>
         </div>
     <% } %>
+
+    <!-- JavaScript files -->
+    <script src="/js/navigation.js"></script>
+</body>
+</html>
