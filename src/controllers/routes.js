@@ -10,6 +10,8 @@ import { processCreateReview, showEditReview, processUpdateReview, processDelete
 import { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
 import { requireLogin } from '../middleware/auth.js';
 import { contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation } from '../middleware/validation/forms.js';
+import { addFavoriteController, removeFavoriteController, favoritesListPage } from '../controllers/favorites/favorites.js';
+import { profilePage } from '../controllers/profile/profile.js';
 
 const router = Router();
 
@@ -53,6 +55,29 @@ router.use('/reviews', (req, res, next) => {
 
 router.use('/service-requests', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/serviceRequests.css">');
+    next();
+});
+
+
+router.use('/favorites', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/favorites.css">');
+    next();
+});
+
+router.use('/profile', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/profile.css">');
+    next();
+});
+
+// Add theme styles globally
+router.use((req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/theme.css">');
+    res.addStyle('<link rel="stylesheet" href="/css/theme-toggle.css">');
+    next();
+});
+
+router.use('/error', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/error.css">');
     next();
 });
 
@@ -105,5 +130,14 @@ router.get('/service-requests/:id/edit', requireLogin, showEditRequestForm );
 router.post('/service-requests/:id/edit', requireLogin, processUpdateRequest );
 router.post('/service-requests/:id/delete', requireLogin, processDeleteRequest );
 router.get('/service-requests/manage', requireLogin, showServiceRequests);
+
+// Favorites routes
+router.get('/favorites', requireLogin, favoritesListPage);
+router.post('/favorites/:vehicleId/add', requireLogin, addFavoriteController);
+router.post('/favorites/:vehicleId/remove', requireLogin, removeFavoriteController);
+
+// Profile routes
+router.get('/profile', requireLogin, profilePage);
+
 
 export default router;

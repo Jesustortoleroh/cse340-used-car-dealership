@@ -189,6 +189,24 @@ CREATE TABLE session (
     expire TIMESTAMP NOT NULL
 );
 
+-- Favorites table for many-to-many relationship between users and vehicles
+CREATE TABLE IF NOT EXISTS favorites (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    vehicle_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+    
+    FOREIGN KEY (vehicle_id)
+        REFERENCES vehicles(id)
+        ON DELETE CASCADE,
+    
+    UNIQUE(user_id, vehicle_id)
+);
+
 -- ============================================
 -- 3. INSERT DATA
 -- ============================================

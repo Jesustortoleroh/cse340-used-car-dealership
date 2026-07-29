@@ -1,0 +1,99 @@
+/* ==========================================
+   Theme Variables - Light Mode (Default)
+========================================== */
+:root {
+    /* Backgrounds */
+    --bg-body: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f9fafb;
+    --bg-nav: #1f2937;
+    --bg-header: #1f2937;
+
+    /* Text Colors */
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --text-light: #9ca3af;
+    --text-white: #ffffff;
+
+    /* Borders */
+    --border-color: #e5e7eb;
+    --border-dark: #d1d5db;
+
+    /* Primary Colors */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+
+    /* Status Colors */
+    --success: #059669;
+    --success-bg: #d1fae5;
+    --error: #dc2626;
+    --error-bg: #fee2e2;
+    --warning: #d97706;
+    --warning-bg: #fef3c7;
+    --info: #2563eb;
+    --info-bg: #dbeafe;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.16);
+
+    /* Card */
+    --card-radius: 12px;
+    --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.12);
+
+    /* Transitions */
+    --transition: all 0.3s ease;
+}
+
+/* ==========================================
+   Dark Mode
+========================================== */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-body: #111827;
+    --bg-card: #1f2937;
+    --bg-input: #374151;
+    --bg-hover: #374151;
+    --bg-nav: #0f172a;
+    --bg-header: #0f172a;
+
+    /* Text Colors */
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --text-light: #6b7280;
+    --text-white: #f9fafb;
+
+    /* Borders */
+    --border-color: #374151;
+    --border-dark: #4b5563;
+
+    /* Primary Colors */
+    --primary: #60a5fa;
+    --primary-hover: #3b82f6;
+    --primary-light: #1e3a5f;
+
+    /* Status Colors */
+    --success: #34d399;
+    --success-bg: #064e3b;
+    --error: #f87171;
+    --error-bg: #7f1d1d;
+    --warning: #fbbf24;
+    --warning-bg: #78350f;
+    --info: #60a5fa;
+    --info-bg: #1e3a5f;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+
+    /* Card */
+    --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4);
+}

@@ -1,0 +1,34 @@
+/* ==========================================
+   Theme Toggle Button
+========================================== */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: var(--text-white);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: var(--transition);
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.theme-toggle:active {
+    transform: scale(0.9);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .theme-toggle {
+        font-size: 1.2rem;
+        padding: 0.2rem 0.4rem;
+    }
+}

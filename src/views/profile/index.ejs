@@ -1,0 +1,87 @@
+<%- include('../partials/header') %>
+
+<main>
+
+    <% if (messages && messages.error) { %>
+        <div class="flash error">
+            <%= messages.error %>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.success) { %>
+        <div class="flash success">
+            <%= messages.success %>
+        </div>
+    <% } %>
+
+    <section class="profile-page">
+
+        <h1>My Profile</h1>
+
+        <div class="profile-card">
+
+            <div class="profile-avatar">
+                <span class="avatar-initials">
+                    <%= profile.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) %>
+                </span>
+            </div>
+
+            <h2><%= profile.name %></h2>
+
+            <p>
+                <strong>Email:</strong>
+                <%= profile.email %>
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                <span class="role-badge role-<%= profile.role_name %>">
+                    <%= profile.role_name %>
+                </span>
+            </p>
+
+            <p>
+                <strong>Member Since:</strong>
+                <%= new Date(profile.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) %>
+            </p>
+
+        </div>
+
+        <div class="profile-stats">
+
+            <div class="stat-card">
+                <div class="stat-icon">❤️</div>
+                <h3>Favorites</h3>
+                <p class="stat-number"><%= favoriteCount %></p>
+                <a href="/favorites" class="stat-link">View All →</a>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <h3>Reviews</h3>
+                <p class="stat-number"><%= reviewCount %></p>
+                <a href="/vehicles" class="stat-link">Write a Review →</a>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🔧</div>
+                <h3>Service Requests</h3>
+                <p class="stat-number"><%= serviceRequestCount %></p>
+                <a href="/service-requests" class="stat-link">View All →</a>
+            </div>
+
+        </div>
+
+        <div class="profile-actions">
+            <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+        </div>
+
+    </section>
+
+</main>
+
+<%- include('../partials/footer') %>

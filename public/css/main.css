@@ -1,9 +1,122 @@
+/* ==========================================
+   Theme Variables - Light Mode (Default)
+========================================== */
+:root {
+    /* Backgrounds */
+    --bg-body: #f4f6f9;
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --bg-hover: #f9fafb;
+    --bg-nav: #1f2937;
+    --bg-header: #1f2937;
+
+    /* Text Colors */
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --text-light: #9ca3af;
+    --text-white: #ffffff;
+
+    /* Borders */
+    --border-color: #e5e7eb;
+    --border-dark: #d1d5db;
+
+    /* Primary Colors */
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-light: #dbeafe;
+
+    /* Status Colors */
+    --success: #10b981;
+    --success-bg: #d1fae5;
+    --success-text: #065f46;
+    --error: #ef4444;
+    --error-bg: #fee2e2;
+    --error-text: #991b1b;
+    --warning: #f59e0b;
+    --warning-bg: #fef3c7;
+    --warning-text: #92400e;
+    --info: #2563eb;
+    --info-bg: #dbeafe;
+    --info-text: #1e3a8a;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.16);
+
+    /* Card */
+    --card-radius: 12px;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.12);
+
+    /* Transitions */
+    --transition: all 0.3s ease;
+}
+
+/* ==========================================
+   Dark Mode
+========================================== */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-body: #111827;
+    --bg-card: #1f2937;
+    --bg-input: #374151;
+    --bg-hover: #374151;
+    --bg-nav: #0f172a;
+    --bg-header: #0f172a;
+
+    /* Text Colors */
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --text-light: #6b7280;
+    --text-white: #f9fafb;
+
+    /* Borders */
+    --border-color: #374151;
+    --border-dark: #4b5563;
+
+    /* Primary Colors */
+    --primary: #60a5fa;
+    --primary-hover: #3b82f6;
+    --primary-light: #1e3a5f;
+
+    /* Status Colors */
+    --success: #34d399;
+    --success-bg: #064e3b;
+    --success-text: #34d399;
+    --error: #f87171;
+    --error-bg: #7f1d1d;
+    --error-text: #f87171;
+    --warning: #fbbf24;
+    --warning-bg: #78350f;
+    --warning-text: #fbbf24;
+    --info: #60a5fa;
+    --info-bg: #1e3a5f;
+    --info-text: #60a5fa;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+
+    /* Card */
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    --card-shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================
+   Global Reset & Base Styles
+========================================== */
 html,
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f6f9;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    transition: var(--transition);
 }
 
 /* Main page layout */
@@ -12,9 +125,10 @@ body {
 }
 
 body header {
-    background-color: #1f2937;
+    background-color: var(--bg-nav);
     padding: 15px 0;
     margin-bottom: 20px;
+    transition: var(--transition);
 }
 
 body header nav {
@@ -36,9 +150,10 @@ body header nav li {
 
 body header nav a {
     text-decoration: none;
-    color: #ffffff;
+    color: var(--text-white);
     font-weight: bold;
     font-size: 16px;
+    transition: var(--transition);
 }
 
 body header nav a:hover {
@@ -51,14 +166,14 @@ body main {
 }
 
 body main h1 {
-    color: #1f2937;
+    color: var(--text-primary);
     text-align: center;
     margin-bottom: 20px;
 }
 
 body main p {
     text-align: center;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 /* Vehicle grid */
@@ -71,15 +186,16 @@ body .vehicle-list {
 
 /* Vehicle cards */
 body .vehicle-card {
-    background: white;
+    background: var(--bg-card);
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 body .vehicle-card:hover {
     transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
 }
 
 body .vehicle-card img {
@@ -94,19 +210,19 @@ body .vehicle-card .vehicle-info {
 
 body .vehicle-card .vehicle-info h3 {
     margin: 0;
-    color: #111827;
+    color: var(--text-primary);
 }
 
 body .vehicle-card .vehicle-info p {
     margin-top: 5px;
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 14px;
 }
 
 body .vehicle-card .vehicle-info .price {
     margin-top: 10px;
     font-weight: bold;
-    color: #2563eb;
+    color: var(--primary);
 }
 
 body .home-image {
@@ -125,11 +241,12 @@ body .cta-buttons {
 
 body .cta-buttons a {
     padding: 10px 20px;
-    background-color: #1f2937;
-    color: white;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
+    transition: var(--transition);
 }
 
 body .cta-buttons a:hover {
@@ -140,12 +257,15 @@ body footer {
     text-align: center;
     margin-top: 40px;
     padding: 15px;
-    background-color: #1f2937;
-    color: white;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
     font-size: 14px;
+    transition: var(--transition);
 }
 
-/* Flash Messages */
+/* ==========================================
+   Flash Messages
+========================================== */
 .flash-messages {
     max-width: 1200px;
     margin: 1rem auto;
@@ -160,41 +280,36 @@ body footer {
     font-size: 0.95rem;
     line-height: 1.5;
     font-weight: 500;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-sm);
 }
 
-/* Success */
 .flash.success {
-    background-color: #d1fae5;
-    border-color: #10b981;
-    color: #065f46;
+    background-color: var(--success-bg);
+    border-color: var(--success);
+    color: var(--success-text);
 }
 
-/* Error */
 .flash.error {
-    background-color: #fee2e2;
-    border-color: #ef4444;
-    color: #991b1b;
+    background-color: var(--error-bg);
+    border-color: var(--error);
+    color: var(--error-text);
 }
 
-/* Warning */
 .flash.warning {
-    background-color: #fef3c7;
-    border-color: #f59e0b;
-    color: #92400e;
+    background-color: var(--warning-bg);
+    border-color: var(--warning);
+    color: var(--warning-text);
 }
 
-/* Information */
 .flash.info {
-    background-color: #dbeafe;
-    border-color: #2563eb;
-    color: #1e3a8a;
+    background-color: var(--info-bg);
+    border-color: var(--info);
+    color: var(--info-text);
 }
 
 /* ==========================================
    About Page
 ========================================== */
-
 .about-page {
     max-width: 1000px;
     margin: 0 auto;
@@ -204,35 +319,36 @@ body footer {
     text-align: center;
     font-size: 1.1rem;
     margin-bottom: 2rem;
-    color: #4b5563;
+    color: var(--text-secondary);
     line-height: 1.8;
 }
 
 .about-section {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 .about-section h2 {
     margin-top: 0;
     margin-bottom: 1rem;
-    color: #1f2937;
-    border-bottom: 2px solid #e5e7eb;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.5rem;
 }
 
 .about-section p {
     text-align: left;
     line-height: 1.8;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .about-section ul {
     padding-left: 1.5rem;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .about-section li {
@@ -247,25 +363,27 @@ body footer {
 }
 
 .feature-card {
-    background-color: #f9fafb;
+    background-color: var(--bg-hover);
     padding: 1rem;
     border-radius: 8px;
-    border-left: 4px solid #2563eb;
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
 }
 
 .feature-card h3 {
     margin-top: 0;
     margin-bottom: 0.75rem;
-    color: #2563eb;
+    color: var(--primary);
 }
 
 .feature-card p {
     margin: 0;
+    color: var(--text-secondary);
 }
 
 .about-cta {
-    background-color: #1f2937;
-    color: white;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
     text-align: center;
     padding: 2rem;
     border-radius: 10px;
@@ -273,12 +391,12 @@ body footer {
 }
 
 .about-cta h2 {
-    color: white;
+    color: var(--text-white);
     margin-top: 0;
 }
 
 .about-cta p {
-    color: #d1d5db;
+    color: var(--text-muted);
     text-align: center;
 }
 
@@ -287,26 +405,22 @@ body footer {
 }
 
 .about-cta .cta-buttons a {
-    background-color: #2563eb;
+    background-color: var(--primary);
 }
 
 .about-cta .cta-buttons a:hover {
-    background-color: #1d4ed8;
+    background-color: var(--primary-hover);
 }
-
-
 
 /* ==========================================
    Home Page
 ========================================== */
-
 .home-page {
     max-width: 1200px;
     margin: 0 auto;
 }
 
 /* Hero Section */
-
 .hero-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -318,25 +432,24 @@ body footer {
 .hero-content h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #1f2937;
+    color: var(--text-primary);
     text-align: left;
 }
 
 .hero-text {
     font-size: 1.2rem;
     line-height: 1.8;
-    color: #4b5563;
+    color: var(--text-secondary);
     text-align: left;
 }
 
 .hero-image {
     width: 100%;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    box-shadow: var(--shadow-lg);
 }
 
 /* Sections */
-
 .home-section {
     margin: 4rem 0;
 }
@@ -344,11 +457,10 @@ body footer {
 .home-section h2 {
     text-align: center;
     margin-bottom: 2rem;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 /* Categories */
-
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -356,18 +468,19 @@ body footer {
 }
 
 .category-card {
-    background: white;
+    background: var(--bg-card);
     border-radius: 12px;
     padding: 1.5rem;
     text-align: center;
     text-decoration: none;
-    color: #1f2937;
-    box-shadow: 0 4px 10px rgba(0,0,0,.08);
-    transition: 0.2s ease;
+    color: var(--text-primary);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 .category-card:hover {
     transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .category-icon {
@@ -377,7 +490,6 @@ body footer {
 }
 
 /* Featured Vehicles */
-
 .featured-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -385,19 +497,20 @@ body footer {
 }
 
 .featured-card {
-    background: white;
+    background: var(--bg-card);
     border-radius: 12px;
     padding: 1.5rem;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 .featured-card h3 {
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .featured-card p {
-    color: #2563eb;
+    color: var(--primary);
     font-size: 1.1rem;
     font-weight: bold;
 }
@@ -405,7 +518,7 @@ body footer {
 .btn-view {
     display: inline-block;
     margin-top: 1rem;
-    color: #2563eb;
+    color: var(--primary);
     font-weight: bold;
     text-decoration: none;
 }
@@ -415,7 +528,6 @@ body footer {
 }
 
 /* Stats */
-
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -423,25 +535,26 @@ body footer {
 }
 
 .stat-card {
-    background: white;
+    background: var(--bg-card);
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 .stat-card h3 {
     font-size: 2.5rem;
     margin: 0;
-    color: #2563eb;
+    color: var(--primary);
 }
 
 .stat-card p {
     margin-top: 0.5rem;
+    color: var(--text-secondary);
 }
 
 /* Benefits */
-
 .benefits-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -449,58 +562,51 @@ body footer {
 }
 
 .benefit-card {
-    background: white;
+    background: var(--bg-card);
     padding: 1.2rem;
     border-radius: 10px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 /* Dealer */
-
 .dealer-highlight {
-    background: white;
+    background: var(--bg-card);
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
     max-width: 600px;
     margin: auto;
-    box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 /* Final CTA */
-
 .home-cta {
     margin: 4rem 0;
-    background: linear-gradient(
-        135deg,
-        #1f2937,
-        #111827
-    );
-    color: white;
+    background: linear-gradient(135deg, var(--bg-nav), #111827);
+    color: var(--text-white);
     padding: 3rem;
     border-radius: 16px;
     text-align: center;
 }
 
 .home-cta h2 {
-    color: white;
+    color: var(--text-white);
 }
 
 .home-cta p {
-    color: #d1d5db;
+    color: var(--text-muted);
 }
 
 .home-cta .cta-buttons {
     justify-content: center;
 }
 
-
-
 /* ==========================================
    Featured Vehicles Carousel
 ========================================== */
-
 .carousel-container {
     overflow: hidden;
     max-width: 1200px;
@@ -517,10 +623,11 @@ body footer {
 .vehicle-feature-card {
     width: 320px;
     flex-shrink: 0;
-    background: #ffffff;
+    background: var(--bg-card);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 6px 14px rgba(0,0,0,.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 .vehicle-feature-card img {
@@ -536,39 +643,32 @@ body footer {
 
 .card-content h3 {
     margin-top: 0;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .card-price {
-    color: #2563eb;
+    color: var(--primary);
     font-size: 1.25rem;
     font-weight: bold;
 }
 
 @keyframes scrollCards {
-
     0% {
         transform: translateX(0);
     }
-
     100% {
         transform: translateX(-50%);
     }
-
 }
 
 .carousel-container:hover .carousel-track {
     animation-play-state: paused;
 }
 
-
-
 /* ==========================================
    Global Responsive Improvements
 ========================================== */
-
 @media (max-width: 992px) {
-
     body {
         padding: 0 15px;
     }
@@ -595,19 +695,15 @@ body footer {
         justify-content: center;
         flex-wrap: wrap;
     }
-
 }
 
 /* Mobile */
-
 @media (max-width: 768px) {
-
     body {
         padding: 0 10px;
     }
 
     /* Header */
-
     body header nav ul {
         flex-wrap: wrap;
         justify-content: center;
@@ -619,7 +715,6 @@ body footer {
     }
 
     /* Typography */
-
     body main h1 {
         font-size: 2rem;
     }
@@ -633,7 +728,6 @@ body footer {
     }
 
     /* Cards */
-
     .vehicle-card,
     .featured-card,
     .stat-card,
@@ -645,40 +739,31 @@ body footer {
     }
 
     /* Vehicle Grid */
-
     .vehicle-list {
         grid-template-columns: 1fr;
     }
 
     /* Category Grid */
-
     .category-grid {
-        grid-template-columns: repeat(
-            auto-fit,
-            minmax(140px, 1fr)
-        );
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
 
     /* Statistics */
-
     .stats-grid {
         grid-template-columns: 1fr;
     }
 
     /* Benefits */
-
     .benefits-grid {
         grid-template-columns: 1fr;
     }
 
     /* Home CTA */
-
     .home-cta {
         padding: 2rem 1rem;
     }
 
     /* Carousel */
-
     .vehicle-feature-card {
         width: 260px;
     }
@@ -686,13 +771,10 @@ body footer {
     .vehicle-feature-card img {
         height: 180px;
     }
-
 }
 
 /* Small mobile devices */
-
 @media (max-width: 480px) {
-
     body header nav ul {
         flex-direction: column;
         align-items: center;
@@ -728,13 +810,11 @@ body footer {
     .carousel-track {
         gap: 1rem;
     }
-
 }
 
 /* ==========================================
    Global Safety Rules
 ========================================== */
-
 * {
     box-sizing: border-box;
 }
@@ -755,7 +835,6 @@ button {
 /* ==========================================
    Responsive Navigation
 ========================================== */
-
 .main-nav {
     max-width: 1200px;
     margin: 0 auto;
@@ -768,7 +847,7 @@ button {
 }
 
 .logo {
-    color: white;
+    color: var(--text-white);
     text-decoration: none;
     font-weight: bold;
     font-size: 1.2rem;
@@ -778,7 +857,7 @@ button {
     display: none;
     background: none;
     border: none;
-    color: white;
+    color: var(--text-white);
     font-size: 2rem;
     cursor: pointer;
 }
@@ -787,18 +866,22 @@ button {
     list-style: none;
     margin: 0;
     padding: 0;
-
     display: flex;
     justify-content: center;
     gap: 25px;
+    align-items: center;
+}
+
+/* Theme toggle in nav */
+.theme-toggle-item {
+    display: flex;
+    align-items: center;
 }
 
 /* ==========================================
    Mobile Menu
 ========================================== */
-
 @media (max-width: 768px) {
-
     .menu-toggle {
         display: block;
     }
@@ -810,16 +893,16 @@ button {
         gap: 15px;
         margin-top: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid rgba(
-            255,
-            255,
-            255,
-            0.2
-        );
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     #nav-menu.show-menu {
         display: flex;
     }
 
+    .theme-toggle-item {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
 }

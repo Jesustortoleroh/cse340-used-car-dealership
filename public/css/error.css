@@ -1,3 +1,6 @@
+/* ==========================================
+   Error Page
+========================================== */
 .error-page {
     text-align: center;
     padding: 3rem 1rem;
@@ -16,19 +19,19 @@
 
 .error-page h1 {
     font-size: 2.5rem;
-    color: #1f2937;
+    color: var(--text-primary);
     margin-bottom: 1rem;
 }
 
 .error-message {
     font-size: 1.2rem;
-    color: #4b5563;
+    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto 0.5rem;
 }
 
 .error-submessage {
-    color: #4b5563;
+    color: var(--text-secondary);
     max-width: 500px;
     margin: 0 auto 1.5rem;
 }
@@ -40,6 +43,9 @@
     opacity: 0.8;
 }
 
+/* ==========================================
+   Error Actions
+========================================== */
 .error-actions {
     display: flex;
     justify-content: center;
@@ -58,28 +64,34 @@
     display: inline-block;
     border: none;
     cursor: pointer;
+    font-family: inherit;
 }
 
 .btn-primary {
-    background: #2563eb;
-    color: #ffffff;
+    background: var(--primary);
+    color: var(--text-white);
 }
 
 .btn-primary:hover {
-    background: #1d4ed8;
+    background: var(--primary-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .btn-secondary {
-    background: #1f2937;
-    color: #ffffff;
+    background: var(--bg-nav);
+    color: var(--text-white);
 }
 
 .btn-secondary:hover {
-    background: #374151;
+    background: var(--text-secondary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    transform: translateY(0);
 }
 
 /* Accesibilidad para navegación por teclado */
@@ -92,28 +104,35 @@
 /* ==========================================
    Error Details (500.ejs)
 ========================================== */
-
 .error-details {
     margin-top: 2rem;
     max-width: 800px;
     width: 100%;
     text-align: left;
-    background: #f8fafc;
+    background: var(--bg-hover);
     border-radius: 8px;
     padding: 1rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
 }
 
 .error-details summary {
     cursor: pointer;
     font-weight: bold;
-    color: #1e293b;
+    color: var(--text-primary);
     padding: 0.5rem;
     user-select: none;
+    transition: var(--transition);
 }
 
 .error-details summary:hover {
-    color: #2563eb;
+    color: var(--primary);
+}
+
+.error-details summary:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .detail-item {
@@ -125,7 +144,7 @@
 }
 
 .detail-item h4 {
-    color: #1e293b;
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
     font-weight: 600;
@@ -134,7 +153,7 @@
 }
 
 .error-details pre {
-    background: #0f172a;
+    background: var(--bg-nav);
     color: #e2e8f0;
     padding: 1rem;
     border-radius: 6px;
@@ -156,7 +175,6 @@
 /* ==========================================
    Responsive
 ========================================== */
-
 @media (max-width: 640px) {
     .error-page h1 {
         font-size: 2rem;
@@ -198,7 +216,6 @@
 /* ==========================================
    Reduced Motion Accessibility
 ========================================== */
-
 @media (prefers-reduced-motion: reduce) {
     .error-icon {
         animation: none;
@@ -218,34 +235,12 @@
 /* ==========================================
    Icon Animation
 ========================================== */
-
 @keyframes pulse {
     0%,
     100% {
         transform: scale(1);
     }
-
     50% {
         transform: scale(1.05);
     }
-}
-
-/* ==========================================
-   Additional Accessibility Improvements
-========================================== */
-
-button.btn-primary,
-button.btn-secondary {
-    font-family: inherit;
-}
-
-.btn-primary:active,
-.btn-secondary:active {
-    transform: translateY(0);
-}
-
-.error-details summary:focus-visible {
-    outline: 3px solid #60a5fa;
-    outline-offset: 2px;
-    border-radius: 4px;
 }

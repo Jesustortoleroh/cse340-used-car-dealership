@@ -1,5 +1,6 @@
-/* Dashboard Layout */
-
+/* ==========================================
+   Dashboard Layout
+========================================== */
 .dashboard-container {
     display: flex;
     flex-direction: column;
@@ -8,27 +9,36 @@
 }
 
 /* Cards */
-
 .user-profile,
 .dashboard-actions {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+
+.user-profile:hover,
+.dashboard-actions:hover {
+    box-shadow: var(--card-shadow-hover);
 }
 
 /* Section Titles */
-
 .user-profile h2,
 .dashboard-actions h2 {
     margin-top: 0;
-    color: #1f2937;
-    border-bottom: 2px solid #e5e7eb;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 0.75rem;
 }
 
-/* User Details */
+/* Dashboard subtitle */
+.dashboard-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
 
+/* User Details */
 .user-details {
     display: grid;
     gap: 1rem;
@@ -40,21 +50,21 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1rem;
-    background-color: #f9fafb;
+    background-color: var(--bg-hover);
     border-radius: 8px;
+    transition: var(--transition);
 }
 
 .label {
     font-weight: bold;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .value {
-    color: #4b5563;
+    color: var(--text-secondary);
 }
 
 /* Dashboard Links */
-
 .dashboard-actions ul {
     list-style: none;
     padding: 0;
@@ -68,23 +78,20 @@
 .dashboard-actions a {
     display: block;
     padding: 0.85rem 1rem;
-    background-color: #1f2937;
-    color: #ffffff;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
     text-decoration: none;
     font-weight: bold;
     border-radius: 8px;
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .dashboard-actions a:hover {
-    background-color: #2563eb;
+    background-color: var(--primary);
     transform: translateY(-2px);
 }
 
 /* Role Highlight */
-
 .detail-item .value {
     font-weight: 600;
 }
@@ -96,8 +103,8 @@
 }
 
 .btn-edit {
-    background: #3498db;
-    color: white;
+    background: var(--info);
+    color: var(--text-white);
     padding: 8px 15px;
     border-radius: 5px;
     text-decoration: none;
@@ -106,12 +113,12 @@
 }
 
 .btn-edit:hover {
-    background: #2980b9;
+    background: var(--primary-hover);
 }
 
 .btn-delete {
-    background: #e74c3c;
-    color: white;
+    background: var(--error);
+    color: var(--text-white);
     padding: 8px 15px;
     border-radius: 5px;
     border: none;
@@ -140,24 +147,81 @@ Role Badges
 }
 
 .role-customer {
-    background: #dbeafe;
-    color: #1d4ed8;
+    background: var(--info-bg);
+    color: var(--info);
 }
 
 .role-employee {
-    background: #dcfce7;
-    color: #15803d;
+    background: var(--success-bg);
+    color: var(--success);
 }
 
 .role-owner {
-    background: #fef3c7;
-    color: #b45309;
+    background: var(--warning-bg);
+    color: var(--warning);
 }
 
-/* Responsive */
+/* ==========================================
+Dashboard Cards Grid
+========================================== */
+.dashboard-cards {
+    margin: 0 0 1rem 0;
+}
 
+.dashboard-cards h2 {
+    margin-top: 0;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.dashboard-card {
+    display: block;
+    text-decoration: none;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 2px solid transparent;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--primary);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.dashboard-card h3 {
+    color: var(--text-primary);
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.dashboard-card p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* ==========================================
+Responsive
+========================================== */
 @media (max-width: 768px) {
-
     .detail-item {
         flex-direction: column;
         align-items: flex-start;
@@ -166,5 +230,45 @@ Role Badges
 
     .dashboard-actions a {
         text-align: center;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .dashboard-card {
+        padding: 1rem;
+    }
+
+    .card-icon {
+        font-size: 2rem;
+    }
+
+    .dashboard-card h3 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cards-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .dashboard-card {
+        padding: 0.75rem;
+    }
+
+    .card-icon {
+        font-size: 1.75rem;
+    }
+
+    .dashboard-card h3 {
+        font-size: 0.9rem;
+    }
+
+    .dashboard-card p {
+        font-size: 0.8rem;
     }
 }

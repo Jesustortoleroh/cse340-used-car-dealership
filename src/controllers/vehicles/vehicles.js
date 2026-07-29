@@ -2,6 +2,7 @@
 import { getVehicleBySlug, getVehiclesByCategory } from '../../models/vehicles/vehicles.js';
 import { searchVehicles } from '../../models/vehicles/vehicles.js'; 
 import { getReviewStats } from '../../models/reviews/reviews.js';
+import { isFavorite } from '../../models/favorites/favorites.js'; 
 
 /**
  * Get sort label for display
@@ -98,32 +99,28 @@ const vehiclesPage = async (req, res, next) => {
  * Renders detailed information for a specific vehicle including reviews and statistics
  */
 const vehicleDetailPage = async (req, res, next) => {
-
     try {
-
         const slug = req.params.slugId;
+        const currentSort = req.query.sort || 'feature';
 
-        const currentSort =
-            req.query.sort || 'feature';
-
-        const vehicle = await getVehicleBySlug(
-            slug,
-            currentSort
-        );
+        const vehicle = await getVehicleBySlug(slug, currentSort);
 
         if (!vehicle) {
-
-            const err = new Error(
-                'Vehicle not found'
-            );
-
+            const err = new Error('Vehicle not found');
             err.status = 404;
-
             return next(err);
         }
 
         // Get review statistics using the model function
         const reviewStats = await getReviewStats(vehicle.id);
+
+        // Check if vehicle is in user's favorites
+        let isFavoriteStatus = false;
+        const userId = req.session?.user?.id;
+        
+        if (userId) {
+            isFavoriteStatus = await isFavorite(userId, vehicle.id);
+        }
 
         // Get flash messages and form data from the session if available
         let flashMessages = {};
@@ -149,30 +146,28 @@ const vehicleDetailPage = async (req, res, next) => {
             }
         }
 
-        res.render(
-            'vehicles/detail',
-            {
-                title: vehicle.name,
-                vehicle,
-                user: req.session?.user || null,
-                currentSort,
-                // Review data from the model
-                reviews: reviewStats.reviews,
-                totalReviews: reviewStats.totalReviews,
-                averageRating: reviewStats.averageRating,
-                ratingCounts: reviewStats.ratingCounts,
-                ratingPercentages: reviewStats.ratingPercentages,
-                // Flash messages
-                flash: flashMessages,
-                // Form data for preserving input
-                formData: formData
-            }
-        );
+        res.render('vehicles/detail', {
+            title: vehicle.name,
+            vehicle,
+            user: req.session?.user || null,
+            currentSort,
+            // Review data from the model
+            reviews: reviewStats.reviews,
+            totalReviews: reviewStats.totalReviews,
+            averageRating: reviewStats.averageRating,
+            ratingCounts: reviewStats.ratingCounts,
+            ratingPercentages: reviewStats.ratingPercentages,
+            // Flash messages
+            flash: flashMessages,
+            // Form data for preserving input
+            formData: formData,
+            // Favorite status
+            isLoggedIn: !!userId,
+            isFavorite: isFavoriteStatus
+        });
 
     } catch (error) {
-
         next(error);
-
     }
 };
 

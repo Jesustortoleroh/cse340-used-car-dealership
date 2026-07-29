@@ -14,18 +14,41 @@
             >
         <% } %>
 
+        <!-- Price first - most important info -->
+        <p class="vehicle-price">
+            $<%= vehicle.price.toLocaleString() %>
+        </p>
+
+        <!-- Category -->
         <p class="vehicle-category">
             Category: <%= vehicle.category %>
         </p>
 
-        <p class="vehicle-meta">
-            $<%= vehicle.price.toLocaleString() %>
-        </p>
+        <!-- FAVORITES BUTTON - prominent position -->
+        <% if (isLoggedIn) { %>
+            <div class="favorite-action">
+                <% if (isFavorite) { %>
+                    <form action="/favorites/<%= vehicle.id %>/remove" method="POST">
+                        <button type="submit" class="btn-favorite saved">
+                            ❤️ Saved
+                        </button>
+                    </form>
+                <% } else { %>
+                    <form action="/favorites/<%= vehicle.id %>/add" method="POST">
+                        <button type="submit" class="btn-favorite">
+                            ♡ Save Vehicle
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+        <% } %>
 
+        <!-- Description -->
         <p class="vehicle-description">
             <%= vehicle.description %>
         </p>
 
+        <!-- Dealer info -->
         <% if (vehicle.dealer) { %>
             <p class="vehicle-dealer">
                 Dealer:
@@ -193,7 +216,7 @@
 
             <h2>Leave a Review</h2>
 
-            <!-- Mostrar mensajes flash -->
+            <!-- Show flash messages -->
             <% if (flash) { %>
                 <% if (flash.error) { %>
                     <div class="flash error">
@@ -266,7 +289,7 @@
 
                     </div>
 
-                    <!-- Mostrar error de flash debajo de las estrellas -->
+                    <!-- Show flash error below the stars -->
                     <% if (flash?.error && !formData?.rating) { %>
                         <div class="invalid-feedback d-block">
                             <%= flash.error %>
@@ -289,7 +312,7 @@
                         required
                     ><%= formData?.comment || '' %></textarea>
 
-                    <!-- Mostrar error de flash debajo del comentario -->
+                    <!-- Show flash error below the comment -->
                     <% if (flash?.error && !formData?.comment) { %>
                         <div class="invalid-feedback d-block">
                             <%= flash.error %>

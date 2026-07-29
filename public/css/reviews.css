@@ -1,27 +1,25 @@
 /* ==========================================
    Reviews Section
 ========================================== */
-
 .reviews-section {
     margin-top: 3rem;
 }
 
 .reviews-section h2 {
-    color: #1f2937;
+    color: var(--text-primary);
     margin-bottom: 1.5rem;
 }
 
 /* ==========================================
    Reviews Header & Summary Badge
 ========================================== */
-
 .reviews-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #e5e7eb;
+    border-bottom: 2px solid var(--border-color);
     flex-wrap: wrap;
     gap: 1rem;
 }
@@ -34,16 +32,17 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background-color: #f3f4f6;
+    background-color: var(--bg-hover);
     padding: 0.5rem 1rem;
     border-radius: 50px;
     flex-wrap: wrap;
+    transition: var(--transition);
 }
 
 .avg-rating {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .mini-stars {
@@ -53,7 +52,7 @@
 }
 
 .mini-stars .star {
-    color: #d1d5db;
+    color: var(--border-dark);
 }
 
 .mini-stars .star.filled {
@@ -62,19 +61,19 @@
 
 .review-count {
     font-size: 0.85rem;
-    color: #6b7280;
+    color: var(--text-muted);
 }
 
 /* ==========================================
    Rating Breakdown (Progress Bars)
 ========================================== */
-
 .rating-breakdown {
-    background-color: #f9fafb;
+    background-color: var(--bg-hover);
     padding: 1.5rem;
     border-radius: 12px;
     margin-bottom: 2rem;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
 }
 
 .breakdown-row {
@@ -90,7 +89,7 @@
 
 .stars-label {
     font-size: 0.85rem;
-    color: #4b5563;
+    color: var(--text-secondary);
     min-width: 65px;
     font-weight: 500;
 }
@@ -98,7 +97,7 @@
 .progress-bar {
     flex: 1;
     height: 8px;
-    background-color: #e5e7eb;
+    background-color: var(--border-color);
     border-radius: 50px;
     overflow: hidden;
 }
@@ -113,7 +112,7 @@
 
 .percentage {
     font-size: 0.85rem;
-    color: #4b5563;
+    color: var(--text-secondary);
     min-width: 45px;
     text-align: right;
     font-weight: 500;
@@ -122,32 +121,30 @@
 /* ==========================================
    Review Cards
 ========================================== */
-
 .review-card {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--card-shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .review-card:hover {
     transform: translateX(4px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--card-shadow-hover);
 }
 
 .review-card h3 {
     margin-top: 0;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 /* ==========================================
    Review Comment
 ========================================== */
-
 .review-comment {
-    color: #374151;
+    color: var(--text-secondary);
     line-height: 1.6;
     text-align: left !important;
     margin: 1rem 0;
@@ -156,19 +153,18 @@
 .review-date {
     display: block;
     margin-top: 0.75rem;
-    color: #6b7280;
+    color: var(--text-muted);
 }
 
 /* ==========================================
    Review Stars Display
 ========================================== */
-
 .review-rating {
     margin: 0.75rem 0;
 }
 
 .star {
-    color: #d1d5db;
+    color: var(--border-dark);
     font-size: 1.2rem;
 }
 
@@ -179,7 +175,6 @@
 /* ==========================================
    Review Card Header (Enhanced)
 ========================================== */
-
 .review-header {
     display: flex;
     align-items: center;
@@ -200,7 +195,7 @@
 }
 
 .review-stars .star {
-    color: #d1d5db;
+    color: var(--border-dark);
 }
 
 .review-stars .star.filled {
@@ -209,14 +204,13 @@
 
 .review-date {
     margin-left: auto;
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 0.85rem;
 }
 
 /* ==========================================
    Interactive Star Rating (Form)
 ========================================== */
-
 .star-rating {
     display: flex;
     flex-direction: row-reverse;
@@ -230,7 +224,7 @@
 
 .star-rating label {
     font-size: 2.2rem;
-    color: #d1d5db;
+    color: var(--border-dark);
     cursor: pointer;
     transition: color 0.2s ease;
     user-select: none;
@@ -238,13 +232,11 @@
     line-height: 1;
 }
 
-/* Hover effect */
 .star-rating label:hover,
 .star-rating label:hover ~ label {
     color: #fbbf24;
 }
 
-/* Selected state */
 .star-rating input:checked ~ label {
     color: #fbbf24;
 }
@@ -252,16 +244,16 @@
 /* ==========================================
    Review Form
 ========================================== */
-
 .review-form-section {
     margin-top: 3rem;
 }
 
 .review-form {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
 }
 
 .review-form .form-group {
@@ -272,7 +264,7 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .review-form textarea,
@@ -281,10 +273,13 @@
     width: 100%;
     box-sizing: border-box;
     padding: 0.85rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-dark);
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .review-form textarea {
@@ -296,14 +291,13 @@
 .review-form select:focus,
 .review-form input:not([type="radio"]):focus {
     outline: none;
-    border-color: #2563eb;
+    border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* ==========================================
    Review Actions (Buttons)
 ========================================== */
-
 .review-actions {
     display: flex;
     justify-content: space-between;
@@ -327,43 +321,39 @@
     font-family: inherit;
 }
 
-/* Primary Button */
 .btn-primary {
-    background-color: #2563eb;
-    color: #ffffff;
+    background-color: var(--primary);
+    color: var(--text-white);
 }
 
 .btn-primary:hover {
-    background-color: #1d4ed8;
+    background-color: var(--primary-hover);
     transform: translateY(-2px);
 }
 
-/* Secondary Button */
 .btn-secondary {
-    background-color: #1f2937;
-    color: #ffffff;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
 }
 
 .btn-secondary:hover {
-    background-color: #374151;
+    background-color: var(--text-secondary);
     transform: translateY(-2px);
 }
 
-/* Edit Button */
 .btn-edit {
-    background-color: #1f2937;
-    color: #ffffff;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
 }
 
 .btn-edit:hover {
-    background-color: #2563eb;
+    background-color: var(--primary);
     transform: translateY(-2px);
 }
 
-/* Delete Button */
 .btn-delete {
-    background-color: #dc2626;
-    color: #ffffff;
+    background-color: var(--error);
+    color: var(--text-white);
 }
 
 .btn-delete:hover {
@@ -378,24 +368,24 @@
 /* ==========================================
    Login Prompt
 ========================================== */
-
 .login-prompt {
-    background-color: #f9fafb;
+    background-color: var(--bg-hover);
     padding: 2rem;
     border-radius: 12px;
     text-align: center;
     margin: 2rem 0;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
 }
 
 .login-prompt p {
     margin: 0;
     font-size: 1.1rem;
-    color: #4b5563;
+    color: var(--text-secondary);
 }
 
 .login-link {
-    color: #2563eb;
+    color: var(--primary);
     font-weight: 600;
     text-decoration: none;
 }
@@ -407,15 +397,15 @@
 /* ==========================================
    Empty State
 ========================================== */
-
 .empty-state {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     border-radius: 12px;
     padding: 3rem 2rem;
     text-align: center;
-    color: #6b7280;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    border: 1px dashed #d1d5db;
+    color: var(--text-muted);
+    box-shadow: var(--card-shadow);
+    border: 1px dashed var(--border-dark);
+    transition: var(--transition);
 }
 
 .empty-icon {
@@ -430,14 +420,13 @@
 
 .empty-sub {
     font-size: 0.9rem;
-    color: #9ca3af;
+    color: var(--text-light);
     margin-top: 0.5rem;
 }
 
 /* ==========================================
    Reviews List (Container)
 ========================================== */
-
 .reviews-list {
     display: flex;
     flex-direction: column;
@@ -447,14 +436,13 @@
 /* ==========================================
    Validation
 ========================================== */
-
 .text-danger {
-    color: #dc2626;
+    color: var(--error);
 }
 
 .invalid-feedback {
     margin-top: 0.5rem;
-    color: #dc2626;
+    color: var(--error);
     font-size: 0.9rem;
 }
 
@@ -465,7 +453,6 @@
 /* ==========================================
    Review Detail
 ========================================== */
-
 .review-detail-header {
     display: flex;
     align-items: center;
@@ -476,12 +463,12 @@
 
 .review-detail-header h1 {
     margin: 0;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .btn-back {
-    background-color: #1f2937;
-    color: #ffffff;
+    background-color: var(--bg-nav);
+    color: var(--text-white);
     padding: 0.6rem 1.2rem;
     border-radius: 8px;
     text-decoration: none;
@@ -491,22 +478,23 @@
 }
 
 .btn-back:hover {
-    background-color: #374151;
+    background-color: var(--text-secondary);
     transform: translateX(-4px);
 }
 
 .review-detail-card {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--card-shadow);
     margin-bottom: 2rem;
+    transition: var(--transition);
 }
 
 .review-detail-vehicle {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #e5e7eb;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .review-detail-vehicle h2 {
@@ -515,7 +503,7 @@
 }
 
 .review-detail-vehicle h2 a {
-    color: #2563eb;
+    color: var(--primary);
     text-decoration: none;
 }
 
@@ -530,7 +518,7 @@
 .review-detail-meta h3 {
     margin: 0 0 0.5rem 0;
     font-size: 1.5rem;
-    color: #1f2937;
+    color: var(--text-primary);
 }
 
 .review-detail-rating {
@@ -549,32 +537,33 @@
 }
 
 .review-detail-rating .star {
-    color: #d1d5db;
+    color: var(--border-dark);
 }
 
 .rating-number {
     font-size: 1rem;
-    color: #6b7280;
+    color: var(--text-muted);
     font-weight: 500;
 }
 
 .review-detail-date {
-    color: #6b7280;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
 .review-detail-comment {
-    background-color: #f9fafb;
+    background-color: var(--bg-hover);
     padding: 1.5rem;
     border-radius: 8px;
     margin: 1rem 0;
+    transition: var(--transition);
 }
 
 .review-detail-comment p {
     margin: 0;
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #374151;
+    color: var(--text-secondary);
 }
 
 .review-detail-actions {
@@ -582,7 +571,7 @@
     gap: 1rem;
     margin-top: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border-color);
     flex-wrap: wrap;
 }
 
@@ -598,9 +587,7 @@
 /* ==========================================
    Responsive
 ========================================== */
-
 @media (max-width: 768px) {
-
     .reviews-header {
         flex-direction: column;
         align-items: flex-start;
@@ -663,7 +650,6 @@
         justify-content: center;
     }
 
-    /* Review Detail Responsive */
     .review-detail-header {
         flex-direction: column;
         align-items: flex-start;

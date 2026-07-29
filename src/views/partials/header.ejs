@@ -6,6 +6,8 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/error.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/theme-toggle.css">
     <%- renderStyles() %>
     <%- renderScripts() %>
 
@@ -31,7 +33,6 @@
     <header>
         <nav class="main-nav">
             <div class="nav-top">
-              
                 <!-- Mobile menu toggle button -->
                 <button
                     class="menu-toggle"
@@ -56,6 +57,12 @@
                     <!-- Dashboard link -->
                     <li><a href="/dashboard">Dashboard</a></li>
 
+                    <!-- Favorites link -->
+                    <li><a href="/favorites">❤️ Favorites</a></li>
+
+                    <!-- Profile link -->
+                    <li><a href="/profile">👤 Profile</a></li>
+
                     <!-- Conditional content for employee or owner roles -->
                     <% if (user && (user.roleName === 'employee' || user.roleName === 'owner')) { %>
                         <!-- Vehicle registration list link -->
@@ -73,6 +80,13 @@
                     <!-- Registration link -->
                     <li><a href="/register">Create Account</a></li>
                 <% } %>
+
+                <!-- Theme Toggle Button -->
+                <li class="theme-toggle-item">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </li>
             </ul>
         </nav>
     </header>
@@ -108,3 +122,4 @@
 
     <!-- JavaScript files -->
     <script src="/js/navigation.js"></script>
+    <script src="/js/theme.js"></script>
