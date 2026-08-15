@@ -23,6 +23,7 @@ DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS contact_form CASCADE;
 DROP TABLE IF EXISTS service_types CASCADE;
 DROP TABLE IF EXISTS favorites CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
 
 -- ============================================
 -- 2. CREATE TABLES WITH ENHANCED SECURITY
@@ -226,6 +227,18 @@ CREATE TABLE session (
     expire TIMESTAMP NOT NULL
 );
 
+-- 15. Notifications table
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    type VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    link VARCHAR(255),
+    is_read BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- ============================================
 -- 3. CREATE INDEXES FOR PERFORMANCE
 -- ============================================
@@ -258,6 +271,10 @@ CREATE INDEX idx_contact_form_status ON contact_form(status);
 CREATE INDEX idx_listings_dealer_id ON listings(dealer_id);
 CREATE INDEX idx_listings_vehicle_id ON listings(vehicle_id);
 CREATE INDEX idx_listings_availability ON listings(availability);
+
+CREATE INDEX idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX idx_notifications_created_at ON notifications(created_at);
 
 -- ============================================
 -- 4. CREATE TRIGGERS FOR UPDATED_AT
@@ -349,22 +366,6 @@ LEFT JOIN contact_form cf ON d.email = cf.email
 WHERE d.is_featured = true OR d.rating >= 4.0
 GROUP BY d.id, d.name, d.slug, d.location, d.rating
 ORDER BY d.rating DESC, vehicle_count DESC;
-
-
-CREATE TABLE notifications (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    type VARCHAR(50) NOT NULL, -- 'favorite', 'service_update', 'price_drop', 'system'
-    title VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    link VARCHAR(255),
-    is_read BOOLEAN DEFAULT false,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_is_read ON notifications(is_read);
-CREATE INDEX idx_notifications_created_at ON notifications(created_at);
 
 -- ============================================
 -- 6. INSERT DATA
@@ -592,8 +593,7 @@ INSERT INTO contact_form (customer_name, email, phone, subject, message, status,
 ('Jane Doe', 'jane.doe@email.com', '555-987-6543', 'Financing Question', 'Do you offer financing options for the Tesla Model 3? I am interested in purchasing but need payment plan information.', 'In Progress', 'High'),
 ('Bob Wilson', 'bob.wilson@email.com', '555-456-7890', 'Vehicle Availability', 'Is the Ford Explorer 2019 still available? I saw it online and want to come see it this weekend.', 'Resolved', 'Normal');
 
-
--- Insertar notificaciones de prueba para el usuario Customer User (id = 3)
+-- Insert sample notifications for testing
 INSERT INTO notifications (user_id, type, title, message, link, is_read) VALUES
 (3, 'system', '👋 Welcome to the Dealership!', 'Welcome Customer User! Start browsing our vehicles and save your favorites.', '/vehicles', false),
 (3, 'service_update', '🔧 Service Update: Toyota Corolla', 'Your service request for Toyota Corolla is now "In Progress".', '/service-requests/1', false),
@@ -604,7 +604,6 @@ INSERT INTO notifications (user_id, type, title, message, link, is_read) VALUES
 (3, 'system', '📢 Special Offer', 'Get 10% off on all service requests this month!', '/service-requests', false),
 (3, 'price_drop', '💰 Price Drop: Honda Civic', 'The price of Honda Civic has dropped from $14,300 to $13,500!', '/vehicles/honda-civic-2021', false),
 (3, 'system', '💡 Tip', 'Did you know you can compare vehicles side by side? Try our comparison tool!', '/compare', false),
-(3, 'inquiry_response', '📧 Inquiry Update: Test Drive Request', 'Your inquiry about "Test Drive Request" has received a response from our team.', '/contact/1', true); 
-
+(3, 'inquiry_response', '📧 Inquiry Update: Test Drive Request', 'Your inquiry about "Test Drive Request" has received a response from our team.', '/contact/1', true);
 
 COMMIT;
