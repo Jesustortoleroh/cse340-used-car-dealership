@@ -73,11 +73,15 @@ const showContactResponses = async (req, res) => {
     }
 
     // ⭐ DEBUG: Verifica que inquiries tenga datos
-    console.log('Inquiries count:', inquiries.length);
+    console.log('📋 Inquiries count:', inquiries.length);
+
+    // ⭐ Obtener mensajes flash
+    const messages = typeof req.flash === 'function' ? req.flash() : {};
 
     res.render('forms/contact/responses', {
         title: 'Customer Inquiries',
         inquiries: inquiries,
+        messages: messages,
         user: req.session?.user || null,
         isLoggedIn: !!req.session?.user
     });
@@ -99,9 +103,13 @@ const showInquiryDetail = async (req, res) => {
             return res.redirect('/contact/responses');
         }
         
+        // ⭐ Obtener mensajes flash
+        const messages = typeof req.flash === 'function' ? req.flash() : {};
+        
         res.render('forms/contact/detail', {
             title: 'Inquiry Details',
             inquiry: inquiry,
+            messages: messages,
             user: req.session?.user || null,
             isLoggedIn: !!req.session?.user
         });
@@ -150,6 +158,15 @@ const updateInquiryPriority = async (req, res) => {
     const id = parseInt(req.params.id);
     const { priority } = req.body;
     
+    // Validar que priority sea válido
+    const validPriorities = ['Low', 'Normal', 'High', 'Urgent'];
+    if (priority && !validPriorities.includes(priority)) {
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'Invalid priority value.');
+        }
+        return res.redirect(`/contact/${id}`);
+    }
+    
     try {
         const updated = await updateContactPriority(id, priority);
         
@@ -169,7 +186,7 @@ const updateInquiryPriority = async (req, res) => {
         }
     }
     
-    res.redirect('/contact/responses');
+    res.redirect(`/contact/${id}`);
 };
 
 /**

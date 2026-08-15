@@ -1,0 +1,103 @@
+<%- include('../../partials/header') %>
+
+<main>
+
+    <h1><%= title %></h1>
+
+    <% if (messages && messages.error) { %>
+        <div class="flash error">
+            <%= messages.error %>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.success) { %>
+        <div class="flash success">
+            <%= messages.success %>
+        </div>
+    <% } %>
+
+    <% if (inquiry) { %>
+
+        <div class="inquiry-detail">
+
+            <div class="inquiry-header">
+                <h2><%= inquiry.subject %></h2>
+                <span class="status-badge status-<%= inquiry.status ? inquiry.status.toLowerCase().replace(/\s+/g, '-') : 'received' %>">
+                    <%= inquiry.status || 'Received' %>
+                </span>
+            </div>
+
+            <div class="inquiry-meta">
+                <p>
+                    <strong>Customer:</strong>
+                    <%= inquiry.customer_name %>
+                </p>
+                <p>
+                    <strong>Email:</strong>
+                    <%= inquiry.email %>
+                </p>
+                <p>
+                    <strong>Phone:</strong>
+                    <%= inquiry.phone || 'Not Provided' %>
+                </p>
+                <p>
+                    <strong>Priority:</strong>
+                    <%= inquiry.priority || 'Normal' %>
+                </p>
+                <p>
+                    <strong>Submitted:</strong>
+                    <%= new Date(inquiry.created_at).toLocaleDateString() %>
+                </p>
+                <% if (inquiry.resolved_at) { %>
+                    <p>
+                        <strong>Resolved:</strong>
+                        <%= new Date(inquiry.resolved_at).toLocaleDateString() %>
+                    </p>
+                <% } %>
+            </div>
+
+            <div class="inquiry-message">
+                <h3>Message</h3>
+                <p><%= inquiry.message %></p>
+            </div>
+
+            <div class="inquiry-actions">
+                <a href="/contact/responses" class="btn-back">
+                    ← Back to Inquiries
+                </a>
+
+                <!-- Form to update status -->
+                <form action="/contact/<%= inquiry.id %>/status" method="POST" class="status-form">
+                    <label for="status">Update Status:</label>
+                    <select name="status" id="status">
+                        <option value="Received" <%= inquiry.status === 'Received' ? 'selected' : '' %>>Received</option>
+                        <option value="In Progress" <%= inquiry.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                        <option value="Resolved" <%= inquiry.status === 'Resolved' ? 'selected' : '' %>>Resolved</option>
+                        <option value="Closed" <%= inquiry.status === 'Closed' ? 'selected' : '' %>>Closed</option>
+                    </select>
+                    <button type="submit" class="btn-update">Update Status</button>
+                </form>
+
+                <!-- Form to delete inquiry -->
+                <form action="/contact/<%= inquiry.id %>/delete" method="POST" class="delete-form">
+                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this inquiry?')">
+                        🗑️ Delete
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="empty-state">
+            <span class="empty-icon">📨</span>
+            <p>Inquiry not found.</p>
+            <a href="/contact/responses" class="btn-primary">Back to Inquiries</a>
+        </div>
+
+    <% } %>
+
+</main>
+
+<%- include('../../partials/footer') %>

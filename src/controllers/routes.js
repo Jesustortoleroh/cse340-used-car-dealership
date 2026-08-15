@@ -3,7 +3,15 @@ import { Router } from 'express';
 import { homePage, aboutPage, testErrorPage } from './index.js';
 import { vehiclesPage, vehicleDetailPage } from './vehicles/vehicles.js';
 import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
-import {  showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, updateInquiryPriority, deleteInquiry } from './forms/contact.js';
+import { 
+    showContactForm, 
+    handleContactSubmission, 
+    showContactResponses, 
+    showInquiryDetail, 
+    updateInquiryStatus, 
+    updateInquiryPriority, 
+    deleteInquiry 
+} from './forms/contact.js';
 import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
 import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
 import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
