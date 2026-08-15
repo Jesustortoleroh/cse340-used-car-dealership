@@ -592,4 +592,19 @@ INSERT INTO contact_form (customer_name, email, phone, subject, message, status,
 ('Jane Doe', 'jane.doe@email.com', '555-987-6543', 'Financing Question', 'Do you offer financing options for the Tesla Model 3? I am interested in purchasing but need payment plan information.', 'In Progress', 'High'),
 ('Bob Wilson', 'bob.wilson@email.com', '555-456-7890', 'Vehicle Availability', 'Is the Ford Explorer 2019 still available? I saw it online and want to come see it this weekend.', 'Resolved', 'Normal');
 
+
+-- Insertar notificaciones de prueba para el usuario Customer User (id = 3)
+INSERT INTO notifications (user_id, type, title, message, link, is_read) VALUES
+(3, 'system', '👋 Welcome to the Dealership!', 'Welcome Customer User! Start browsing our vehicles and save your favorites.', '/vehicles', false),
+(3, 'service_update', '🔧 Service Update: Toyota Corolla', 'Your service request for Toyota Corolla is now "In Progress".', '/service-requests/1', false),
+(3, 'price_drop', '💰 Price Drop: Ford Explorer', 'The price of Ford Explorer has dropped from $18,500 to $17,500!', '/vehicles/ford-explorer-2019', false),
+(3, 'inquiry_response', '📧 Inquiry Update: Vehicle Availability', 'Your inquiry about "Vehicle Availability" has received a response from our team.', '/contact/3', false),
+(3, 'system', '⭐ New Vehicle Available', 'Check out our new inventory: Tesla Model 3 2022 has been added!', '/vehicles/tesla-model-3-2022', false),
+(3, 'service_update', '🔧 Service Update: Ford Explorer', 'Your service request for Ford Explorer is now "Completed".', '/service-requests/2', true),
+(3, 'system', '📢 Special Offer', 'Get 10% off on all service requests this month!', '/service-requests', false),
+(3, 'price_drop', '💰 Price Drop: Honda Civic', 'The price of Honda Civic has dropped from $14,300 to $13,500!', '/vehicles/honda-civic-2021', false),
+(3, 'system', '💡 Tip', 'Did you know you can compare vehicles side by side? Try our comparison tool!', '/compare', false),
+(3, 'inquiry_response', '📧 Inquiry Update: Test Drive Request', 'Your inquiry about "Test Drive Request" has received a response from our team.', '/contact/1', true); 
+
+
 COMMIT;
