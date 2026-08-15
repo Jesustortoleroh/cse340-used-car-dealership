@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator';
 import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
-
+import { getDashboardAnalytics, getRecentFavorites, getRecentReviews, getRecentRequests } from '../../models/analytics/analytics.js';
 
 /**
  * Display login form
@@ -60,6 +60,7 @@ const processLogin = async (req, res) => {
 
         // Store user in session
         req.session.user = user;
+        req.session.userId = user.id;
 
         // Success message
         if (typeof req.flash === 'function') {
@@ -104,30 +105,72 @@ const processLogout = (req, res) => {
 };
 
 /**
- * Protected dashboard - Only show necessary user data
+ * Protected dashboard - Show user data with analytics
  */
-const showDashboard = (req, res) => {
-    // Get user from session
-    const user = req.session.user;
-    const sessionData = req.session;
+const showDashboard = async (req, res) => {
+    try {
+        // Get user from session
+        const userId = req.session.userId;
+        const user = req.session.user;
 
-    // Security: Ensure password is never exposed
-    if (user && user.password) {
-        console.error('Security error: password found in user object');
-        delete user.password;
+        // Security: Ensure password is never exposed
+        if (user && user.password) {
+            console.error('Security error: password found in user object');
+            delete user.password;
+        }
+
+        if (!userId || !user) {
+            req.flash('error', 'Please login first.');
+            return res.redirect('/login');
+        }
+
+        // Get user role name
+        const roleName = user?.roleName || 'customer';
+
+        // Get analytics based on user role
+        const analytics = await getDashboardAnalytics(userId, roleName);
+        
+        // Get recent activity (limited to 3 each)
+        const recentFavorites = await getRecentFavorites(userId, 3);
+        const recentReviews = await getRecentReviews(userId, 3);
+        const recentRequests = await getRecentRequests(userId, 3);
+
+        // Prepare analytics for display
+        const analyticsData = {
+            customer: {
+                favorites: parseInt(analytics.favorites_count) || 0,
+                reviews: parseInt(analytics.reviews_count) || 0,
+                requests: parseInt(analytics.requests_count) || 0
+            },
+            employee: {
+                openInquiries: parseInt(analytics.open_inquiries) || 0,
+                pendingRequests: parseInt(analytics.pending_requests) || 0,
+                totalVehicles: parseInt(analytics.total_vehicles) || 0
+            },
+            owner: {
+                totalUsers: parseInt(analytics.total_users) || 0,
+                totalVehicles: parseInt(analytics.total_vehicles) || 0,
+                totalDealers: parseInt(analytics.total_dealers) || 0,
+                totalReviews: parseInt(analytics.total_reviews) || 0
+            }
+        };
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            user: user,
+            analytics: analyticsData,
+            recentFavorites,
+            recentReviews,
+            recentRequests,
+            isLoggedIn: true,
+            messages: req.flash()
+        });
+
+    } catch (error) {
+        console.error('Dashboard error:', error);
+        req.flash('error', 'Unable to load dashboard. Please try again later.');
+        res.redirect('/login');
     }
-
-    if (sessionData.user && sessionData.user.password) {
-        console.error('Security error: password found in sessionData.user');
-        delete sessionData.user.password;
-    }
-
-    res.render('dashboard', {
-        title: 'Customer Dashboard',
-        user: user,
-        sessionData: sessionData
-    });
 };
-
 
 export { showLoginForm, processLogin, processLogout, showDashboard };

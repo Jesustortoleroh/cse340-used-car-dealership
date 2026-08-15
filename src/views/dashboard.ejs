@@ -6,6 +6,101 @@
 
     <% if (user) { %>
 
+        <!-- ==========================================
+        Analytics Cards
+        ========================================== -->
+        <section class="analytics-section">
+
+            <!-- Customer Analytics -->
+            <div class="analytics-grid">
+
+                <div class="analytics-card">
+                    <div class="analytics-icon">❤️</div>
+                    <div class="analytics-number"><%= analytics.customer.favorites %></div>
+                    <div class="analytics-label">Favorite Vehicles</div>
+                    <a href="/favorites" class="analytics-link">View All →</a>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="analytics-icon">⭐</div>
+                    <div class="analytics-number"><%= analytics.customer.reviews %></div>
+                    <div class="analytics-label">Reviews Submitted</div>
+                    <a href="/vehicles" class="analytics-link">Write Review →</a>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="analytics-icon">🔧</div>
+                    <div class="analytics-number"><%= analytics.customer.requests %></div>
+                    <div class="analytics-label">Service Requests</div>
+                    <a href="/service-requests" class="analytics-link">View All →</a>
+                </div>
+
+            </div>
+
+            <!-- Employee Analytics -->
+            <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
+                <div class="analytics-grid employee-analytics">
+                    <div class="analytics-card">
+                        <div class="analytics-icon">📨</div>
+                        <div class="analytics-number"><%= analytics.employee.openInquiries %></div>
+                        <div class="analytics-label">Open Inquiries</div>
+                        <a href="/contact/responses" class="analytics-link">View All →</a>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon">🔧</div>
+                        <div class="analytics-number"><%= analytics.employee.pendingRequests %></div>
+                        <div class="analytics-label">Pending Requests</div>
+                        <a href="/service-requests" class="analytics-link">View All →</a>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon">🚗</div>
+                        <div class="analytics-number"><%= analytics.employee.totalVehicles %></div>
+                        <div class="analytics-label">Total Vehicles</div>
+                        <a href="/vehicles" class="analytics-link">View All →</a>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Owner Analytics -->
+            <% if (user.roleName === 'owner') { %>
+                <div class="analytics-grid owner-analytics">
+                    <div class="analytics-card">
+                        <div class="analytics-icon">👥</div>
+                        <div class="analytics-number"><%= analytics.owner.totalUsers %></div>
+                        <div class="analytics-label">Total Users</div>
+                        <a href="/register/list" class="analytics-link">View All →</a>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon">🚗</div>
+                        <div class="analytics-number"><%= analytics.owner.totalVehicles %></div>
+                        <div class="analytics-label">Total Vehicles</div>
+                        <a href="/vehicles" class="analytics-link">View All →</a>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon">🏢</div>
+                        <div class="analytics-number"><%= analytics.owner.totalDealers %></div>
+                        <div class="analytics-label">Total Dealers</div>
+                        <a href="/dealers" class="analytics-link">View All →</a>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon">⭐</div>
+                        <div class="analytics-number"><%= analytics.owner.totalReviews %></div>
+                        <div class="analytics-label">Total Reviews</div>
+                        <a href="/vehicles" class="analytics-link">View All →</a>
+                    </div>
+                </div>
+            <% } %>
+
+        </section>
+
+        <!-- ==========================================
+        Dashboard Container (tu código existente)
+        ========================================== -->
         <div class="dashboard-container">
 
             <!-- User Profile -->
