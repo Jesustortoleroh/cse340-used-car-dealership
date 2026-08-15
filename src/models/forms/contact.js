@@ -12,8 +12,8 @@ import db from '../db.js';
  */
 const createContactForm = async (customer_name, email, phone, subject, message) => {
     const query = `
-        INSERT INTO contact_form (customer_name, email, phone, subject, message)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO contact_form (customer_name, email, phone, subject, message, status)
+        VALUES ($1, $2, $3, $4, $5, 'Received')
         RETURNING *
     `;
     const result = await db.query(query, [customer_name, email, phone, subject, message]);
@@ -22,7 +22,6 @@ const createContactForm = async (customer_name, email, phone, subject, message) 
 
 /**
  * Retrieves all contact form submissions, ordered by most recent first.
- * Includes status and priority fields.
  * 
  * @returns {Promise<Array>} Array of contact form records
  */
@@ -36,10 +35,7 @@ const getAllContactForms = async () => {
             subject, 
             message, 
             status,
-            priority,
-            submitted AS created_at,
-            created_at,
-            updated_at
+            submitted AS created_at
         FROM contact_form
         ORDER BY submitted DESC
     `;
@@ -63,12 +59,7 @@ const getContactFormById = async (id) => {
             subject, 
             message, 
             status,
-            priority,
-            assigned_to,
-            submitted AS created_at,
-            created_at,
-            updated_at,
-            resolved_at
+            submitted AS created_at
         FROM contact_form
         WHERE id = $1
     `;
@@ -81,40 +72,16 @@ const getContactFormById = async (id) => {
  * 
  * @param {number} id - The ID of the contact form submission
  * @param {string} status - The new status ('Received', 'In Progress', 'Resolved', 'Closed')
- * @param {number} assignedTo - The user ID to assign the inquiry to (optional)
  * @returns {Promise<Object|null>} The updated contact form record or null if not found
  */
-const updateContactStatus = async (id, status, assignedTo = null) => {
+const updateContactStatus = async (id, status) => {
     const query = `
         UPDATE contact_form
-        SET 
-            status = $1,
-            assigned_to = COALESCE($2, assigned_to),
-            resolved_at = CASE WHEN $1 = 'Resolved' THEN CURRENT_TIMESTAMP ELSE resolved_at END,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-        RETURNING *
-    `;
-    const result = await db.query(query, [status, assignedTo, id]);
-    return result.rows[0] || null;
-};
-
-/**
- * Updates the priority of a contact form submission.
- * 
- * @param {number} id - The ID of the contact form submission
- * @param {string} priority - The new priority ('Low', 'Normal', 'High', 'Urgent')
- * @returns {Promise<Object|null>} The updated contact form record or null if not found
- */
-const updateContactPriority = async (id, priority) => {
-    const query = `
-        UPDATE contact_form
-        SET priority = $1,
-            updated_at = CURRENT_TIMESTAMP
+        SET status = $1
         WHERE id = $2
         RETURNING *
     `;
-    const result = await db.query(query, [priority, id]);
+    const result = await db.query(query, [status, id]);
     return result.rows[0] || null;
 };
 
@@ -130,6 +97,25 @@ const deleteContactForm = async (id) => {
     return result.rowCount > 0;
 };
 
+/**
+ * Updates the priority of a contact form submission (opcional).
+ * 
+ * @param {number} id - The ID of the contact form submission
+ * @param {string} priority - The new priority ('Low', 'Normal', 'High', 'Urgent')
+ * @returns {Promise<Object|null>} The updated contact form record or null if not found
+ */
+const updateContactPriority = async (id, priority) => {
+    const query = `
+        UPDATE contact_form
+        SET priority = $1
+        WHERE id = $2
+        RETURNING *
+    `;
+    const result = await db.query(query, [priority, id]);
+    return result.rows[0] || null;
+};
+
+// ⭐ EXPORTAR TODAS LAS FUNCIONES
 export {
     createContactForm,
     getAllContactForms,
