@@ -6,8 +6,13 @@ import { createContactForm, getAllContactForms, getContactFormById, updateContac
  * Display contact page
  */
 const showContactForm = (req, res) => {
+    const messages = typeof req.flash === 'function' ? req.flash() : {};
+
     res.render('forms/contact/form', {
-        title: 'Contact Our Dealership'
+        title: 'Contact Our Dealership',
+        messages: messages,
+        user: req.session?.user || null,
+        isLoggedIn: !!req.session?.user
     });
 };
 
@@ -15,11 +20,9 @@ const showContactForm = (req, res) => {
  * Process contact form submission
  */
 const handleContactSubmission = async (req, res) => {
-    // Check for validation errors
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        // Store each validation error as a flash message
         errors.array().forEach(error => {
             if (typeof req.flash === 'function') {
                 req.flash('error', error.msg);
@@ -31,10 +34,8 @@ const handleContactSubmission = async (req, res) => {
     const { customer_name, email, phone, subject, message } = req.body;
 
     try {
-        // Save to database
         await createContactForm(customer_name, email, phone, subject, message);
 
-        // Success message
         if (typeof req.flash === 'function') {
             req.flash('success', `Thank you for contacting our dealership, ${customer_name}! We will respond as soon as possible.`);
         }
@@ -56,21 +57,26 @@ const handleContactSubmission = async (req, res) => {
  * Show all dealership inquiries
  */
 const showContactResponses = async (req, res) => {
-    let contactForms = [];
+    let inquiries = [];
 
     try {
-        contactForms = await getAllContactForms();
+        inquiries = await getAllContactForms();
     } catch (error) {
         console.error('Error retrieving inquiries:', error);
-
         if (typeof req.flash === 'function') {
             req.flash('error', 'Unable to retrieve customer inquiries. Please try again later.');
         }
     }
 
+    // ⭐ OBTENER FLASH MESSAGES
+    const messages = typeof req.flash === 'function' ? req.flash() : {};
+
     res.render('forms/contact/responses', {
         title: 'Customer Inquiries',
-        contactForms
+        inquiries: inquiries,
+        messages: messages,  // ⭐ PASAR A LA VISTA
+        user: req.session?.user || null,
+        isLoggedIn: !!req.session?.user
     });
 };
 
@@ -90,9 +96,14 @@ const showInquiryDetail = async (req, res) => {
             return res.redirect('/contact/responses');
         }
         
+        const messages = typeof req.flash === 'function' ? req.flash() : {};
+        
         res.render('forms/contact/detail', {
             title: 'Inquiry Details',
-            inquiry
+            inquiry: inquiry,
+            messages: messages,
+            user: req.session?.user || null,
+            isLoggedIn: !!req.session?.user
         });
     } catch (error) {
         console.error('Error retrieving inquiry:', error);
@@ -160,4 +171,4 @@ const deleteInquiry = async (req, res) => {
     res.redirect('/contact/responses');
 };
 
-export { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry};
+export { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry };

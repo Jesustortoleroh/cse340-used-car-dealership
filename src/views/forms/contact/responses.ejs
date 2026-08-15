@@ -1,48 +1,79 @@
 <%- include('../../partials/header') %>
 
 <main>
-    <h1>Customer Inquiries</h1>
+
+    <h1><%= title %></h1>
 
     <p>
         Below are the inquiries submitted by potential customers interested in
         our vehicles and services.
     </p>
 
-    <% if (contactForms && contactForms.length > 0) { %>
+    <% if (messages && messages.error) { %>
+        <div class="flash error">
+            <%= messages.error %>
+        </div>
+    <% } %>
+
+    <% if (messages && messages.success) { %>
+        <div class="flash success">
+            <%= messages.success %>
+        </div>
+    <% } %>
+
+    <% if (inquiries && inquiries.length > 0) { %>
 
         <div class="contact-responses">
 
-            <% contactForms.forEach(form => { %>
+            <% inquiries.forEach(inquiry => { %>
 
                 <div class="response-item">
 
                     <h3 class="response-subject">
-                        <%= form.subject %>
+                        <%= inquiry.subject %>
                     </h3>
 
                     <p>
                         <strong>Customer:</strong>
-                        <%= form.customer_name %>
+                        <%= inquiry.customer_name %>
                     </p>
 
                     <p>
                         <strong>Email:</strong>
-                        <%= form.email %>
+                        <%= inquiry.email %>
                     </p>
 
                     <p>
                         <strong>Phone:</strong>
-                        <%= form.phone || 'Not Provided' %>
+                        <%= inquiry.phone || 'Not Provided' %>
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="status-badge status-<%= inquiry.status ? inquiry.status.toLowerCase().replace(' ', '-') : 'received' %>">
+                            <%= inquiry.status || 'Received' %>
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Priority:</strong>
+                        <%= inquiry.priority || 'Normal' %>
                     </p>
 
                     <p class="response-message">
-                        <%= form.message %>
+                        <%= inquiry.message %>
                     </p>
 
                     <p class="response-date">
                         Submitted:
-                        <%= new Date(form.submitted).toLocaleDateString() %>
+                        <%= new Date(inquiry.submitted || inquiry.created_at).toLocaleDateString() %>
                     </p>
+
+                    <div class="inquiry-actions">
+                        <a href="/contact/<%= inquiry.id %>" class="btn-view">
+                            View Details
+                        </a>
+                    </div>
 
                 </div>
 
@@ -52,17 +83,18 @@
 
     <% } else { %>
 
-        <p class="no-responses">
-            No customer inquiries have been submitted yet.
-        </p>
+        <div class="empty-state">
+            <span class="empty-icon">📨</span>
+            <p>No customer inquiries have been submitted yet.</p>
+        </div>
 
     <% } %>
 
-    <p class="contact-link">
-        <a href="/contact">
+    <div class="contact-link">
+        <a href="/contact" class="btn-primary">
             Submit a New Inquiry
         </a>
-    </p>
+    </div>
 
 </main>
 
