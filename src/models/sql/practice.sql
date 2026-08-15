@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS contact_form (
 );
 
 CREATE INDEX IF NOT EXISTS idx_contact_status ON contact_form(status);
-CREATE INDEX IF NOT EXISTS idx_contact_submitted ON contact_form(created_at);
+CREATE INDEX IF NOT EXISTS idx_contact_created_at ON contact_form(created_at);
 CREATE INDEX IF NOT EXISTS idx_contact_email ON contact_form(email);
 CREATE INDEX IF NOT EXISTS idx_contact_assigned_to ON contact_form(assigned_to);
 

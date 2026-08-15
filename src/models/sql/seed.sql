@@ -209,8 +209,10 @@ CREATE TABLE contact_form (
     phone VARCHAR(20) CHECK (phone ~ '^[0-9+\-() ]+$'),
     subject VARCHAR(255) NOT NULL CHECK (length(subject) >= 3),
     message TEXT NOT NULL CHECK (length(message) >= 10),
-    status VARCHAR(50) DEFAULT 'Received' CHECK (status IN ('Received', 'In Progress', 'Resolved', 'Closed')),
-    priority VARCHAR(20) DEFAULT 'Normal' CHECK (priority IN ('Low', 'Normal', 'High', 'Urgent')),
+    status VARCHAR(50) DEFAULT 'Received' 
+        CHECK (status IN ('Received', 'In Progress', 'Resolved', 'Closed')),
+    priority VARCHAR(20) DEFAULT 'Normal' 
+        CHECK (priority IN ('Low', 'Normal', 'High', 'Urgent')),
     assigned_to INTEGER REFERENCES users(id) ON DELETE SET NULL,
     resolved_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
