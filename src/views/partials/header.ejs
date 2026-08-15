@@ -64,6 +64,16 @@
                     <!-- Profile link -->
                     <li><a href="/profile">👤 Profile</a></li>
 
+                    <!-- Notifications link -->
+                    <li class="notification-link-wrapper">
+                        <a href="/notifications" class="notification-link">
+                            🔔
+                            <% if (unreadNotifications > 0) { %>
+                                <span class="notification-badge"><%= unreadNotifications %></span>
+                            <% } %>
+                        </a>
+                    </li>
+
                     <!-- Conditional content for employee or owner roles -->
                     <% if (user && (user.roleName === 'employee' || user.roleName === 'owner')) { %>
                         <!-- Vehicle registration list link -->

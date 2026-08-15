@@ -7,6 +7,7 @@ import {
     updateContactPriority,
     deleteContactForm 
 } from '../../models/forms/contact.js';
+import { notifyInquiryResponse } from '../../models/notifications/notificationTriggers.js';
 
 
 /**
@@ -130,11 +131,25 @@ const updateInquiryStatus = async (req, res) => {
     const { status } = req.body;
     
     try {
+        const inquiry = await getContactFormById(id);
         const updated = await updateContactStatus(id, status);
         
         if (updated) {
             if (typeof req.flash === 'function') {
                 req.flash('success', 'Inquiry status updated successfully.');
+            }
+
+            // ⭐ Notificar al usuario si la consulta fue resuelta
+            if (status === 'Resolved' && inquiry && inquiry.email) {
+                // Buscar usuario por email para obtener user_id
+                const user = await findUserByEmail(inquiry.email);
+                if (user) {
+                    await notifyInquiryResponse(
+                        user.id,
+                        id,
+                        inquiry.subject
+                    );
+                }
             }
         } else {
             if (typeof req.flash === 'function') {

@@ -1,0 +1,273 @@
+/* ==========================================
+   Notifications Page Styles
+========================================== */
+
+/* ==========================================
+   Header
+========================================== */
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.notifications-header h1 {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.notifications-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-mark-all {
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-mark-all:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-mark-all:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   Notifications List
+========================================== */
+.notifications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border-radius: 8px;
+    border-left: 4px solid var(--text-muted);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.notification-item:hover {
+    box-shadow: var(--card-shadow-hover);
+}
+
+.notification-item.unread {
+    border-left-color: var(--primary);
+    background: var(--bg-hover);
+}
+
+.notification-item.read {
+    border-left-color: var(--text-muted);
+    opacity: 0.8;
+}
+
+/* ==========================================
+   Notification Content
+========================================== */
+.notification-content {
+    flex: 1;
+    min-width: 200px;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.notification-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.notification-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.notification-content p {
+    margin: 0.25rem 0;
+    color: var(--text-secondary);
+}
+
+.notification-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.notification-link:hover {
+    text-decoration: underline;
+    color: var(--primary-hover);
+}
+
+/* ==========================================
+   Notification Actions
+========================================== */
+.notification-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.btn-read {
+    padding: 0.3rem 0.75rem;
+    background: var(--success);
+    color: var(--text-white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.btn-read:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-read:active {
+    transform: scale(0.95);
+}
+
+.btn-delete-notification {
+    padding: 0.3rem 0.5rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.btn-delete-notification:hover {
+    color: var(--error);
+    transform: scale(1.1);
+}
+
+/* ==========================================
+   Empty State
+========================================== */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-muted);
+}
+
+/* ==========================================
+   Flash Messages
+========================================== */
+.flash {
+    max-width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.flash.success {
+    background: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid var(--success);
+}
+
+.flash.error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    border: 1px solid var(--error);
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+@media (max-width: 768px) {
+    .notifications-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .notification-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .notification-actions {
+        justify-content: flex-start;
+    }
+
+    .notifications-actions {
+        width: 100%;
+    }
+
+    .btn-mark-all {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .notification-item {
+        padding: 0.75rem 1rem;
+    }
+
+    .notification-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .notification-actions {
+        flex-wrap: wrap;
+    }
+
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+}

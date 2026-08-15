@@ -3,15 +3,7 @@ import { Router } from 'express';
 import { homePage, aboutPage, testErrorPage } from './index.js';
 import { vehiclesPage, vehicleDetailPage } from './vehicles/vehicles.js';
 import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
-import { 
-    showContactForm, 
-    handleContactSubmission, 
-    showContactResponses, 
-    showInquiryDetail, 
-    updateInquiryStatus, 
-    updateInquiryPriority, 
-    deleteInquiry 
-} from './forms/contact.js';
+import { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, updateInquiryPriority, deleteInquiry } from './forms/contact.js';
 import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
 import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
 import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
@@ -21,6 +13,7 @@ import { contactValidation, registrationValidation, loginValidation, updateAccou
 import { addFavoriteController, removeFavoriteController, favoritesListPage } from '../controllers/favorites/favorites.js';
 import { profilePage } from '../controllers/profile/profile.js';
 import { comparisonPage, compareVehiclesController, getVehicleDetails } from '../controllers/comparison/comparison.js';
+import { showNotifications, getUnreadCountAjax, markAsReadController, markAllAsReadController, deleteNotificationController } from '../controllers/notifications/notifications.js';
 
 const router = Router();
 
@@ -73,6 +66,12 @@ router.use('/favorites', (req, res, next) => {
 
 router.use('/profile', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/profile.css">');
+    next();
+});
+
+// Notifications CSS
+router.use('/notifications', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/notifications.css">');
     next();
 });
 
@@ -156,5 +155,12 @@ router.get('/profile', requireLogin, profilePage);
 router.get('/compare', comparisonPage);
 router.post('/compare', compareVehiclesController);
 router.get('/compare/:vehicleId', getVehicleDetails);
+
+// Notifications routes
+router.get('/notifications', requireLogin, showNotifications);
+router.get('/notifications/unread', requireLogin, getUnreadCountAjax);
+router.post('/notifications/:id/read', requireLogin, markAsReadController);
+router.post('/notifications/read-all', requireLogin, markAllAsReadController);
+router.post('/notifications/:id/delete', requireLogin, deleteNotificationController);
 
 export default router;

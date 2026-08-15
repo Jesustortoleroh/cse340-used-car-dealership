@@ -1,0 +1,69 @@
+<%- include('../partials/header') %>
+
+<main>
+
+    <div class="notifications-header">
+        <h1>🔔 Notifications</h1>
+        <div class="notifications-actions">
+            <% if (unreadCount > 0) { %>
+                <form action="/notifications/read-all" method="POST">
+                    <button type="submit" class="btn-mark-all">Mark all as read</button>
+                </form>
+            <% } %>
+        </div>
+    </div>
+
+    <% if (messages && messages.success) { %>
+        <div class="flash success"><%= messages.success %></div>
+    <% } %>
+
+    <% if (messages && messages.error) { %>
+        <div class="flash error"><%= messages.error %></div>
+    <% } %>
+
+    <% if (notifications && notifications.length > 0) { %>
+
+        <div class="notifications-list">
+            <% notifications.forEach(notification => { %>
+                <div class="notification-item <%= notification.is_read ? 'read' : 'unread' %>">
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <h3><%= notification.title %></h3>
+                            <span class="notification-time">
+                                <%= new Date(notification.created_at).toLocaleDateString() %>
+                            </span>
+                        </div>
+                        <p><%= notification.message %></p>
+                        <% if (notification.link) { %>
+                            <a href="<%= notification.link %>" class="notification-link">
+                                View Details →
+                            </a>
+                        <% } %>
+                    </div>
+                    <div class="notification-actions">
+                        <% if (!notification.is_read) { %>
+                            <form action="/notifications/<%= notification.id %>/read" method="POST">
+                                <button type="submit" class="btn-read">Mark as read</button>
+                            </form>
+                        <% } %>
+                        <form action="/notifications/<%= notification.id %>/delete" method="POST">
+                            <button type="submit" class="btn-delete-notification">🗑️</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+    <% } else { %>
+
+        <div class="empty-state">
+            <span class="empty-icon">🔔</span>
+            <h2>No Notifications</h2>
+            <p>You don't have any notifications yet.</p>
+        </div>
+
+    <% } %>
+
+</main>
+
+<%- include('../partials/footer') %>

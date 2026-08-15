@@ -879,6 +879,48 @@ button {
 }
 
 /* ==========================================
+   Notifications in Header
+========================================== */
+.notification-link-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: var(--text-white);
+    font-size: 1.2rem;
+    position: relative;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.notification-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-white);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    background: var(--error);
+    color: var(--text-white);
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================
    Mobile Menu
 ========================================== */
 @media (max-width: 768px) {
@@ -904,5 +946,17 @@ button {
         width: 100%;
         display: flex;
         justify-content: center;
+    }
+
+    .notification-link {
+        font-size: 1rem;
+    }
+
+    .notification-badge {
+        font-size: 0.6rem;
+        min-width: 16px;
+        top: -4px;
+        right: -2px;
+        padding: 0.05rem 0.35rem;
     }
 }

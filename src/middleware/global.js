@@ -1,3 +1,5 @@
+import { getUnreadCount } from '../models/notifications/notifications.js';
+
 /**
  * Express middleware that adds head asset management functionality.
  */
@@ -31,7 +33,7 @@ const setHeadAssetsFunctionality = (res) => {
 /**
  * Middleware to add local variables to res.locals for use in all templates.
  */
-const addLocalVariables = (req, res, next) => {
+const addLocalVariables = async (req, res, next) => {
     // Asset system
     setHeadAssetsFunctionality(res);
 
@@ -54,6 +56,19 @@ const addLocalVariables = (req, res, next) => {
     // Authentication data available in ALL views
     res.locals.user = req.session?.user || null;
     res.locals.isLoggedIn = !!req.session?.user;
+
+    // ⭐ Notifications: Get unread count for logged-in users
+    res.locals.unreadNotifications = 0;
+    
+    if (req.session?.userId) {
+        try {
+            const count = await getUnreadCount(req.session.userId);
+            res.locals.unreadNotifications = count;
+        } catch (error) {
+            console.error('Error fetching unread notifications:', error);
+            res.locals.unreadNotifications = 0;
+        }
+    }
 
     next();
 };

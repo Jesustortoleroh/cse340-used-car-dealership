@@ -30,6 +30,26 @@ const findUserByEmail = async (email) => {
 };
 
 /**
+ * Find a user by email address only (for notifications and other purposes)
+ * 
+ * @param {string} email - Email address to search for
+ * @returns {Promise<Object|null>} User object with id, name, email or null if not found
+ */
+const findUserByEmailOnly = async (email) => {
+    const query = `
+        SELECT 
+            id, 
+            name, 
+            email
+        FROM users
+        WHERE LOWER(email) = LOWER($1)
+        LIMIT 1
+    `;
+    const result = await db.query(query, [email]);
+    return result.rows[0] || null;
+};
+
+/**
  * Verify a plain text password against a stored bcrypt hash.
  * 
  * @param {string} plainPassword - The password to verify
@@ -40,4 +60,8 @@ const verifyPassword = async (plainPassword, hashedPassword) => {
     return await bcrypt.compare(plainPassword, hashedPassword);
 };
 
-export { findUserByEmail, verifyPassword };
+export { 
+    findUserByEmail, 
+    findUserByEmailOnly,
+    verifyPassword 
+};

@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import { getAllServiceRequests, getServiceRequestById, getServiceRequestsByUserId, getAllServiceTypes, createServiceRequest, updateServiceRequestStatus, updateServiceRequestNotes, deleteServiceRequest } from '../../models/serviceRequest/serviceRequests.js';
 import { getAllVehicles } from '../../models/vehicles/vehicles.js';
+import { notifyServiceUpdate } from '../../models/notifications/notificationTriggers.js';
 
 /**
  * Show service requests
@@ -212,11 +213,22 @@ const processUpdateRequest = async (req, res) => {
         // Staff (employees and owners) can update everything
         if (userRole === 'employee' || userRole === 'owner') {
             // Update status
-            await updateServiceRequestStatus(requestId, status);
+            const updatedRequest = await updateServiceRequestStatus(requestId, status);
 
             // Update notes if provided
             if (notes !== undefined) {
                 await updateServiceRequestNotes(requestId, notes.trim() || '');
+            }
+
+            // ⭐ Notificar al usuario sobre el cambio de estado
+            if (updatedRequest) {
+                const vehicleName = request.vehicle_name || 'your vehicle';
+                await notifyServiceUpdate(
+                    request.user_id,
+                    requestId,
+                    status,
+                    vehicleName
+                );
             }
 
             req.flash?.('success', 'Service request updated successfully.');
