@@ -14,6 +14,10 @@ const findUserByEmail = async (email) => {
             users.name, 
             users.email, 
             users.password, 
+            users.profile_image,
+            users.avatar_style,
+            users.last_login,
+            users.is_active,
             users.created_at,
             roles.role_name AS "roleName"
         FROM users

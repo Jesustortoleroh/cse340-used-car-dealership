@@ -37,42 +37,21 @@ const contactValidation = [
         .isLength({ min: 10, max: 2000 })
         .withMessage('Message must be between 10 and 2000 characters')
         .custom((value) => {
-
             const words = value.split(/\s+/);
             const uniqueWords = new Set(words);
 
-            if (
-                words.length > 20 &&
-                uniqueWords.size / words.length < 0.3
-            ) {
+            if (words.length > 20 && uniqueWords.size / words.length < 0.3) {
                 throw new Error('Message appears to be spam');
             }
 
-            const invalidMessages = [
-                'hi',
-                'hello',
-                'test',
-                'ok',
-                'hey',
-                'whats up',
-                'yo'
-            ];
+            const invalidMessages = ['hi', 'hello', 'test', 'ok', 'hey', 'whats up', 'yo'];
+            const trimmedValue = value.toLowerCase().trim();
 
-            const trimmedValue =
-                value.toLowerCase().trim();
-
-            if (
-                invalidMessages.includes(
-                    trimmedValue
-                )
-            ) {
-                throw new Error(
-                    'Please provide a more detailed message about your inquiry'
-                );
+            if (invalidMessages.includes(trimmedValue)) {
+                throw new Error('Please provide a more detailed message about your inquiry');
             }
 
             return true;
-
         })
 ];
 
@@ -116,9 +95,7 @@ const registrationValidation = [
 
     body('emailConfirm')
         .trim()
-        .custom((value, { req }) =>
-            value === req.body.email
-        )
+        .custom((value, { req }) => value === req.body.email)
         .withMessage('Email addresses must match'),
 
     body('password')
@@ -130,13 +107,11 @@ const registrationValidation = [
         .withMessage('Password must contain at least one uppercase letter')
         .matches(/[a-z]/)
         .withMessage('Password must contain at least one lowercase letter')
-        .matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>\/?]/)
+        .matches(/[!@#$%^&*()_+\-=[\]{};':"\|,.<>\/?]/)
         .withMessage('Password must contain at least one special character'),
 
     body('passwordConfirm')
-        .custom((value, { req }) =>
-            value === req.body.password
-        )
+        .custom((value, { req }) => value === req.body.password)
         .withMessage('Passwords must match')
 ];
 
@@ -164,47 +139,25 @@ const updateAccountValidation = [
  * Review validation rules
  */
 const reviewValidation = [
-
     body('rating')
         .notEmpty()
-        .withMessage(
-            'Please select a star rating before submitting your review.'
-        )
+        .withMessage('Please select a star rating before submitting your review.')
         .isInt({ min: 1, max: 5 })
-        .withMessage(
-            'Rating must be between 1 and 5.'
-        ),
+        .withMessage('Rating must be between 1 and 5.'),
 
     body('comment')
         .trim()
         .isLength({ min: 10, max: 1000 })
-        .withMessage(
-            'Review must be between 10 and 1000 characters'
-        )
+        .withMessage('Review must be between 10 and 1000 characters')
         .custom((value) => {
+            const invalidMessages = ['good', 'nice', 'ok', 'great', 'cool', 'test'];
+            const review = value.toLowerCase().trim();
 
-            const invalidMessages = [
-                'good',
-                'nice',
-                'ok',
-                'great',
-                'cool',
-                'test'
-            ];
-
-            const review =
-                value.toLowerCase().trim();
-
-            if (
-                invalidMessages.includes(review)
-            ) {
-                throw new Error(
-                    'Please provide a more detailed review'
-                );
+            if (invalidMessages.includes(review)) {
+                throw new Error('Please provide a more detailed review');
             }
 
             return true;
-
         })
 ];
 
@@ -212,27 +165,20 @@ const reviewValidation = [
  * Service Request Validation
  */
 const serviceRequestValidation = [
-
     body('service_type_id')
+        .optional({ checkFalsy: true })
         .isInt({ min: 1 })
-        .withMessage(
-            'Please select a valid service type'
-        ),
+        .withMessage('Please select a valid service type'),
 
     body('description')
         .trim()
         .isLength({ min: 10, max: 1000 })
-        .withMessage(
-            'Description must be between 10 and 1000 characters'
-        ),
+        .withMessage('Description must be between 10 and 1000 characters'),
 
     body('vehicle_id')
-        .optional()
+        .optional({ checkFalsy: true })
         .isInt({ min: 1 })
-        .withMessage(
-            'Vehicle ID must be a valid number'
-        )
-
+        .withMessage('Vehicle ID must be a valid number')
 ];
 
 export {

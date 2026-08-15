@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
 import { getDashboardAnalytics, getRecentFavorites, getRecentReviews, getRecentRequests } from '../../models/analytics/analytics.js';
+import { updateLastLogin } from '../../models/profile/profile.js';
 
 /**
  * Display login form
@@ -44,6 +45,14 @@ const processLogin = async (req, res) => {
             return res.redirect('/login');
         }
 
+        // Check if user account is active
+        if (user.is_active === false) {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'Your account has been deactivated. Please contact support.');
+            }
+            return res.redirect('/login');
+        }
+
         // Verify password
         const validPassword = await verifyPassword(password, user.password);
 
@@ -54,6 +63,9 @@ const processLogin = async (req, res) => {
             }
             return res.redirect('/login');
         }
+
+        // Update last login timestamp
+        await updateLastLogin(user.id);
 
         // Remove password before storing in session
         delete user.password;
