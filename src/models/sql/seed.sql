@@ -536,14 +536,15 @@ INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
 (11, 1, 'Available', 'New York, NY'),
 (12, 2, 'Available', 'Dallas, TX');
 
+
+
 -- ============================================
 -- ⭐ ACCOUNT TEST - USERS ⭐
 -- ============================================
-
 INSERT INTO users (name, email, password, role_id, is_active) VALUES
-('Owner User', 'owner@dealer.com', '$2b$10$FodhxCGecArzP6Vp332Nnu93z.P9yBA02YSbBqHOQbjnIqACn5CXO', 3, true),
-('Employee User', 'employee@dealer.com', '$2b$10$HECjPqlm3ZfGqBw0Ix/6nOD/Tg/iSbcVuLYmO.RjBQJeHqHyEn7L.', 2, true),
-('Customer User', 'customer@dealer.com', '$2b$10$YZpun6F6GHGrZWVwnky9DuwtPiRj3FIwMGBO5lPpSXx1Mw1OSC5gC', 1, true)
+('Owner User', 'owner@dealer.com', '$2b$12$kgMMZta6hPNKzf3/eMS57Oct0mZFOFQFIrcUnlDPJRD3GF8PpKJsC', 3, true),
+('Employee User', 'employee@dealer.com', '$2b$12$7sEgsA4Ec.FyfZ5ipnWRTOBHuTXZWu5O9uySL.75hnYp1FepqsOWS', 2, true),
+('Customer User', 'customer@dealer.com', '$2b$12$XGKT3RYknxqr/KWfqvGE6eABgy0JQ4OlcIxbVa/W7J/D/Zm4dhO1i', 1, true)
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert service types
