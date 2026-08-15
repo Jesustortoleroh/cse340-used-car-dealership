@@ -138,5 +138,5 @@ A full-featured used car dealership web application built with Node.js, Express,
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/cse340-used-car-dealership.git
+git clone https://github.com/jesustortoleroh/cse340-used-car-dealership.git
 cd cse340-used-car-dealership
