@@ -6,11 +6,8 @@ import { createContactForm, getAllContactForms, getContactFormById, updateContac
  * Display contact page
  */
 const showContactForm = (req, res) => {
-    const messages = typeof req.flash === 'function' ? req.flash() : {};
-
     res.render('forms/contact/form', {
         title: 'Contact Our Dealership',
-        messages: messages,
         user: req.session?.user || null,
         isLoggedIn: !!req.session?.user
     });
@@ -68,13 +65,12 @@ const showContactResponses = async (req, res) => {
         }
     }
 
-    // ⭐ OBTENER FLASH MESSAGES
-    const messages = typeof req.flash === 'function' ? req.flash() : {};
+    // ⭐ DEBUG: Verifica que inquiries tenga datos
+    console.log('Inquiries count:', inquiries.length);
 
     res.render('forms/contact/responses', {
         title: 'Customer Inquiries',
         inquiries: inquiries,
-        messages: messages,  // ⭐ PASAR A LA VISTA
         user: req.session?.user || null,
         isLoggedIn: !!req.session?.user
     });
@@ -96,12 +92,9 @@ const showInquiryDetail = async (req, res) => {
             return res.redirect('/contact/responses');
         }
         
-        const messages = typeof req.flash === 'function' ? req.flash() : {};
-        
         res.render('forms/contact/detail', {
             title: 'Inquiry Details',
             inquiry: inquiry,
-            messages: messages,
             user: req.session?.user || null,
             isLoggedIn: !!req.session?.user
         });

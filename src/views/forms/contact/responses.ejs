@@ -9,23 +9,16 @@
         our vehicles and services.
     </p>
 
-    <% if (messages && messages.error) { %>
-        <div class="flash error">
-            <%= messages.error %>
-        </div>
-    <% } %>
+    <%
+    // ⭐ SOLUCIÓN DEFENSIVA
+    const inquiryList = typeof inquiries !== 'undefined' ? inquiries : [];
+    %>
 
-    <% if (messages && messages.success) { %>
-        <div class="flash success">
-            <%= messages.success %>
-        </div>
-    <% } %>
-
-    <% if (inquiries && inquiries.length > 0) { %>
+    <% if (inquiryList.length > 0) { %>
 
         <div class="contact-responses">
 
-            <% inquiries.forEach(inquiry => { %>
+            <% inquiryList.forEach(inquiry => { %>
 
                 <div class="response-item">
 
@@ -50,7 +43,7 @@
 
                     <p>
                         <strong>Status:</strong>
-                        <span class="status-badge status-<%= inquiry.status ? inquiry.status.toLowerCase().replace(' ', '-') : 'received' %>">
+                        <span class="status-badge status-<%= inquiry.status ? inquiry.status.toLowerCase().replace(/\s+/g, '-') : 'received' %>">
                             <%= inquiry.status || 'Received' %>
                         </span>
                     </p>
@@ -85,6 +78,7 @@
 
         <div class="empty-state">
             <span class="empty-icon">📨</span>
+            <h2>No Customer Inquiries</h2>
             <p>No customer inquiries have been submitted yet.</p>
         </div>
 
