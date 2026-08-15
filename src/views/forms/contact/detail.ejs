@@ -61,7 +61,7 @@
                 <p><%= inquiry.message %></p>
             </div>
 
-            <div class="inquiry-actions">
+            <div class="inquiry-detail-actions">
                 <a href="/contact/responses" class="btn-back">
                     ← Back to Inquiries
                 </a>
@@ -80,7 +80,7 @@
 
                 <!-- Form to delete inquiry -->
                 <form action="/contact/<%= inquiry.id %>/delete" method="POST" class="delete-form">
-                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this inquiry?')">
+                    <button type="submit" class="btn-delete-detail" onclick="return confirm('Are you sure you want to delete this inquiry?')">
                         🗑️ Delete
                     </button>
                 </form>
