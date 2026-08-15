@@ -1,5 +1,12 @@
 import { validationResult } from 'express-validator';
-import { createContactForm, getAllContactForms, getContactFormById, updateContactStatus, deleteContactForm } from '../../models/forms/contact.js';
+import { 
+    createContactForm, 
+    getAllContactForms, 
+    getContactFormById, 
+    updateContactStatus, 
+    updateContactPriority,
+    deleteContactForm 
+} from '../../models/forms/contact.js';
 
 
 /**
@@ -137,6 +144,35 @@ const updateInquiryStatus = async (req, res) => {
 };
 
 /**
+ * Update inquiry priority
+ */
+const updateInquiryPriority = async (req, res) => {
+    const id = parseInt(req.params.id);
+    const { priority } = req.body;
+    
+    try {
+        const updated = await updateContactPriority(id, priority);
+        
+        if (updated) {
+            if (typeof req.flash === 'function') {
+                req.flash('success', 'Inquiry priority updated successfully.');
+            }
+        } else {
+            if (typeof req.flash === 'function') {
+                req.flash('error', 'Inquiry not found.');
+            }
+        }
+    } catch (error) {
+        console.error('Error updating inquiry priority:', error);
+        if (typeof req.flash === 'function') {
+            req.flash('error', 'Unable to update inquiry priority.');
+        }
+    }
+    
+    res.redirect('/contact/responses');
+};
+
+/**
  * Delete an inquiry
  */
 const deleteInquiry = async (req, res) => {
@@ -164,4 +200,12 @@ const deleteInquiry = async (req, res) => {
     res.redirect('/contact/responses');
 };
 
-export { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry };
+export { 
+    showContactForm, 
+    handleContactSubmission, 
+    showContactResponses, 
+    showInquiryDetail, 
+    updateInquiryStatus,
+    updateInquiryPriority,
+    deleteInquiry 
+};

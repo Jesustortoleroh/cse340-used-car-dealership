@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { homePage, aboutPage, testErrorPage } from './index.js';
 import { vehiclesPage, vehicleDetailPage } from './vehicles/vehicles.js';
 import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
-import { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, deleteInquiry } from './forms/contact.js';
+import {  showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, updateInquiryPriority, deleteInquiry } from './forms/contact.js';
 import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
 import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
 import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
@@ -21,7 +21,6 @@ router.use('/login', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/login.css">');
     next();
 });
-
 
 router.use('/register', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/registration.css">');
@@ -59,7 +58,6 @@ router.use('/service-requests', (req, res, next) => {
     next();
 });
 
-
 router.use('/favorites', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/favorites.css">');
     next();
@@ -87,8 +85,6 @@ router.use('/compare', (req, res, next) => {
     next();
 });
 
-
-
 // Basic Pages
 router.get('/', homePage);
 router.get('/about', aboutPage);
@@ -108,6 +104,7 @@ router.post('/contact', contactValidation, handleContactSubmission);
 router.get('/contact/responses', requireLogin, showContactResponses);
 router.get('/contact/:id', requireLogin, showInquiryDetail);
 router.post('/contact/:id/status', requireLogin, updateInquiryStatus);
+router.post('/contact/:id/priority', requireLogin, updateInquiryPriority);
 router.post('/contact/:id/delete', requireLogin, deleteInquiry);
 
 // Registration routes
@@ -131,12 +128,12 @@ router.post('/reviews/:id/edit', requireLogin, reviewValidation, processUpdateRe
 router.post('/reviews/:id/delete', requireLogin, processDeleteReview);
 
 // Service Requests routes
-router.get('/service-requests', requireLogin, showServiceRequests );
-router.get('/service-requests/create', requireLogin, showCreateRequestForm );
+router.get('/service-requests', requireLogin, showServiceRequests);
+router.get('/service-requests/create', requireLogin, showCreateRequestForm);
 router.post('/service-requests/create', requireLogin, serviceRequestValidation, processCreateRequest);
-router.get('/service-requests/:id/edit', requireLogin, showEditRequestForm );
-router.post('/service-requests/:id/edit', requireLogin, processUpdateRequest );
-router.post('/service-requests/:id/delete', requireLogin, processDeleteRequest );
+router.get('/service-requests/:id/edit', requireLogin, showEditRequestForm);
+router.post('/service-requests/:id/edit', requireLogin, processUpdateRequest);
+router.post('/service-requests/:id/delete', requireLogin, processDeleteRequest);
 router.get('/service-requests/manage', requireLogin, showServiceRequests);
 
 // Favorites routes
@@ -151,6 +148,5 @@ router.get('/profile', requireLogin, profilePage);
 router.get('/compare', comparisonPage);
 router.post('/compare', compareVehiclesController);
 router.get('/compare/:vehicleId', getVehicleDetails);
-
 
 export default router;

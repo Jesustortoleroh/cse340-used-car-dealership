@@ -35,9 +35,13 @@ const getAllContactForms = async () => {
             subject, 
             message, 
             status,
-            submitted AS created_at
+            priority,
+            assigned_to,
+            resolved_at,
+            created_at,
+            updated_at
         FROM contact_form
-        ORDER BY submitted DESC
+        ORDER BY created_at DESC
     `;
     const result = await db.query(query);
     return result.rows;
@@ -59,7 +63,11 @@ const getContactFormById = async (id) => {
             subject, 
             message, 
             status,
-            submitted AS created_at
+            priority,
+            assigned_to,
+            created_at,
+            updated_at,
+            resolved_at
         FROM contact_form
         WHERE id = $1
     `;
@@ -77,11 +85,33 @@ const getContactFormById = async (id) => {
 const updateContactStatus = async (id, status) => {
     const query = `
         UPDATE contact_form
-        SET status = $1
+        SET 
+            status = $1,
+            resolved_at = CASE WHEN $1 = 'Resolved' THEN CURRENT_TIMESTAMP ELSE resolved_at END,
+            updated_at = CURRENT_TIMESTAMP
         WHERE id = $2
         RETURNING *
     `;
     const result = await db.query(query, [status, id]);
+    return result.rows[0] || null;
+};
+
+/**
+ * Updates the priority of a contact form submission.
+ * 
+ * @param {number} id - The ID of the contact form submission
+ * @param {string} priority - The new priority ('Low', 'Normal', 'High', 'Urgent')
+ * @returns {Promise<Object|null>} The updated contact form record or null if not found
+ */
+const updateContactPriority = async (id, priority) => {
+    const query = `
+        UPDATE contact_form
+        SET priority = $1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+        RETURNING *
+    `;
+    const result = await db.query(query, [priority, id]);
     return result.rows[0] || null;
 };
 
@@ -97,25 +127,6 @@ const deleteContactForm = async (id) => {
     return result.rowCount > 0;
 };
 
-/**
- * Updates the priority of a contact form submission (opcional).
- * 
- * @param {number} id - The ID of the contact form submission
- * @param {string} priority - The new priority ('Low', 'Normal', 'High', 'Urgent')
- * @returns {Promise<Object|null>} The updated contact form record or null if not found
- */
-const updateContactPriority = async (id, priority) => {
-    const query = `
-        UPDATE contact_form
-        SET priority = $1
-        WHERE id = $2
-        RETURNING *
-    `;
-    const result = await db.query(query, [priority, id]);
-    return result.rows[0] || null;
-};
-
-// ⭐ EXPORTAR TODAS LAS FUNCIONES
 export {
     createContactForm,
     getAllContactForms,
