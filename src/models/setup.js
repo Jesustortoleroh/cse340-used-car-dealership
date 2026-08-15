@@ -29,10 +29,11 @@ const setupDatabase = async () => {
         hasData = false;
     }
     
-   if (false) {
-    console.log('Vehicles database already seeded ✅');
-    return true;
-}
+    // ⭐ CORREGIDO: Usar hasData en lugar de false
+    if (hasData) {
+        console.log('Vehicles database already seeded ✅');
+        return true;
+    }
     
     // No vehicles found - run full seed
     console.log('Seeding vehicles database...');
