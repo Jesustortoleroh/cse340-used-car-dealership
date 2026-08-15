@@ -352,12 +352,14 @@ ORDER BY d.rating DESC, vehicle_count DESC;
 -- 6. INSERT DATA
 -- ============================================
 
+-- Insert roles
 INSERT INTO roles (role_name, role_description) VALUES
 ('customer', 'Standard dealership customer account with browsing and review capabilities'),
 ('employee', 'Dealership employee account with management access'),
 ('owner', 'Full dealership administration access with all permissions')
 ON CONFLICT (role_name) DO NOTHING;
 
+-- Insert categories
 INSERT INTO categories (name, slug, icon, description) VALUES
 ('Car', 'car', '🚗', 'Standard passenger vehicles including sedans, coupes, and hatchbacks'),
 ('SUV', 'suv', '🚙', 'Sport Utility Vehicles with off-road capability and spacious interiors'),
@@ -368,6 +370,7 @@ INSERT INTO categories (name, slug, icon, description) VALUES
 ('Hybrid', 'hybrid', '🌿', 'Vehicles combining electric and gasoline power')
 ON CONFLICT (name) DO NOTHING;
 
+-- Insert dealers
 INSERT INTO dealers (name, slug, location, phone, email, image_url, description, rating, is_featured) VALUES
 ('AutoWorld Motors', 'autoworld-motors', 'New York, NY', '123-456-7890', 'info@autoworld.com', '/images/dealers/autoworld.jpg', 'Premier auto dealership serving the New York area with quality vehicles and exceptional service.', 4.8, true),
 ('City Auto Sales', 'city-auto-sales', 'Dallas, TX', '555-666-7777', 'contact@cityauto.com', '/images/dealers/city-auto.jpg', 'Trusted dealership in Texas offering a wide selection of pre-owned vehicles.', 4.5, false),
@@ -381,6 +384,7 @@ INSERT INTO dealers (name, slug, location, phone, email, image_url, description,
 ('Sunshine Auto Group', 'sunshine-auto-group', 'Phoenix, AZ', '111-222-3333', 'contact@sunshineauto.com', '/images/dealers/sunshine.jpg', 'Southwest dealership with a large inventory of trucks and SUVs.', 4.0, false)
 ON CONFLICT (slug) DO NOTHING;
 
+-- Insert vehicles
 INSERT INTO vehicles (name, slug, description, price, category_id, dealer_id, year, mileage, transmission, fuel_type, color, condition, featured, available) VALUES
 ('Toyota Corolla 2020', 'toyota-corolla-2020', 'Reliable compact car with excellent fuel economy and modern safety features. Perfect for daily commuting.', 12000.00, 1, 1, 2020, 35000, 'Automatic', 'Gasoline', 'Red', 'Excellent', true, true),
 ('Ford Explorer 2019', 'ford-explorer-2019', 'Spacious SUV perfect for families with three rows of seating and powerful V6 engine.', 18500.00, 2, 2, 2019, 28000, 'Automatic', 'Gasoline', 'Black', 'Good', true, true),
@@ -395,6 +399,7 @@ INSERT INTO vehicles (name, slug, description, price, category_id, dealer_id, ye
 ('Ford F-150 2021', 'ford-f-150-2021', 'Best-selling pickup truck with EcoBoost engine and advanced towing technology.', 38000.00, 3, 1, 2021, 10000, 'Automatic', 'Gasoline', 'Black', 'Excellent', true, true),
 ('Honda CR-V 2020', 'honda-cr-v-2020', 'Reliable SUV with great cargo space and excellent safety ratings.', 22000.00, 2, 2, 2020, 25000, 'Automatic', 'Gasoline', 'Silver', 'Good', false, true);
 
+-- Insert vehicle images
 INSERT INTO vehicle_images (vehicle_id, image_url, is_primary, caption) VALUES
 (1, '/images/vehicles/toyota-corolla.jpg', true, 'Toyota Corolla 2020 exterior'),
 (2, '/images/vehicles/ford-explorer.jpg', true, 'Ford Explorer 2019 front view'),
@@ -409,6 +414,7 @@ INSERT INTO vehicle_images (vehicle_id, image_url, is_primary, caption) VALUES
 (11, '/images/vehicles/ford-f150.jpg', true, 'Ford F-150 2021'),
 (12, '/images/vehicles/honda-crv.jpg', true, 'Honda CR-V 2020');
 
+-- Insert vehicle specs
 INSERT INTO vehicle_specs (vehicle_id, feature, value) VALUES
 (1, 'Engine', '1.8L 4-cylinder'),
 (1, 'Horsepower', '139 HP'),
@@ -515,6 +521,7 @@ INSERT INTO vehicle_specs (vehicle_id, feature, value) VALUES
 (12, 'Seats', '5'),
 (12, 'Doors', '4');
 
+-- Insert listings
 INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
 (1, 1, 'Available', 'New York, NY'),
 (2, 2, 'Available', 'Dallas, TX'),
@@ -529,12 +536,17 @@ INSERT INTO listings (vehicle_id, dealer_id, availability, location) VALUES
 (11, 1, 'Available', 'New York, NY'),
 (12, 2, 'Available', 'Dallas, TX');
 
--- Password: 'password123' for all test accounts
-INSERT INTO users (name, email, password, role_id) VALUES
-('Owner User', 'owner@dealer.com', '$2b$12$kgMMZta6hPNKzf3/eMS57Oct0mZFOFQFIrcUnlDPJRD3GF8PpKJsC', 3),
-('Employee User', 'employee@dealer.com', '$2b$12$7sEgsA4Ec.FyfZ5ipnWRTOBHuTXZWu5O9uySL.75hnYp1FepqsOWS', 2),
-('Customer User', 'customer@dealer.com', '$2b$12$XGKT3RYknxqr/KWfqvGE6eABgy0JQ4OlcIxbVa/W7J/D/Zm4dhO1i', 1);
+-- ============================================
+-- ⭐ ACCOUNT TEST - USERS ⭐
+-- ============================================
 
+INSERT INTO users (name, email, password, role_id, is_active) VALUES
+('Owner User', 'owner@dealer.com', '$2b$12$kgMMZta6hPNKzf3/eMS57Oct0mZFOFQFIrcUnlDPJRD3GF8PpKJsC', 3, true),
+('Employee User', 'employee@dealer.com', '$2b$12$7sEgsA4Ec.FyfZ5ipnWRTOBHuTXZWu5O9uySL.75hnYp1FepqsOWS', 2, true),
+('Customer User', 'customer@dealer.com', '$2b$12$XGKT3RYknxqr/KWfqvGE6eABgy0JQ4OlcIxbVa/W7J/D/Zm4dhO1i', 1, true)
+ON CONFLICT (email) DO NOTHING;
+
+-- Insert service types
 INSERT INTO service_types (name, description, estimated_duration, price) VALUES
 ('Oil Change', 'Standard oil change service including filter replacement', '1 hour', 49.99),
 ('Tire Rotation', 'Rotate tires for even wear and extended tire life', '45 minutes', 29.99),
@@ -550,11 +562,13 @@ INSERT INTO service_types (name, description, estimated_duration, price) VALUES
 ('Fluid Check/Change', 'Check and change all vehicle fluids', '1 hour', 99.99),
 ('Full Inspection', 'Complete vehicle inspection', '3 hours', 149.99);
 
+-- Insert sample service requests
 INSERT INTO service_requests (user_id, service_type_id, vehicle_id, description, status, requested_date, estimated_cost) VALUES
 (3, 1, 1, 'Need synthetic oil change and filter replacement. Vehicle has been running rough.', 'Submitted', CURRENT_DATE, 69.99),
 (3, 3, 2, 'Brakes are making squeaking noise when stopping. Need complete brake inspection.', 'In Progress', CURRENT_DATE - 2, 229.99),
 (3, 4, 3, 'Check engine light came on yesterday. Car is idling rough.', 'Completed', CURRENT_DATE - 5, 89.99);
 
+-- Insert sample contact inquiries
 INSERT INTO contact_form (customer_name, email, phone, subject, message, status, priority) VALUES
 ('John Smith', 'john.smith@email.com', '555-123-4567', 'Test Drive Request', 'I would like to schedule a test drive for the Toyota Corolla 2020. Please let me know available times.', 'Received', 'Normal'),
 ('Jane Doe', 'jane.doe@email.com', '555-987-6543', 'Financing Question', 'Do you offer financing options for the Tesla Model 3? I am interested in purchasing but need payment plan information.', 'In Progress', 'High'),
