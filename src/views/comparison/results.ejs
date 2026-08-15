@@ -1,0 +1,148 @@
+<%- include('../partials/header') %>
+
+<main>
+
+    <div class="comparison-header">
+        <h1>🚗 Vehicle Comparison</h1>
+        <a href="/compare" class="btn-new-compare">← New Comparison</a>
+    </div>
+
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <% vehicles.forEach(vehicle => { %>
+                        <th>
+                            <a href="/vehicles/<%= vehicle.slug %>" class="vehicle-link">
+                                <%= vehicle.name %>
+                            </a>
+                        </th>
+                    <% }) %>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Image Row -->
+                <tr>
+                    <td class="feature-label">Image</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value">
+                            <img src="<%= vehicle.image_url || '/images/default-car.jpg' %>" 
+                                 alt="<%= vehicle.name %>"
+                                 class="comparison-image">
+                        </td>
+                    <% }) %>
+                </tr>
+
+                <!-- Price -->
+                <tr>
+                    <td class="feature-label">Price</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value price-highlight">
+                            $<%= vehicle.price.toLocaleString() %>
+                        </td>
+                    <% }) %>
+                </tr>
+
+                <!-- Year -->
+                <tr>
+                    <td class="feature-label">Year</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value"><%= vehicle.year || 'N/A' %></td>
+                    <% }) %>
+                </tr>
+
+                <!-- Mileage -->
+                <tr>
+                    <td class="feature-label">Mileage</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value">
+                            <%= vehicle.mileage ? vehicle.mileage.toLocaleString() + ' mi' : 'N/A' %>
+                        </td>
+                    <% }) %>
+                </tr>
+
+                <!-- Transmission -->
+                <tr>
+                    <td class="feature-label">Transmission</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value"><%= vehicle.transmission || 'N/A' %></td>
+                    <% }) %>
+                </tr>
+
+                <!-- Fuel Type -->
+                <tr>
+                    <td class="feature-label">Fuel Type</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value"><%= vehicle.fuel_type || 'N/A' %></td>
+                    <% }) %>
+                </tr>
+
+                <!-- Color -->
+                <tr>
+                    <td class="feature-label">Color</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value"><%= vehicle.color || 'N/A' %></td>
+                    <% }) %>
+                </tr>
+
+                <!-- Category -->
+                <tr>
+                    <td class="feature-label">Category</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value"><%= vehicle.category_name || 'N/A' %></td>
+                    <% }) %>
+                </tr>
+
+                <!-- Description -->
+                <tr>
+                    <td class="feature-label">Description</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value description-text">
+                            <%= vehicle.description || 'No description available' %>
+                        </td>
+                    <% }) %>
+                </tr>
+
+                <!-- Specifications -->
+                <tr>
+                    <td class="feature-label">Specifications</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value spec-list">
+                            <% if (vehicle.specs && vehicle.specs.length > 0) { %>
+                                <% vehicle.specs.forEach(spec => { %>
+                                    <div class="spec-item">
+                                        <span class="spec-feature"><%= spec.feature %>:</span>
+                                        <span class="spec-value"><%= spec.value %></span>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <span class="no-specs">No specs available</span>
+                            <% } %>
+                        </td>
+                    <% }) %>
+                </tr>
+
+                <!-- Actions -->
+                <tr>
+                    <td class="feature-label">Actions</td>
+                    <% vehicles.forEach(vehicle => { %>
+                        <td class="feature-value">
+                            <a href="/vehicles/<%= vehicle.slug %>" class="btn-details">
+                                View Details →
+                            </a>
+                        </td>
+                    <% }) %>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="comparison-footer">
+        <a href="/compare" class="btn-back">← Back to Compare</a>
+        <a href="/vehicles" class="btn-browse">Browse All Vehicles</a>
+    </div>
+
+</main>
+
+<%- include('../partials/footer') %>

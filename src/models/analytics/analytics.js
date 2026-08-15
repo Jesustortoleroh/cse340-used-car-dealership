@@ -101,13 +101,14 @@ const getRecentRequests = async (userId, limit = 3) => {
     const query = `
         SELECT 
             sr.id,
-            sr.service_type,
+            st.name AS service_type,
             sr.description,
             sr.status,
             sr.created_at,
             v.name AS vehicle_name,
             v.slug AS vehicle_slug
         FROM service_requests sr
+        LEFT JOIN service_types st ON sr.service_type_id = st.id
         LEFT JOIN vehicles v ON sr.vehicle_id = v.id
         WHERE sr.user_id = $1
         ORDER BY sr.created_at DESC

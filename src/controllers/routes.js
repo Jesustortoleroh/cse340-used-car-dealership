@@ -12,6 +12,7 @@ import { requireLogin } from '../middleware/auth.js';
 import { contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation } from '../middleware/validation/forms.js';
 import { addFavoriteController, removeFavoriteController, favoritesListPage } from '../controllers/favorites/favorites.js';
 import { profilePage } from '../controllers/profile/profile.js';
+import { comparisonPage, compareVehiclesController, getVehicleDetails } from '../controllers/comparison/comparison.js';
 
 const router = Router();
 
@@ -81,6 +82,13 @@ router.use('/error', (req, res, next) => {
     next();
 });
 
+router.use('/compare', (req, res, next) => {
+    res.addStyle('<link rel="stylesheet" href="/css/comparison.css">');
+    next();
+});
+
+
+
 // Basic Pages
 router.get('/', homePage);
 router.get('/about', aboutPage);
@@ -138,6 +146,11 @@ router.post('/favorites/:vehicleId/remove', requireLogin, removeFavoriteControll
 
 // Profile routes
 router.get('/profile', requireLogin, profilePage);
+
+// Comparison routes
+router.get('/compare', comparisonPage);
+router.post('/compare', compareVehiclesController);
+router.get('/compare/:vehicleId', getVehicleDetails);
 
 
 export default router;
