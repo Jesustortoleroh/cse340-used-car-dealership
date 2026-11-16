@@ -17,6 +17,18 @@
     <%- renderStyles() %>
     <%- renderScripts() %>
 
+    <!-- ⭐ Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
     <% if (NODE_ENV.includes('dev')) { %>
     <script>
         // Get the current hostname and port from the browser
@@ -37,13 +49,15 @@
 <body>
     <!-- Main navigation header -->
     <header>
-        <nav class="main-nav">
+        <nav class="main-nav" aria-label="Main navigation">
             <div class="nav-top">
                 <!-- Mobile menu toggle button -->
                 <button
                     class="menu-toggle"
                     id="menu-toggle"
                     aria-label="Toggle navigation"
+                    aria-expanded="false"
+                    aria-controls="nav-menu"
                 >
                     ☰
                 </button>
@@ -101,7 +115,7 @@
                 <!-- Theme Toggle Button -->
                 <li class="theme-toggle-item">
                     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                        <span class="theme-icon">🌙</span>
+                        <span class="theme-icon" aria-hidden="true">🌙</span>
                     </button>
                 </li>
             </ul>
@@ -127,7 +141,7 @@
                 <% if (Array.isArray(messages[type])) { %>
                     <% messages[type].forEach(message => { %>
                         <% if (message && message.trim() !== '') { %>
-                            <div class="flash <%= type %>">
+                            <div class="flash <%= type %>" role="alert">
                                 <%= message %>
                             </div>
                         <% } %>

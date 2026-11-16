@@ -9,30 +9,30 @@
         <!-- ==========================================
         Analytics Cards
         ========================================== -->
-        <section class="analytics-section">
+        <section class="analytics-section" aria-label="Dashboard Analytics">
 
             <!-- Customer Analytics -->
             <div class="analytics-grid">
 
                 <div class="analytics-card">
-                    <div class="analytics-icon">❤️</div>
+                    <div class="analytics-icon" aria-hidden="true">❤️</div>
                     <div class="analytics-number"><%= analytics.customer.favorites %></div>
                     <div class="analytics-label">Favorite Vehicles</div>
-                    <a href="/favorites" class="analytics-link">View All →</a>
+                    <a href="/favorites" class="analytics-link" aria-label="View all favorite vehicles">View All →</a>
                 </div>
 
                 <div class="analytics-card">
-                    <div class="analytics-icon">⭐</div>
+                    <div class="analytics-icon" aria-hidden="true">⭐</div>
                     <div class="analytics-number"><%= analytics.customer.reviews %></div>
                     <div class="analytics-label">Reviews Submitted</div>
-                    <a href="/vehicles" class="analytics-link">Write Review →</a>
+                    <a href="/vehicles" class="analytics-link" aria-label="Write a new review">Write Review →</a>
                 </div>
 
                 <div class="analytics-card">
-                    <div class="analytics-icon">🔧</div>
+                    <div class="analytics-icon" aria-hidden="true">🔧</div>
                     <div class="analytics-number"><%= analytics.customer.requests %></div>
                     <div class="analytics-label">Service Requests</div>
-                    <a href="/service-requests" class="analytics-link">View All →</a>
+                    <a href="/service-requests" class="analytics-link" aria-label="View all service requests">View All →</a>
                 </div>
 
             </div>
@@ -41,24 +41,24 @@
             <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
                 <div class="analytics-grid employee-analytics">
                     <div class="analytics-card">
-                        <div class="analytics-icon">📨</div>
+                        <div class="analytics-icon" aria-hidden="true">📨</div>
                         <div class="analytics-number"><%= analytics.employee.openInquiries %></div>
                         <div class="analytics-label">Open Inquiries</div>
-                        <a href="/contact/responses" class="analytics-link">View All →</a>
+                        <a href="/contact/responses" class="analytics-link" aria-label="View open inquiries">View All →</a>
                     </div>
 
                     <div class="analytics-card">
-                        <div class="analytics-icon">🔧</div>
+                        <div class="analytics-icon" aria-hidden="true">🔧</div>
                         <div class="analytics-number"><%= analytics.employee.pendingRequests %></div>
                         <div class="analytics-label">Pending Requests</div>
-                        <a href="/service-requests" class="analytics-link">View All →</a>
+                        <a href="/service-requests" class="analytics-link" aria-label="View pending service requests">View All →</a>
                     </div>
 
                     <div class="analytics-card">
-                        <div class="analytics-icon">🚗</div>
+                        <div class="analytics-icon" aria-hidden="true">🚗</div>
                         <div class="analytics-number"><%= analytics.employee.totalVehicles %></div>
                         <div class="analytics-label">Total Vehicles</div>
-                        <a href="/vehicles" class="analytics-link">View All →</a>
+                        <a href="/vehicles" class="analytics-link" aria-label="View all vehicles">View All →</a>
                     </div>
                 </div>
             <% } %>
@@ -67,31 +67,31 @@
             <% if (user.roleName === 'owner') { %>
                 <div class="analytics-grid owner-analytics">
                     <div class="analytics-card">
-                        <div class="analytics-icon">👥</div>
+                        <div class="analytics-icon" aria-hidden="true">👥</div>
                         <div class="analytics-number"><%= analytics.owner.totalUsers %></div>
                         <div class="analytics-label">Total Users</div>
-                        <a href="/register/list" class="analytics-link">View All →</a>
+                        <a href="/register/list" class="analytics-link" aria-label="View all users">View All →</a>
                     </div>
 
                     <div class="analytics-card">
-                        <div class="analytics-icon">🚗</div>
+                        <div class="analytics-icon" aria-hidden="true">🚗</div>
                         <div class="analytics-number"><%= analytics.owner.totalVehicles %></div>
                         <div class="analytics-label">Total Vehicles</div>
-                        <a href="/vehicles" class="analytics-link">View All →</a>
+                        <a href="/vehicles" class="analytics-link" aria-label="View all vehicles">View All →</a>
                     </div>
 
                     <div class="analytics-card">
-                        <div class="analytics-icon">🏢</div>
+                        <div class="analytics-icon" aria-hidden="true">🏢</div>
                         <div class="analytics-number"><%= analytics.owner.totalDealers %></div>
                         <div class="analytics-label">Total Dealers</div>
-                        <a href="/dealers" class="analytics-link">View All →</a>
+                        <a href="/dealers" class="analytics-link" aria-label="View all dealers">View All →</a>
                     </div>
 
                     <div class="analytics-card">
-                        <div class="analytics-icon">⭐</div>
+                        <div class="analytics-icon" aria-hidden="true">⭐</div>
                         <div class="analytics-number"><%= analytics.owner.totalReviews %></div>
                         <div class="analytics-label">Total Reviews</div>
-                        <a href="/vehicles" class="analytics-link">View All →</a>
+                        <a href="/vehicles" class="analytics-link" aria-label="View all reviews">View All →</a>
                     </div>
                 </div>
             <% } %>
@@ -99,14 +99,14 @@
         </section>
 
         <!-- ==========================================
-        Dashboard Container (tu código existente)
+        Dashboard Container
         ========================================== -->
         <div class="dashboard-container">
 
             <!-- User Profile -->
-            <section class="user-profile">
+            <section class="user-profile" aria-labelledby="user-profile-title">
 
-             <h2><%= greeting %></h2>
+             <h2 id="user-profile-title"><%= greeting %></h2>
              
              <p class="dashboard-subtitle">
 
@@ -124,99 +124,98 @@
 
            </p>
 
-                <div class="user-details">
+                <!-- Using Description List for better semantics -->
+                <dl class="user-details">
 
                     <div class="detail-item">
-                        <span class="label">Name:</span>
-                        <span class="value">
-                            <%= user.name %>
-                        </span>
+                        <dt class="label">Name:</dt>
+                        <dd class="value"><%= user.name %></dd>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">Email:</span>
-                        <span class="value">
-                            <%= user.email %>
-                        </span>
+                        <dt class="label">Email:</dt>
+                        <dd class="value"><%= user.email %></dd>
                     </div>
 
                    <div class="detail-item">
-                        <span class="label">Role:</span>
-                        <span class="role-badge role-<%= user.roleName %>">
-                            <%= user.roleName %>
-                        </span>
+                        <dt class="label">Role:</dt>
+                        <dd class="value">
+                            <span class="role-badge role-<%= user.roleName %>">
+                                <%= user.roleName %>
+                            </span>
+                        </dd>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">Member Since:</span>
-                        <span class="value">
+                        <dt class="label">Member Since:</dt>
+                        <dd class="value">
                             <%= new Date(user.created_at).toLocaleDateString() %>
-                        </span>
+                        </dd>
                     </div>
 
-                </div>
+                </dl>
 
             </section>
 
             <!-- Dashboard Cards Grid -->
-            <section class="dashboard-cards">
+            <section class="dashboard-cards" aria-labelledby="quick-access-title">
 
-                <h2>Quick Access</h2>
+                <h2 id="quick-access-title">Quick Access</h2>
 
                 <div class="cards-grid">
 
                     <!-- My Profile -->
                     <a href="/profile" class="dashboard-card">
-                        <div class="card-icon">👤</div>
+                        <div class="card-icon" aria-hidden="true">👤</div>
                         <h3>My Profile</h3>
                         <p>View account information</p>
                     </a>
 
                     <!-- Browse Vehicles -->
                     <a href="/vehicles" class="dashboard-card">
-                        <div class="card-icon">🚗</div>
+                        <div class="card-icon" aria-hidden="true">🚗</div>
                         <h3>Browse Vehicles</h3>
                         <p>Explore our inventory</p>
                     </a>
 
                     <!-- View Dealers -->
                     <a href="/dealers" class="dashboard-card">
-                        <div class="card-icon">🏪</div>
+                        <div class="card-icon" aria-hidden="true">🏪</div>
                         <h3>View Dealers</h3>
                         <p>Find dealerships</p>
                     </a>
 
                     <!-- Favorites Card -->
                     <a href="/favorites" class="dashboard-card">
-                        <div class="card-icon">❤️</div>
+                        <div class="card-icon" aria-hidden="true">❤️</div>
                         <h3>My Favorites</h3>
                         <p>View your saved vehicles</p>
                     </a>
 
                     <!-- Service Requests -->
                     <a href="/service-requests" class="dashboard-card">
-                        <div class="card-icon">🔧</div>
+                        <div class="card-icon" aria-hidden="true">🔧</div>
                         <h3>Service Requests</h3>
                         <p>Manage your requests</p>
                     </a>
 
                     <!-- Submit Service Request -->
                     <a href="/service-requests/create" class="dashboard-card">
-                        <div class="card-icon">📝</div>
+                        <div class="card-icon" aria-hidden="true">📝</div>
                         <h3>Submit Request</h3>
                         <p>New service request</p>
                     </a>
 
                     <!-- Contact Dealership -->
                     <a href="/contact" class="dashboard-card">
-                        <div class="card-icon">📧</div>
+                        <div class="card-icon" aria-hidden="true">📧</div>
                         <h3>Contact</h3>
                         <p>Get in touch</p>
                     </a>
 
                     <!-- Compare Vehicles -->
                     <a href="/compare" class="dashboard-card">
-                        <div class="card-icon">📊</div>
+                        <div class="card-icon" aria-hidden="true">📊</div>
                         <h3>Compare Vehicles</h3>
                         <p>Compare side by side</p>
                     </a>
@@ -226,70 +225,30 @@
             </section>
 
             <!-- Customer Tools -->
-            <section class="dashboard-actions">
+            <section class="dashboard-actions" aria-labelledby="customer-tools-title">
 
-                <h2>Customer Tools</h2>
+                <h2 id="customer-tools-title">Customer Tools</h2>
 
                 <ul>
-
-                    <li>
-                        <a href="/vehicles">
-                            Browse Vehicles
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/dealers">
-                            View Dealers
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/service-requests">
-                            Service Requests
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/service-requests/create">
-                            Submit Service Request
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="/contact">
-                            Contact Dealership
-                        </a>
-                    </li>
-
+                    <li><a href="/vehicles">Browse Vehicles</a></li>
+                    <li><a href="/dealers">View Dealers</a></li>
+                    <li><a href="/service-requests">Service Requests</a></li>
+                    <li><a href="/service-requests/create">Submit Service Request</a></li>
+                    <li><a href="/contact">Contact Dealership</a></li>
                 </ul>
 
             </section>
 
             <!-- Employee & Owner Tools -->
-            <% if (
-                user.roleName === 'employee' ||
-                user.roleName === 'owner'
-            ) { %>
+            <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
 
-                <section class="dashboard-actions">
+                <section class="dashboard-actions" aria-labelledby="staff-tools-title">
 
-                    <h2>Staff Tools</h2>
+                    <h2 id="staff-tools-title">Staff Tools</h2>
 
                     <ul>
-
-                        <li>
-                            <a href="/contact/responses">
-                                View Contact Responses
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="/service-requests">
-                                Manage Service Requests
-                            </a>
-                        </li>
-
+                        <li><a href="/contact/responses">View Contact Responses</a></li>
+                        <li><a href="/service-requests">Manage Service Requests</a></li>
                     </ul>
 
                 </section>
@@ -299,18 +258,12 @@
             <!-- Owner Tools -->
             <% if (user.roleName === 'owner') { %>
 
-                <section class="dashboard-actions">
+                <section class="dashboard-actions" aria-labelledby="admin-tools-title">
 
-                    <h2>Administration</h2>
+                    <h2 id="admin-tools-title">Administration</h2>
 
                     <ul>
-
-                        <li>
-                            <a href="/register/list">
-                                Manage Users
-                            </a>
-                        </li>
-
+                        <li><a href="/register/list">Manage Users</a></li>
                     </ul>
 
                 </section>
@@ -321,9 +274,7 @@
 
     <% } else { %>
 
-        <p>
-            Please log in to view your dashboard.
-        </p>
+        <p>Please log in to view your dashboard.</p>
 
     <% } %>
 
