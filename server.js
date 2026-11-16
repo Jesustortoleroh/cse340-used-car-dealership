@@ -35,10 +35,10 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"], // Adjust based on your inline scripts (like dark mode)
-            styleSrc: ["'self'", "'unsafe-inline'"],  // Adjust based on your inline styles
+            scriptSrc: ["'self'", "'unsafe-inline'"], 
+            styleSrc: ["'self'", "'unsafe-inline'"],  
             imgSrc: ["'self'", "data:", "https:"],
-            connectSrc: ["'self'", "ws:", "wss:"],    // Allow WebSocket for dev live-reload
+            connectSrc: ["'self'", "ws:", "wss:"],    
         },
     },
 }));
@@ -52,10 +52,7 @@ app.use(session({
     store: new pgSession({
         conObject: {
             connectionString: process.env.DB_URL,
-            // SSL configuration for Neon
-            ssl: {
-                require: true
-            }
+            ssl: { require: true }
         },
         tableName: 'session',
         createTableIfMissing: true
@@ -64,7 +61,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: NODE_ENV === 'production', // Only use secure cookies in production
+        secure: NODE_ENV === 'production', 
         httpOnly: true,
         sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000
@@ -84,19 +81,18 @@ app.set('views', path.join(__dirname, 'src/views'));
 /**
  * 5. Custom Global Middleware
  */
+// Generate CSRF token for every request (must be after session middleware)
+app.use(attachCsrfToken);
+
 // Global middleware (sets res.locals variables)
 app.use(addLocalVariables);
 
 // Flash message middleware (must come after session and global middleware)
 app.use(flash);
 
-// Generate CSRF token for every request (must be after session middleware)
-app.use(attachCsrfToken);
-
 /**
  * 6. Rate Limiting
  */
-// Global rate limiter (e.g., 100 requests per 15 minutes per IP)
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
     max: 100, 
@@ -110,31 +106,31 @@ app.use(globalLimiter);
 /**
  * 7. Routes
  */
-// Apply CSRF protection to all routes
-app.use('/', csrfProtection, routes);
+const csrfMiddleware = (req, res, next) => {
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+        return csrfProtection(req, res, next);
+    }
+    next();
+};
+
+app.use('/', csrfMiddleware, routes);
 
 /**
  * 8. Error Handling
  */
-
-// 404 handler
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');
     err.status = 404;
     next(err);
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
-    // Prevent infinite loops; if a response has already been sent, do nothing
     if (res.headersSent || res.finished) {
         return next(err);
     }
 
-    // Determine status and template
     const status = err.status || err.statusCode || 500;
     
-    // Map error codes to templates and titles
     let template = '500';
     let title = 'Server Error';
     
@@ -156,7 +152,6 @@ app.use((err, req, res, next) => {
             title = 'Server Error';
     }
 
-    // Prepare data for the template
     const context = {
         title,
         error: NODE_ENV === 'production' ? 'An error occurred.' : err.message,
@@ -166,11 +161,9 @@ app.use((err, req, res, next) => {
         NODE_ENV
     };
 
-    // Render the appropriate error template with fallback
     try {
         res.status(status).render(`errors/${template}`, context);
     } catch (renderErr) {
-        // If rendering fails, send a simple error page instead
         if (!res.headersSent) {
             res.status(status).send(`
                 <!DOCTYPE html>
@@ -222,18 +215,12 @@ if (NODE_ENV === 'development') {
  */
 app.listen(PORT, async () => {
     try {
-        // 1. Verify database connection
         await testConnection();
-        
-        // 2. Run setup only if needed (seeds the DB if empty)
         await setupDatabase();
-        
-        // 3. Start automatic session cleanup only after DB is ready
         startSessionCleanup();
-        
         console.log(`Server is running on http://127.0.0.1:${PORT}`);
     } catch (error) {
         console.error('❌ Failed to start server:', error);
-        process.exit(1); // Exit with error code so hosting providers know it failed
+        process.exit(1);
     }
 });
