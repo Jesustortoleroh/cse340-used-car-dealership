@@ -54,53 +54,6 @@
     margin-top: 1rem;
 }
 
-.btn-primary,
-.btn-secondary {
-    padding: 0.9rem 1.25rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    display: inline-block;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: var(--text-white);
-}
-
-.btn-primary:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-.btn-secondary {
-    background: var(--bg-nav);
-    color: var(--text-white);
-}
-
-.btn-secondary:hover {
-    background: var(--text-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.3);
-}
-
-.btn-primary:active,
-.btn-secondary:active {
-    transform: translateY(0);
-}
-
-/* Accesibilidad para navegación por teclado */
-.btn-primary:focus-visible,
-.btn-secondary:focus-visible {
-    outline: 3px solid #60a5fa;
-    outline-offset: 2px;
-}
-
 /* ==========================================
    Error Details (500.ejs)
 ========================================== */
@@ -130,7 +83,7 @@
 }
 
 .error-details summary:focus-visible {
-    outline: 3px solid #60a5fa;
+    outline: 3px solid var(--primary);
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -191,12 +144,6 @@
         max-width: 300px;
     }
 
-    .btn-primary,
-    .btn-secondary {
-        width: 100%;
-        text-align: center;
-    }
-
     .error-details {
         padding: 0.75rem;
         margin-top: 1.5rem;
@@ -219,16 +166,6 @@
 @media (prefers-reduced-motion: reduce) {
     .error-icon {
         animation: none;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-        transition: none;
-    }
-
-    .btn-primary:hover,
-    .btn-secondary:hover {
-        transform: none;
     }
 }
 

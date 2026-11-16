@@ -1,19 +1,20 @@
 /* ==========================================
-   Vehicles catalog styles using native CSS nesting
+   Vehicles catalog styles
 ========================================== */
-
 .vehicle-list {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     max-width: 1000px;
     margin: 0 auto;
 
     .vehicle-card {
-        border-radius: 10px;
+        border-radius: var(--card-radius);
         overflow: hidden;
         background: var(--bg-card);
         box-shadow: var(--card-shadow);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: var(--transition);
+        text-align: center; /* Unificado */
 
         &:hover {
             transform: translateY(-5px);
@@ -70,11 +71,20 @@
                 text-decoration: none;
                 font-weight: bold;
                 border-radius: 8px;
-                transition: background-color 0.2s ease, transform 0.2s ease;
+                transition: var(--transition);
 
                 &:hover {
                     background-color: var(--primary-hover);
                     transform: scale(1.02);
+                }
+                
+                &:active {
+                    transform: scale(0.98);
+                }
+                
+                &:focus-visible {
+                    outline: 3px solid var(--primary);
+                    outline-offset: 2px;
                 }
             }
         }
@@ -99,19 +109,22 @@
     }
 }
 
+/* Unified Detail Image */
 .vehicle-detail-image {
-    text-align: center;
-    margin-bottom: 1.5rem;
-
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: var(--shadow-sm);
+    
     img {
         width: 100%;
         max-width: 600px;
         border-radius: 10px;
     }
-}
-
-.vehicle-card {
-    text-align: center;
 }
 
 /* ==========================================
@@ -167,6 +180,12 @@
         &:hover {
             text-decoration: underline;
         }
+        
+        &:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
     }
 }
 
@@ -176,17 +195,6 @@
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
-}
-
-.vehicle-detail-image {
-    width: 100%;
-    max-width: 700px;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-    border-radius: 12px;
-    object-fit: cover;
-    box-shadow: var(--shadow-sm);
 }
 
 /* ==========================================
@@ -219,6 +227,11 @@
         color: var(--text-primary);
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
+        &:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
         &:focus {
             outline: none;
             border-color: var(--primary);
@@ -238,6 +251,11 @@
         cursor: pointer;
         transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
+        &:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
         &:focus {
             outline: none;
             border-color: var(--primary);
@@ -253,10 +271,20 @@
         color: var(--text-white);
         font-weight: bold;
         cursor: pointer;
-        transition: background-color 0.2s ease;
+        transition: var(--transition);
 
         &:hover {
             background: var(--primary);
+            transform: translateY(-1px);
+        }
+        
+        &:active {
+            transform: translateY(0);
+        }
+        
+        &:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
         }
     }
 
@@ -267,10 +295,21 @@
         background: var(--text-muted);
         color: var(--text-white);
         font-weight: bold;
-        transition: background-color 0.2s ease;
+        transition: var(--transition);
+        display: inline-block;
 
         &:hover {
             background: var(--text-secondary);
+            transform: translateY(-1px);
+        }
+        
+        &:active {
+            transform: translateY(0);
+        }
+        
+        &:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
         }
     }
 }
@@ -331,6 +370,12 @@
         &:hover {
             text-decoration: underline;
         }
+        
+        &:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
     }
 }
 
@@ -355,5 +400,4 @@
         margin-left: 0.25rem;
     }
 }
-
 

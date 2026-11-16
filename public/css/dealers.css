@@ -10,7 +10,7 @@
 .dealer-card-detail {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     padding: 2rem;
     box-shadow: var(--card-shadow);
     transition: var(--transition);
@@ -37,50 +37,27 @@
     gap: 1rem;
     justify-content: center;
     margin-top: 2rem;
+    flex-wrap: wrap;
 }
 
-.back-button,
-.inventory-button {
-    display: inline-block;
-    padding: 0.75rem 1.25rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: var(--transition);
-}
-
-.back-button {
-    background-color: var(--text-muted);
-    color: var(--text-white);
-}
-
-.back-button:hover {
-    background-color: var(--text-secondary);
-}
-
-.inventory-button {
-    background-color: var(--primary);
-    color: var(--text-white);
-}
-
-.inventory-button:hover {
-    background-color: var(--primary-hover);
-}
+/* Note: We are reusing .btn-secondary and .btn-primary from main.css,
+   but we need specific margin/padding if they don't have them globally.
+   Assuming they are standard buttons now. */
 
 /* ==========================================
-   Dealer List
+   Dealer List (Grid)
 ========================================== */
 .dealer-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .dealer-card {
-    width: 300px;
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: var(--card-radius);
     padding: 15px;
     background: var(--bg-card);
     box-shadow: var(--card-shadow);
@@ -112,7 +89,7 @@
     height: auto;
     display: block;
     margin: 20px auto;
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     box-shadow: var(--shadow-sm);
 }
 
@@ -162,7 +139,7 @@
     text-align: center;
     padding: 3rem 1.5rem;
     background: var(--bg-hover);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     border: 1px solid var(--border-color);
     transition: var(--transition);
 }
@@ -182,85 +159,4 @@
 .empty-state .empty-sub {
     font-size: 0.95rem;
     color: var(--text-muted);
-}
-
-/* ==========================================
-   Vehicle Cards (reused from vehicles.css)
-========================================== */
-.vehicle-list {
-    display: grid;
-    gap: 1.5rem;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.vehicle-card {
-    border-radius: 10px;
-    overflow: hidden;
-    background: var(--bg-card);
-    box-shadow: var(--card-shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.vehicle-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--card-shadow-hover);
-}
-
-.vehicle-card .vehicle-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.vehicle-card .vehicle-info {
-    padding: 1rem;
-}
-
-.vehicle-card .vehicle-info h3 {
-    margin: 0 0 0.5rem 0;
-}
-
-.vehicle-card .vehicle-info h3 a {
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-.vehicle-card .vehicle-info h3 a:hover {
-    color: var(--primary);
-}
-
-.vehicle-card .vehicle-info p {
-    margin: 0.2rem 0;
-    color: var(--text-secondary);
-}
-
-.vehicle-card .vehicle-price {
-    margin-top: 0.7rem;
-    font-weight: bold;
-    color: var(--primary);
-    font-size: 1.1rem;
-}
-
-.vehicle-card .vehicle-category {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.vehicle-card .btn-view-details {
-    display: inline-block;
-    margin-top: 0.75rem;
-    padding: 0.6rem 1.25rem;
-    background-color: var(--primary);
-    color: var(--text-white);
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 8px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.vehicle-card .btn-view-details:hover {
-    background-color: var(--primary-hover);
-    transform: scale(1.02);
 }

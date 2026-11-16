@@ -8,11 +8,11 @@
     margin-top: 2rem;
 }
 
-/* Cards */
+/* Cards base styles */
 .user-profile,
 .dashboard-actions {
     background-color: var(--bg-card);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     padding: 1.5rem;
     box-shadow: var(--card-shadow);
     transition: var(--transition);
@@ -38,7 +38,7 @@
     margin-bottom: 1.5rem;
 }
 
-/* User Details */
+/* User Details (using DL, DT, DD semantics) */
 .user-details {
     display: grid;
     gap: 1rem;
@@ -46,8 +46,9 @@
 }
 
 .detail-item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Label | Value */
+    gap: 1rem;
     align-items: center;
     padding: 0.75rem 1rem;
     background-color: var(--bg-hover);
@@ -58,10 +59,13 @@
 .label {
     font-weight: bold;
     color: var(--text-primary);
+    margin: 0;
 }
 
 .value {
     color: var(--text-secondary);
+    margin: 0;
+    font-weight: 600;
 }
 
 /* Dashboard Links */
@@ -83,7 +87,7 @@
     text-decoration: none;
     font-weight: bold;
     border-radius: 8px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: var(--transition);
 }
 
 .dashboard-actions a:hover {
@@ -91,52 +95,8 @@
     transform: translateY(-2px);
 }
 
-/* Role Highlight */
-.detail-item .value {
-    font-weight: 600;
-}
-
-.request-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn-edit {
-    background: var(--info);
-    color: var(--text-white);
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s;
-}
-
-.btn-edit:hover {
-    background: var(--primary-hover);
-}
-
-.btn-delete {
-    background: var(--error);
-    color: var(--text-white);
-    padding: 8px 15px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background 0.3s;
-}
-
-.btn-delete:hover {
-    background: #c0392b;
-}
-
-.delete-form {
-    display: inline;
-}
-
 /* ==========================================
-Role Badges
+   Role Badges
 ========================================== */
 .role-badge {
     display: inline-block;
@@ -148,21 +108,66 @@ Role Badges
 
 .role-customer {
     background: var(--info-bg);
-    color: var(--info);
+    color: var(--info-text);
 }
 
 .role-employee {
     background: var(--success-bg);
-    color: var(--success);
+    color: var(--success-text);
 }
 
 .role-owner {
     background: var(--warning-bg);
-    color: var(--warning);
+    color: var(--warning-text);
 }
 
 /* ==========================================
-Dashboard Cards Grid
+   Buttons (Edit / Delete)
+========================================== */
+.request-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-edit {
+    background: var(--info);
+    color: var(--text-white);
+}
+
+.btn-edit:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-delete {
+    background: var(--error);
+    color: var(--text-white);
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+.delete-form {
+    display: inline;
+}
+
+/* ==========================================
+   Dashboard Cards Grid (Quick Access)
 ========================================== */
 .dashboard-cards {
     margin: 0 0 1rem 0;
@@ -186,10 +191,10 @@ Dashboard Cards Grid
     display: block;
     text-decoration: none;
     background-color: var(--bg-card);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     padding: 1.5rem;
     box-shadow: var(--card-shadow);
-    transition: all 0.3s ease;
+    transition: var(--transition);
     text-align: center;
     border: 2px solid transparent;
 }
@@ -198,6 +203,15 @@ Dashboard Cards Grid
     transform: translateY(-4px);
     box-shadow: var(--card-shadow-hover);
     border-color: var(--primary);
+}
+
+/* Accessibility: Focus states for keyboard navigation */
+.dashboard-card:focus-visible,
+.dashboard-actions a:focus-visible,
+.btn-edit:focus-visible,
+.btn-delete:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
 }
 
 .card-icon {
@@ -219,7 +233,7 @@ Dashboard Cards Grid
 }
 
 /* ==========================================
-Analytics Section
+   Analytics Section
 ========================================== */
 .analytics-section {
     margin-bottom: 2rem;
@@ -235,10 +249,10 @@ Analytics Section
 .analytics-card {
     background: var(--bg-card);
     padding: 1.5rem 1rem;
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     text-align: center;
     box-shadow: var(--card-shadow);
-    transition: all 0.3s ease;
+    transition: var(--transition);
     border: 1px solid transparent;
 }
 
@@ -280,23 +294,21 @@ Analytics Section
     text-decoration: underline;
 }
 
-/* Employee analytics */
+/* Employee & Owner specific styling */
 .employee-analytics .analytics-card {
     border-left: 4px solid var(--primary);
 }
 
-/* Owner analytics */
 .owner-analytics .analytics-card {
     border-left: 4px solid var(--warning);
 }
 
 /* ==========================================
-Responsive
+   Responsive Design
 ========================================== */
 @media (max-width: 768px) {
     .detail-item {
-        flex-direction: column;
-        align-items: flex-start;
+        grid-template-columns: 1fr; /* Stack label and value vertically on mobile */
         gap: 0.25rem;
     }
 
@@ -321,7 +333,6 @@ Responsive
         font-size: 1rem;
     }
 
-    /* Analytics responsive */
     .analytics-grid {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 1rem;
@@ -358,7 +369,6 @@ Responsive
         font-size: 0.8rem;
     }
 
-    /* Analytics responsive */
     .analytics-grid {
         grid-template-columns: 1fr 1fr;
         gap: 0.75rem;
