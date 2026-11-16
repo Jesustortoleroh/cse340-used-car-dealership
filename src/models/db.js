@@ -22,7 +22,8 @@ pool.on('error', (err) => {
     process.exit(-1);
 });
 
-let db = null;
+// Variable to hold the database interface (wrapped or raw pool)
+let db;
 
 // Ensure NODE_ENV exists before using .includes to avoid errors
 if (process.env.NODE_ENV && process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {

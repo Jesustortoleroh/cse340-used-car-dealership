@@ -9,7 +9,7 @@ const contactValidation = [
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s\'-]+$/)
+        .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
 
     body('email')
@@ -87,7 +87,7 @@ const registrationValidation = [
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s\'-]+$/)
+        .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
 
     body('email')
@@ -112,7 +112,7 @@ const registrationValidation = [
         .withMessage('Password must contain at least one uppercase letter')
         .matches(/[a-z]/)
         .withMessage('Password must contain at least one lowercase letter')
-        .matches(/[!@#$%^&*()_+\-=[\]{};':"\|,.<>\/?]/)
+        .matches(/[!@#$%^&*()_+\-=[\]{};':"|,.<>/?]/)
         .withMessage('Password must contain at least one special character'),
 
     body('passwordConfirm')
@@ -131,7 +131,7 @@ const updateAccountValidation = [
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s\'-]+$/)
+        .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
 
     body('email')

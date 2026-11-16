@@ -15,13 +15,13 @@ const setupDatabase = async () => {
      * Check if vehicles table has any rows and wrap in try-catch to handle cases
      * where table doesn't exist yet.
      */
-    let hasData = false;
+    let hasData;
     try {
         const result = await db.query(
             "SELECT EXISTS (SELECT 1 FROM vehicles LIMIT 1) as has_data"
         );
         hasData = result.rows[0]?.has_data || false;
-    } catch (error) {
+    } catch {
         /**
          * If query fails (e.g., table doesn't exist), treat the same as no data.
          * This allows the seed process to proceed.
@@ -29,7 +29,6 @@ const setupDatabase = async () => {
         hasData = false;
     }
     
-    // ⭐ CORREGIDO: Usar hasData en lugar de false
     if (hasData) {
         console.log('Vehicles database already seeded ✅');
         return true;

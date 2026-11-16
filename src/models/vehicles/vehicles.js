@@ -3,19 +3,10 @@ import db from '../db.js';
 /**
  * Get all vehicles with category information
  */
-const getVehicles = async (
-    category = null,
-    sortBy = 'price'
-) => {
+const getVehicles = async (category = null, sortBy = 'price') => {
+    const whereClause = category ? 'WHERE LOWER(c.name) = LOWER($1)' : '';
 
-    const whereClause = category
-        ? 'WHERE LOWER(c.name) = LOWER($1)'
-        : '';
-
-    const orderByClause =
-        sortBy === 'name'
-            ? 'v.name'
-            : 'v.price';
+    const orderByClause = sortBy === 'name' ? 'v.name' : 'v.price';
 
     const query = `
         SELECT
@@ -36,14 +27,9 @@ const getVehicles = async (
         ORDER BY ${orderByClause}
     `;
 
-    const params = category
-        ? [category]
-        : [];
+    const params = category ? [category] : [];
 
-    const result = await db.query(
-        query,
-        params
-    );
+    const result = await db.query(query, params);
 
     return result.rows;
 };
@@ -51,12 +37,7 @@ const getVehicles = async (
 /**
  * Search vehicles by name, category, or description
  */
-const searchVehicles = async (
-    searchTerm,
-    category = null,
-    sortBy = 'price'
-) => {
-
+const searchVehicles = async (searchTerm, category = null, sortBy = 'price') => {
     // Build WHERE clause for search
     let whereClause = `
         WHERE 
@@ -64,20 +45,17 @@ const searchVehicles = async (
             OR LOWER(v.description) LIKE LOWER($1)
     `;
 
-    let params = [`%${searchTerm}%`];
-    let paramIndex = 2;
+    const params = [`%${searchTerm}%`];
 
     // Add category filter if provided
     if (category && category !== 'All' && category !== 'all') {
-        whereClause += ` AND LOWER(c.name) = LOWER($${paramIndex})`;
+        // Use params.length + 1 to dynamically get the next placeholder index
+        const nextIndex = params.length + 1;
+        whereClause += ` AND LOWER(c.name) = LOWER($${nextIndex})`;
         params.push(category);
-        paramIndex++;
     }
 
-    const orderByClause =
-        sortBy === 'name'
-            ? 'v.name'
-            : 'v.price';
+    const orderByClause = sortBy === 'name' ? 'v.name' : 'v.price';
 
     const query = `
         SELECT
@@ -98,10 +76,7 @@ const searchVehicles = async (
         ORDER BY ${orderByClause}
     `;
 
-    const result = await db.query(
-        query,
-        params
-    );
+    const result = await db.query(query, params);
 
     return result.rows;
 };
@@ -109,11 +84,7 @@ const searchVehicles = async (
 /**
  * Get vehicle by slug
  */
-const getVehicleBySlug = async (
-    slug,
-    sort = 'feature'
-) => {
-
+const getVehicleBySlug = async (slug, sort = 'feature') => {
     const query = `
         SELECT
             v.id,
@@ -139,26 +110,18 @@ const getVehicleBySlug = async (
         WHERE v.slug = $1
     `;
 
-    const result = await db.query(
-        query,
-        [slug]
-    );
+    const result = await db.query(query, [slug]);
 
     if (result.rows.length === 0) {
         return null;
     }
 
-    const vehicle =
-        result.rows[0];
+    const vehicle = result.rows[0];
 
-    const orderBy =
-        sort === 'value'
-            ? 'value'
-            : 'feature';
+    const orderBy = sort === 'value' ? 'value' : 'feature';
 
-    const specsResult =
-        await db.query(
-            `
+    const specsResult = await db.query(
+        `
             SELECT
                 feature,
                 value
@@ -166,11 +129,10 @@ const getVehicleBySlug = async (
             WHERE vehicle_id = $1
             ORDER BY ${orderBy}
             `,
-            [vehicle.id]
-        );
+        [vehicle.id]
+    );
 
-    vehicle.specs =
-        specsResult.rows;
+    vehicle.specs = specsResult.rows;
 
     return vehicle;
 };
@@ -178,10 +140,7 @@ const getVehicleBySlug = async (
 /**
  * Get vehicle by ID
  */
-const getVehicleById = async (
-    vehicleId
-) => {
-
+const getVehicleById = async (vehicleId) => {
     const query = `
         SELECT
             id,
@@ -193,10 +152,7 @@ const getVehicleById = async (
         WHERE id = $1
     `;
 
-    const result = await db.query(
-        query,
-        [vehicleId]
-    );
+    const result = await db.query(query, [vehicleId]);
 
     return result.rows[0] || null;
 };
@@ -211,27 +167,12 @@ const getAllVehicles = async () => {
 /**
  * Get vehicles by category
  */
-const getVehiclesByCategory = async (
-    category
-) => {
-
-    if (
-        !category ||
-        category === 'All' ||
-        category === 'all'
-    ) {
+const getVehiclesByCategory = async (category) => {
+    if (!category || category === 'All' || category === 'all') {
         return await getVehicles();
     }
 
-    return await getVehicles(
-        category
-    );
+    return await getVehicles(category);
 };
 
-export {
-    getAllVehicles,
-    getVehiclesByCategory,
-    getVehicleBySlug,
-    getVehicleById,
-    searchVehicles  
-};
+export { getAllVehicles, getVehiclesByCategory, getVehicleBySlug, getVehicleById, searchVehicles };

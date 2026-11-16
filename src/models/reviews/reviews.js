@@ -4,7 +4,6 @@ import db from '../db.js';
  * Get all reviews for a vehicle
  */
 const getReviewsByVehicleId = async (vehicleId) => {
-
     const query = `
         SELECT
             r.id,
@@ -25,10 +24,7 @@ const getReviewsByVehicleId = async (vehicleId) => {
         ORDER BY r.created_at DESC
     `;
 
-    const result = await db.query(
-        query,
-        [vehicleId]
-    );
+    const result = await db.query(query, [vehicleId]);
 
     return result.rows;
 };
@@ -37,7 +33,6 @@ const getReviewsByVehicleId = async (vehicleId) => {
  * Get a single review by ID
  */
 const getReviewById = async (reviewId) => {
-
     const query = `
         SELECT
             id,
@@ -53,10 +48,7 @@ const getReviewById = async (reviewId) => {
         WHERE id = $1
     `;
 
-    const result = await db.query(
-        query,
-        [reviewId]
-    );
+    const result = await db.query(query, [reviewId]);
 
     return result.rows[0] || null;
 };
@@ -64,13 +56,7 @@ const getReviewById = async (reviewId) => {
 /**
  * Create a new review
  */
-const createReview = async (
-    userId,
-    vehicleId,
-    rating,
-    comment
-) => {
-
+const createReview = async (userId, vehicleId, rating, comment) => {
     const query = `
         INSERT INTO reviews (
             user_id,
@@ -84,15 +70,7 @@ const createReview = async (
         RETURNING *
     `;
 
-    const result = await db.query(
-        query,
-        [
-            userId,
-            vehicleId,
-            rating,
-            comment
-        ]
-    );
+    const result = await db.query(query, [userId, vehicleId, rating, comment]);
 
     return result.rows[0];
 };
@@ -100,12 +78,7 @@ const createReview = async (
 /**
  * Update an existing review
  */
-const updateReview = async (
-    reviewId,
-    rating,
-    comment
-) => {
-
+const updateReview = async (reviewId, rating, comment) => {
     const query = `
         UPDATE reviews
 
@@ -119,14 +92,7 @@ const updateReview = async (
         RETURNING *
     `;
 
-    const result = await db.query(
-        query,
-        [
-            rating,
-            comment,
-            reviewId
-        ]
-    );
+    const result = await db.query(query, [rating, comment, reviewId]);
 
     return result.rows[0] || null;
 };
@@ -135,16 +101,12 @@ const updateReview = async (
  * Delete a review
  */
 const deleteReview = async (reviewId) => {
-
     const query = `
         DELETE FROM reviews
         WHERE id = $1
     `;
 
-    const result = await db.query(
-        query,
-        [reviewId]
-    );
+    const result = await db.query(query, [reviewId]);
 
     return result.rowCount > 0;
 };
@@ -154,7 +116,6 @@ const deleteReview = async (reviewId) => {
  * Returns: reviews, totalReviews, averageRating, ratingCounts, ratingPercentages
  */
 const getReviewStats = async (vehicleId) => {
-
     const reviews = await getReviewsByVehicleId(vehicleId);
 
     const totalReviews = reviews.length;
@@ -165,7 +126,7 @@ const getReviewStats = async (vehicleId) => {
         const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
         averageRating = parseFloat((sum / totalReviews).toFixed(1));
 
-        reviews.forEach(review => {
+        reviews.forEach((review) => {
             if (review.rating >= 1 && review.rating <= 5) {
                 ratingCounts[review.rating] = (ratingCounts[review.rating] || 0) + 1;
             }
@@ -175,9 +136,8 @@ const getReviewStats = async (vehicleId) => {
     // Calculate percentages
     const ratingPercentages = {};
     for (let i = 1; i <= 5; i++) {
-        ratingPercentages[i] = totalReviews > 0
-            ? Math.round((ratingCounts[i] / totalReviews) * 100)
-            : 0;
+        ratingPercentages[i] =
+            totalReviews > 0 ? Math.round((ratingCounts[i] / totalReviews) * 100) : 0;
     }
 
     return {
@@ -193,12 +153,10 @@ const getReviewStats = async (vehicleId) => {
  * Check if a user can edit/delete a review
  */
 const canUserModifyReview = (user, review) => {
-    if (!user) return false;
-    return (
-        user.id === review.user_id ||
-        user.roleName === 'employee' ||
-        user.roleName === 'owner'
-    );
+    if (!user) {
+        return false;
+    }
+    return user.id === review.user_id || user.roleName === 'employee' || user.roleName === 'owner';
 };
 
 export {

@@ -1,19 +1,19 @@
 // Vehicle model functions
 import { getVehicleBySlug, getVehiclesByCategory } from '../../models/vehicles/vehicles.js';
-import { searchVehicles } from '../../models/vehicles/vehicles.js'; 
+import { searchVehicles } from '../../models/vehicles/vehicles.js';
 import { getReviewStats } from '../../models/reviews/reviews.js';
-import { isFavorite } from '../../models/favorites/favorites.js'; 
+import { isFavorite } from '../../models/favorites/favorites.js';
 
 /**
  * Get sort label for display
  */
 const getSortLabel = (sort) => {
     const labels = {
-        'price_asc': 'Price: Low to High',
-        'price_desc': 'Price: High to Low',
-        'name_asc': 'Name: A to Z',
-        'name_desc': 'Name: Z to A',
-        'newest': 'Newest First'
+        price_asc: 'Price: Low to High',
+        price_desc: 'Price: High to Low',
+        name_asc: 'Name: A to Z',
+        name_desc: 'Name: Z to A',
+        newest: 'Newest First'
     };
     return labels[sort] || 'Name: A to Z';
 };
@@ -35,22 +35,15 @@ const vehiclesPage = async (req, res, next) => {
         // If search term is provided, use search functionality
         if (search && search.trim()) {
             // Search vehicles by name or description, with optional category filter
-            vehicles = await searchVehicles(
-                search.trim(),
-                category,
-                sort
-            );
-            
+            vehicles = await searchVehicles(search.trim(), category, sort);
+
             // Keep the category filter active for UI
             currentCategory = category || 'All';
-            
         } else {
             // Otherwise, get vehicles by category (original behavior)
-            vehicles = await getVehiclesByCategory(
-                category
-            );
+            vehicles = await getVehiclesByCategory(category);
             currentCategory = category || 'All';
-            
+
             // Apply sorting to non-search results
             if (sort && sort !== 'name_asc') {
                 // Sort the results based on the sort parameter
@@ -75,9 +68,10 @@ const vehiclesPage = async (req, res, next) => {
 
         // Render the vehicles list view with search context
         res.render('vehicles/list', {
-            title: search && search.trim() 
-                ? `Search results for "${search.trim()}"` 
-                : 'Available Vehicles',
+            title:
+                search && search.trim()
+                    ? `Search results for "${search.trim()}"`
+                    : 'Available Vehicles',
             vehicles,
             currentCategory: currentCategory,
             queryParams: {
@@ -88,7 +82,6 @@ const vehiclesPage = async (req, res, next) => {
             sortLabel: getSortLabel(sort),
             vehicleCount: vehicles.length
         });
-
     } catch (error) {
         next(error);
     }
@@ -117,28 +110,36 @@ const vehicleDetailPage = async (req, res, next) => {
         // Check if vehicle is in user's favorites
         let isFavoriteStatus = false;
         const userId = req.session?.user?.id;
-        
+
         if (userId) {
             isFavoriteStatus = await isFavorite(userId, vehicle.id);
         }
 
         // Get flash messages and form data from the session if available
-        let flashMessages = {};
+        const flashMessages = {};
         let formData = {};
-        
+
         if (typeof req.flash === 'function') {
             // Get flash messages for different types
             const success = req.flash('success');
             const error = req.flash('error');
             const warning = req.flash('warning');
             const info = req.flash('info');
-            
+
             // Keep only the first message of each type for display
-            if (success.length) flashMessages.success = success[0];
-            if (error.length) flashMessages.error = error[0];
-            if (warning.length) flashMessages.warning = warning[0];
-            if (info.length) flashMessages.info = info[0];
-            
+            if (success.length) {
+                flashMessages.success = success[0];
+            }
+            if (error.length) {
+                flashMessages.error = error[0];
+            }
+            if (warning.length) {
+                flashMessages.warning = warning[0];
+            }
+            if (info.length) {
+                flashMessages.info = info[0];
+            }
+
             // Get form data from flash if available (for preserving input after validation errors)
             const formDataFlash = req.flash('formData');
             if (formDataFlash.length) {
@@ -165,7 +166,6 @@ const vehicleDetailPage = async (req, res, next) => {
             isLoggedIn: !!userId,
             isFavorite: isFavoriteStatus
         });
-
     } catch (error) {
         next(error);
     }

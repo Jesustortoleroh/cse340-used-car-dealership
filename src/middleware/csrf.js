@@ -1,10 +1,7 @@
 import { csrfSync } from 'csrf-sync';
 
 // Configure CSRF protection
-const {
-    generateToken,
-    csrfSynchronisedProtection
-} = csrfSync({
+const { generateToken, csrfSynchronisedProtection } = csrfSync({
     getTokenFromRequest: (req) => {
         // Look for the token in the body (for standard forms)
         // or in the headers (for AJAX/fetch requests)

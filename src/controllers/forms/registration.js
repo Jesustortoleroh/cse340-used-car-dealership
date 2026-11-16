@@ -7,9 +7,9 @@ import { notifyWelcome } from '../../models/notifications/notificationTriggers.j
  */
 const showRegistrationForm = (req, res) => {
     // Get flash messages and form data
-    const messages = typeof req.flash === 'function' ? req.flash() : {};
+    const messages = req.flash();
     const formData = req.session?.formData || {};
-    
+
     // Clear session data after retrieving
     delete req.session.formData;
     delete req.session.errors;
@@ -32,12 +32,10 @@ const processRegistration = async (req, res) => {
 
     if (!errors.isEmpty()) {
         // Store validation errors as flash messages
-        errors.array().forEach(error => {
-            if (typeof req.flash === 'function') {
-                req.flash('error', error.msg);
-            }
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
         });
-        
+
         // Store form data to repopulate the form
         req.session.formData = req.body;
         return res.redirect('/register');
@@ -49,9 +47,7 @@ const processRegistration = async (req, res) => {
         // Check if user already exists
         const existingUser = await findUserByEmail(email);
         if (existingUser) {
-            if (typeof req.flash === 'function') {
-                req.flash('error', 'An account with this email already exists.');
-            }
+            req.flash('error', 'An account with this email already exists.');
             req.session.formData = req.body;
             return res.redirect('/register');
         }
@@ -66,19 +62,14 @@ const processRegistration = async (req, res) => {
         await notifyWelcome(newUser.id, newUser.name);
 
         // Success message
-        if (typeof req.flash === 'function') {
-            req.flash('success', `Account created successfully, ${name}! Please log in.`);
-        }
+        req.flash('success', `Account created successfully, ${name}! Please log in.`);
 
         // Redirect to login page
         res.redirect('/login');
-
     } catch (error) {
         console.error('Registration error:', error);
 
-        if (typeof req.flash === 'function') {
-            req.flash('error', 'Unable to create account. Please try again later.');
-        }
+        req.flash('error', 'Unable to create account. Please try again later.');
 
         req.session.formData = req.body;
         res.redirect('/register');
@@ -117,17 +108,20 @@ const showEditAccountForm = async (req, res) => {
         const user = req.session.user;
         const formData = req.session?.formData || {};
         const errors = req.session?.errors || {};
-        
+
         delete req.session.formData;
         delete req.session.errors;
 
         res.render('forms/registration/edit', {
             title: 'Edit Account',
             user: user,
-            formData: Object.keys(formData).length > 0 ? formData : {
-                name: user.name,
-                email: user.email
-            },
+            formData:
+                Object.keys(formData).length > 0
+                    ? formData
+                    : {
+                          name: user.name,
+                          email: user.email
+                      },
             errors,
             isLoggedIn: true
         });
@@ -146,10 +140,8 @@ const processEditAccount = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        errors.array().forEach(error => {
-            if (typeof req.flash === 'function') {
-                req.flash('error', error.msg);
-            }
+        errors.array().forEach((error) => {
+            req.flash('error', error.msg);
         });
         req.session.formData = req.body;
         return res.redirect(`/register/${userId}/edit`);
@@ -158,16 +150,14 @@ const processEditAccount = async (req, res) => {
     try {
         // For now, just update session and show success
         const { name, email } = req.body;
-        
+
         // Update session user data
         if (req.session.user) {
             req.session.user.name = name;
             req.session.user.email = email;
         }
 
-        if (typeof req.flash === 'function') {
-            req.flash('success', 'Account updated successfully.');
-        }
+        req.flash('success', 'Account updated successfully.');
 
         res.redirect('/dashboard');
     } catch (error) {
@@ -181,13 +171,12 @@ const processEditAccount = async (req, res) => {
  * Process delete account
  */
 const processDeleteAccount = async (req, res) => {
-    const userId = parseInt(req.params.id);
+    // TODO: Implement actual account deletion logic
+    // const userId = parseInt(req.params.id);
 
     try {
         // For now, just logout and show message
-        if (typeof req.flash === 'function') {
-            req.flash('info', 'Account deletion feature coming soon.');
-        }
+        req.flash('info', 'Account deletion feature coming soon.');
 
         res.redirect('/dashboard');
     } catch (error) {
@@ -205,4 +194,3 @@ export {
     processEditAccount,
     processDeleteAccount
 };
-

@@ -13,7 +13,7 @@ export const globalErrorHandler = (err, req, res, next) => {
     }
 
     const status = err.status || err.statusCode || 500;
-    
+
     // Log the error (only print stack trace if it's a 500 in development)
     if (status >= 500) {
         logger.error({ err, status }, 'Server error occurred');
@@ -23,11 +23,20 @@ export const globalErrorHandler = (err, req, res, next) => {
 
     let template = '500';
     let title = 'Server Error';
-    
+
     switch (status) {
-        case 400: template = '400'; title = 'Bad Request'; break;
-        case 403: template = '403'; title = 'Access Denied'; break;
-        case 404: template = '404'; title = 'Page Not Found'; break;
+        case 400:
+            template = '400';
+            title = 'Bad Request';
+            break;
+        case 403:
+            template = '403';
+            title = 'Access Denied';
+            break;
+        case 404:
+            template = '404';
+            title = 'Page Not Found';
+            break;
     }
 
     const context = {
