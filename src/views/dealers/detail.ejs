@@ -1,67 +1,60 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="dealer-detail-page">
 
     <section class="dealer-profile">
-
         <div class="dealer-card-detail">
+            <h1 class="dealer-name"><%= dealer.name %></h1>
 
-            <h1><%= dealer.name %></h1>
+            <div class="dealer-detail-grid">
+                <!-- Dealer Image -->
+                <div class="dealer-image-wrapper">
+                    <% if (dealer.image_url) { %>
+                        <img
+                            src="<%= dealer.image_url %>"
+                            alt="<%= dealer.name %>"
+                            class="dealer-detail-image"
+                        >
+                    <% } %>
+                </div>
 
-            <% if (dealer.image_url) { %>
-                <img
-                    src="<%= dealer.image_url %>"
-                    alt="<%= dealer.name %>"
-                    class="dealer-detail-image"
-                >
-            <% } %>
-
-            <div class="dealer-info">
-
-                <p>
-                    <strong>Location:</strong>
-                    <%= dealer.location %>
-                </p>
-
-                <p>
-                    <strong>Phone:</strong>
-                    <%= dealer.phone %>
-                </p>
-
-                <p>
-                    <strong>Email:</strong>
-                    <%= dealer.email %>
-                </p>
-
+                <!-- Dealer Info -->
+                <div class="dealer-info">
+                    <div class="info-item">
+                        <strong>Location:</strong>
+                        <span><%= dealer.location %></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Phone:</strong>
+                        <span><%= dealer.phone %></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Email:</strong>
+                        <span><%= dealer.email %></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="dealer-actions">
-
-                <a href="/dealers" class="back-button">
+            <!-- Actions -->
+            <div class="dealer-actions" style="justify-content: center;">
+                <a href="/dealers" class="btn-secondary">
                     ← Back to Dealers
                 </a>
-
-                <a href="/vehicles" class="inventory-button">
+                <a href="/vehicles" class="btn-primary">
                     View All Inventory
                 </a>
-
             </div>
-
         </div>
-
     </section>
 
     <!-- ==========================================
          Vehicles Available at this Dealer
     ========================================== -->
     <section class="dealer-vehicles-section">
-
         <div class="dealer-vehicles-header">
             <h2>
                 Vehicles Available 
-                <span class="vehicle-count-badge">
-                    <%= vehicleCount %>
-                </span>
+                <span class="vehicle-count-badge"><%= vehicleCount %></span>
             </h2>
             <p class="dealer-vehicles-subtitle">
                 <%= vehicleCount === 1 
@@ -72,71 +65,43 @@
         </div>
 
         <% if (vehicles && vehicles.length > 0) { %>
-
             <div class="vehicle-list">
-
                 <% vehicles.forEach(vehicle => { %>
-
                     <div class="vehicle-card">
-
                         <% if (vehicle.image_url) { %>
-
-                            <img 
-                                src="<%= vehicle.image_url %>"
-                                alt="<%= vehicle.name %>"
-                                class="vehicle-image"
-                            >
-
+                            <div class="vehicle-image-wrapper">
+                                <img 
+                                    src="<%= vehicle.image_url %>"
+                                    alt="<%= vehicle.name %>"
+                                    class="vehicle-image"
+                                    loading="lazy"
+                                >
+                            </div>
                         <% } %>
 
                         <div class="vehicle-info">
-
                             <h3>
-                                <a href="/vehicles/<%= vehicle.slug %>">
-                                    <%= vehicle.name %>
-                                </a>
+                                <a href="/vehicles/<%= vehicle.slug %>"><%= vehicle.name %></a>
                             </h3>
-
-                            <p class="vehicle-price">
-                                $<%= vehicle.price.toLocaleString() %>
-                            </p>
-
-                            <p class="vehicle-category">
-                                Category: <%= vehicle.category %>
-                            </p>
-
-                            <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
-                                View Details →
-                            </a>
-
+                            <p class="vehicle-category">Category: <%= vehicle.category %></p>
+                            
+                            <div class="vehicle-card-footer">
+                                <p class="vehicle-price">$<%= vehicle.price.toLocaleString() %></p>
+                                <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
+                                    View Details →
+                                </a>
+                            </div>
                         </div>
-
                     </div>
-
                 <% }) %>
-
             </div>
-
         <% } else { %>
-
             <div class="empty-state">
-
-                <span class="empty-icon">
-                    🏢
-                </span>
-
-                <p>
-                    No vehicles currently available at this dealer.
-                </p>
-
-                <p class="empty-sub">
-                    Check back later for new inventory!
-                </p>
-
+                <span class="empty-icon" aria-hidden="true">🏢</span>
+                <p>No vehicles currently available at this dealer.</p>
+                <p class="empty-sub">Check back later for new inventory!</p>
             </div>
-
         <% } %>
-
     </section>
 
 </main>

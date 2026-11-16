@@ -1,162 +1,458 @@
 /* ==========================================
-   Dealer Profile
+   Dealers Page Styles (NeoMotor)
 ========================================== */
-.dealer-profile {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.dealer-card-detail {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--card-radius);
-    padding: 2rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-}
-
-.dealer-card-detail h1 {
-    text-align: center;
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 2rem;
-}
-
-.dealer-info p {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    color: var(--text-secondary);
-}
 
 /* ==========================================
-   Dealer Actions
+   1. Page Layout
 ========================================== */
-.dealer-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-/* Note: We are reusing .btn-secondary and .btn-primary from main.css,
-   but we need specific margin/padding if they don't have them globally.
-   Assuming they are standard buttons now. */
-
-/* ==========================================
-   Dealer List (Grid)
-========================================== */
-.dealer-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+.dealers-page {
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.dealer-card {
+.page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+[data-theme="light"] .page-title {
+    text-shadow: none;
+}
+
+/* ==========================================
+   2. Dealer List Page (Grid & Toolbar)
+========================================== */
+.dealers-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    padding: 15px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sort-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.sort-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.sort-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.sort-links a:hover {
+    color: var(--primary);
+    background: var(--bg-hover);
+}
+
+.sort-links a.active {
+    color: var(--bg-body);
+    background: var(--primary);
+    box-shadow: var(--neon-glow);
+}
+
+/* Dealer Grid */
+.dealer-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.dealer-card {
+    display: flex;
+    flex-direction: column;
     background: var(--bg-card);
-    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
     transition: var(--transition);
 }
 
 .dealer-card:hover {
-    box-shadow: var(--card-shadow-hover);
-    transform: translateY(-3px);
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
 }
 
-.dealer-card h3 {
-    text-align: center;
-    margin-top: 15px;
-    color: var(--text-primary);
+.dealer-image-wrapper {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .dealer-image {
     width: 100%;
-    height: 180px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    transition: transform 0.5s ease;
 }
 
-.dealer-detail-image {
-    width: 100%;
-    max-width: 700px;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-    border-radius: var(--card-radius);
-    box-shadow: var(--shadow-sm);
+.dealer-card:hover .dealer-image {
+    transform: scale(1.05);
+}
+
+.dealer-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+}
+
+.dealer-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.4rem;
+}
+
+.dealer-info h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.dealer-info h3 a:hover {
+    color: var(--primary);
+}
+
+.dealer-location {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-view-dealer {
+    margin-top: auto;
+    display: inline-block;
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.btn-view-dealer:hover {
+    background: var(--primary);
+    color: var(--bg-body);
+    box-shadow: var(--neon-glow);
 }
 
 /* ==========================================
-   Dealer Vehicles Section
+   3. Dealer Detail Page
 ========================================== */
-.dealer-vehicles-section {
-    max-width: 1000px;
-    margin: 2.5rem auto 0 auto;
+.dealer-detail-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dealer-profile {
+    margin-bottom: 4rem;
+}
+
+.dealer-card-detail {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+.dealer-name {
+    text-align: center;
+    color: var(--primary);
+    font-size: 3rem;
+    margin-bottom: 2.5rem;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+[data-theme="light"] .dealer-name {
+    text-shadow: none;
+}
+
+/* Grid for Image and Info */
+.dealer-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.dealer-image-wrapper img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+}
+
+.dealer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+    transition: var(--transition);
+}
+
+.info-item:hover {
+    background: var(--bg-hover);
+    transform: translateX(5px);
+}
+
+.info-item strong {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+}
+
+.info-item span {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Actions */
+.dealer-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
     padding-top: 2rem;
     border-top: 1px solid var(--border-color);
 }
 
+/* ==========================================
+   4. Vehicles Section (Inside Dealer Detail)
+========================================== */
+.dealer-vehicles-section {
+    margin-bottom: 4rem;
+}
+
 .dealer-vehicles-header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 .dealer-vehicles-header h2 {
     color: var(--text-primary);
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .vehicle-count-badge {
-    display: inline-block;
     background: var(--primary);
-    color: var(--text-white);
-    font-size: 0.85rem;
-    font-weight: bold;
-    padding: 0.15rem 0.75rem;
-    border-radius: 20px;
-    margin-left: 0.5rem;
-    vertical-align: middle;
+    color: var(--bg-body);
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 0.2rem 1rem;
+    border-radius: 50px;
+    box-shadow: var(--neon-glow);
 }
 
 .dealer-vehicles-subtitle {
     color: var(--text-muted);
-    font-size: 0.95rem;
-    margin: 0;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
 }
 
-/* ==========================================
-   Empty State
-========================================== */
-.empty-state {
-    text-align: center;
-    padding: 3rem 1.5rem;
-    background: var(--bg-hover);
-    border-radius: var(--card-radius);
+/* Force grid columns to not stretch when there's only one item */
+.dealer-vehicles-section .vehicle-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Fix the vehicle card inside the dealer section */
+.dealer-vehicles-section .vehicle-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
     transition: var(--transition);
 }
 
-.empty-state .empty-icon {
-    font-size: 3rem;
+.dealer-vehicles-section .vehicle-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.dealer-vehicles-section .vehicle-image-wrapper {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dealer-vehicles-section .vehicle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.dealer-vehicles-section .vehicle-card:hover .vehicle-image {
+    transform: scale(1.05);
+}
+
+.dealer-vehicles-section .vehicle-info {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: center;
+}
+
+.dealer-vehicles-section .vehicle-info h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.dealer-vehicles-section .vehicle-info h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.dealer-vehicles-section .vehicle-info h3 a:hover {
+    color: var(--primary);
+}
+
+.dealer-vehicles-section .vehicle-category {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.dealer-vehicles-section .vehicle-card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.dealer-vehicles-section .vehicle-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.dealer-vehicles-section .btn-view-details {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.dealer-vehicles-section .btn-view-details:hover {
+    background: var(--primary);
+    color: var(--bg-body);
+    box-shadow: var(--neon-glow);
+}
+
+/* ==========================================
+   5. Empty State
+========================================== */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--bg-card);
+    border-radius: var(--card-radius);
+    border: 1px dashed var(--border-color);
+    margin-top: 2rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
     display: block;
     margin-bottom: 1rem;
 }
 
-.empty-state p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin: 0.5rem 0;
-}
+/* ==========================================
+   6. Responsive
+========================================== */
+@media (max-width: 768px) {
+    .dealers-toolbar {
+        flex-direction: column;
+        width: 100%;
+    }
 
-.empty-state .empty-sub {
-    font-size: 0.95rem;
-    color: var(--text-muted);
+    .dealer-card-detail {
+        padding: 1.5rem;
+    }
+
+    .dealer-name {
+        font-size: 2rem;
+    }
+
+    .dealer-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .dealer-actions {
+        flex-direction: column;
+    }
+    
+    .dealer-actions a {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .dealer-vehicles-section .vehicle-card-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
 }
