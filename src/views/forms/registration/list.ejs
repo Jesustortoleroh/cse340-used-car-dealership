@@ -1,27 +1,14 @@
 <%- include('../../partials/header') %>
 
-<main>
+<main class="users-page">
 
-    <h1><%= title %></h1>
-
-    <p>
-        Below is a list of registered customers who have created
-        accounts with our dealership.
-    </p>
-
-    <!-- Mostrar mensajes flash -->
-    <% if (flash) { %>
-        <% if (flash.error) { %>
-            <div class="flash error">
-                <%= flash.error %>
-            </div>
-        <% } %>
-        <% if (flash.success) { %>
-            <div class="flash success">
-                <%= flash.success %>
-            </div>
-        <% } %>
-    <% } %>
+    <div class="page-header">
+        <h1 class="page-title"><%= title %></h1>
+        <p class="page-subtitle">
+            Below is a list of registered customers who have created
+            accounts with our dealership.
+        </p>
+    </div>
 
     <% if (users && users.length > 0) { %>
 
@@ -30,8 +17,6 @@
             <% users.forEach(listUser => { %>
                 <% 
                     // Calculate permissions for this user card
-                    // 'user' variable contains the current logged-in user (from session)
-                    // 'listUser' is the user from the users array we're currently rendering
                     const currentUser = typeof user !== 'undefined' && user ? user : null;
                     const canEdit = currentUser && (currentUser.id === listUser.id || currentUser.roleName === 'owner');
                     const canDelete = currentUser && currentUser.roleName === 'owner' && currentUser.id !== listUser.id;
@@ -40,64 +25,36 @@
                 <div class="user-card">
 
                     <div class="user-header">
-
-                        <h3>
-                            <%= listUser.name %>
-                        </h3>
-
-                        <span class="user-id">
-                            ID: <%= listUser.id %>
-                        </span>
-
+                        <h3><%= listUser.name %></h3>
+                        <span class="user-id">ID: <%= listUser.id %></span>
                     </div>
 
                     <div class="user-details">
-
                         <div class="detail-item">
-
-                            <div class="label">
-                                Email
-                            </div>
-
-                            <div class="value">
-                                <%= listUser.email %>
-                            </div>
-
+                            <div class="label">Email</div>
+                            <div class="value"><%= listUser.email %></div>
                         </div>
 
                         <% if (listUser.roleName) { %>
-
                             <div class="detail-item">
-
-                                <div class="label">
-                                    Role
-                                </div>
-
+                                <div class="label">Role</div>
                                 <div class="value">
                                     <span class="role-badge role-<%= listUser.roleName %>">
                                         <%= listUser.roleName %>
                                     </span>
                                 </div>
-
                             </div>
-
                         <% } %>
 
                         <div class="detail-item">
-
-                            <div class="label">
-                                Registered
-                            </div>
-
+                            <div class="label">Registered</div>
                             <div class="value">
                                 <%= new Date(listUser.created_at).toLocaleDateString() %>
                             </div>
-
                         </div>
-
                     </div>
 
-                    <!-- User Actions - Only shown if user has permissions -->
+                    <!-- User Actions -->
                     <% if (canEdit || canDelete) { %>
                         <div class="user-actions">
                             <% if (canEdit) { %>
@@ -106,7 +63,9 @@
                                 </a>
                             <% } %>
                             <% if (canDelete) { %>
-                                <form method="POST" action="/register/<%= listUser.id %>/delete" style="display: inline;">
+                                <form method="POST" action="/register/<%= listUser.id %>/delete" class="delete-form">
+                                    <!-- CSRF Token -->
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button 
                                         type="submit" 
                                         class="btn-delete" 
@@ -127,19 +86,16 @@
 
     <% } else { %>
 
-        <p class="no-users">
-            No customers have registered yet.
-        </p>
+        <div class="no-users">
+            <span class="empty-icon" aria-hidden="true">👥</span>
+            <p>No customers have registered yet.</p>
+        </div>
 
     <% } %>
 
     <div class="page-actions">
-        <a href="/register" class="btn-primary">
-            Create Another Account
-        </a>
-        <a href="/dashboard" class="btn-secondary">
-            Back to Dashboard
-        </a>
+        <a href="/register" class="btn-primary">Create Another Account</a>
+        <a href="/dashboard" class="btn-secondary">Back to Dashboard</a>
     </div>
 
 </main>

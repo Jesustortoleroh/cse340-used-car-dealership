@@ -1,19 +1,24 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="comparison-page">
 
-    <h1>🚗 Compare Vehicles</h1>
-    <p class="compare-subtitle">Select up to 3 vehicles to compare side by side</p>
+    <div class="comparison-header">
+        <h1 class="page-title">🚗 Compare Vehicles</h1>
+        <p class="page-subtitle">Select up to 3 vehicles to compare side by side</p>
+    </div>
 
     <% if (messages && messages.error) { %>
         <div class="flash error"><%= messages.error %></div>
     <% } %>
 
-    <form action="/compare" method="POST" class="compare-form">
+    <form action="/compare" method="POST" class="compare-form glass-card">
+        <!-- CSRF Token for Security -->
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
         <div class="compare-selectors">
             <div class="selector-group">
-                <label>Vehicle 1</label>
-                <select name="vehicle1" required>
+                <label for="vehicle1">Vehicle 1</label>
+                <select name="vehicle1" id="vehicle1" required>
                     <option value="">Select a vehicle...</option>
                     <% vehicles.forEach(vehicle => { %>
                         <option value="<%= vehicle.id %>">
@@ -24,8 +29,8 @@
             </div>
 
             <div class="selector-group">
-                <label>Vehicle 2</label>
-                <select name="vehicle2" required>
+                <label for="vehicle2">Vehicle 2</label>
+                <select name="vehicle2" id="vehicle2" required>
                     <option value="">Select a vehicle...</option>
                     <% vehicles.forEach(vehicle => { %>
                         <option value="<%= vehicle.id %>">
@@ -36,8 +41,8 @@
             </div>
 
             <div class="selector-group">
-                <label>Vehicle 3 (Optional)</label>
-                <select name="vehicle3">
+                <label for="vehicle3">Vehicle 3 (Optional)</label>
+                <select name="vehicle3" id="vehicle3">
                     <option value="">Select a vehicle...</option>
                     <% vehicles.forEach(vehicle => { %>
                         <option value="<%= vehicle.id %>">
@@ -48,15 +53,18 @@
             </div>
         </div>
 
-        <button type="submit" class="btn-compare">Compare Vehicles 🔍</button>
+        <button type="submit" class="btn-primary btn-block">
+            Compare Vehicles 🔍
+        </button>
     </form>
 
+    <!-- Tips Section -->
     <div class="compare-tips">
-        <h3>💡 Tips for comparing</h3>
+        <h3><span aria-hidden="true">💡</span> Tips for comparing</h3>
         <ul>
-            <li>Compare vehicles from the same category for better insights</li>
-            <li>Consider price, year, mileage, and transmission</li>
-            <li>Look at the specifications for detailed differences</li>
+            <li>Compare vehicles from the same category for better insights.</li>
+            <li>Consider price, year, mileage, and transmission.</li>
+            <li>Look at the specifications for detailed differences.</li>
         </ul>
     </div>
 

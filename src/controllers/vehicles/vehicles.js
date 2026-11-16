@@ -1,6 +1,4 @@
-// Vehicle model functions
-import { getVehicleBySlug, getVehiclesByCategory } from '../../models/vehicles/vehicles.js';
-import { searchVehicles } from '../../models/vehicles/vehicles.js';
+import { getVehicleBySlug, getVehiclesByCategory, searchVehicles } from '../../models/vehicles/vehicles.js';
 import { getReviewStats } from '../../models/reviews/reviews.js';
 import { isFavorite } from '../../models/favorites/favorites.js';
 
@@ -24,7 +22,6 @@ const getSortLabel = (sort) => {
  */
 const vehiclesPage = async (req, res, next) => {
     try {
-        // Get query parameters from URL
         const category = req.query.category || 'All';
         const search = req.query.search || '';
         const sort = req.query.sort || 'name_asc';
@@ -32,48 +29,33 @@ const vehiclesPage = async (req, res, next) => {
         let vehicles;
         let currentCategory = category;
 
-        // If search term is provided, use search functionality
         if (search && search.trim()) {
-            // Search vehicles by name or description, with optional category filter
             vehicles = await searchVehicles(search.trim(), category, sort);
-
-            // Keep the category filter active for UI
             currentCategory = category || 'All';
         } else {
-            // Otherwise, get vehicles by category (original behavior)
             vehicles = await getVehiclesByCategory(category);
             currentCategory = category || 'All';
 
-            // Apply sorting to non-search results
             if (sort && sort !== 'name_asc') {
-                // Sort the results based on the sort parameter
                 vehicles.sort((a, b) => {
                     switch (sort) {
-                        case 'price_asc':
-                            return a.price - b.price;
-                        case 'price_desc':
-                            return b.price - a.price;
-                        case 'name_desc':
-                            return b.name.localeCompare(a.name);
-                        case 'newest':
-                            // Use id as proxy for newest if created_at not available
-                            return b.id - a.id;
+                        case 'price_asc': return a.price - b.price;
+                        case 'price_desc': return b.price - a.price;
+                        case 'name_desc': return b.name.localeCompare(a.name);
+                        case 'newest': return b.id - a.id;
                         case 'name_asc':
-                        default:
-                            return a.name.localeCompare(b.name);
+                        default: return a.name.localeCompare(b.name);
                     }
                 });
             }
         }
 
-        // Render the vehicles list view with search context
         res.render('vehicles/list', {
-            title:
-                search && search.trim()
-                    ? `Search results for "${search.trim()}"`
-                    : 'Available Vehicles',
+            title: search && search.trim()
+                ? `Search results for "${search.trim()}"`
+                : 'Available Vehicles',
             vehicles,
-            currentCategory: currentCategory,
+            currentCategory,
             queryParams: {
                 search: search || '',
                 category: category || '',
@@ -81,6 +63,7 @@ const vehiclesPage = async (req, res, next) => {
             },
             sortLabel: getSortLabel(sort),
             vehicleCount: vehicles.length
+            // Flash messages are handled globally by header.ejs
         });
     } catch (error) {
         next(error);
@@ -104,10 +87,8 @@ const vehicleDetailPage = async (req, res, next) => {
             return next(err);
         }
 
-        // Get review statistics using the model function
         const reviewStats = await getReviewStats(vehicle.id);
 
-        // Check if vehicle is in user's favorites
         let isFavoriteStatus = false;
         const userId = req.session?.user?.id;
 
@@ -115,35 +96,15 @@ const vehicleDetailPage = async (req, res, next) => {
             isFavoriteStatus = await isFavorite(userId, vehicle.id);
         }
 
-        // Get flash messages and form data from the session if available
-        const flashMessages = {};
+        // Form data is stored as a JSON string in flash, so we need to parse it
         let formData = {};
-
-        if (typeof req.flash === 'function') {
-            // Get flash messages for different types
-            const success = req.flash('success');
-            const error = req.flash('error');
-            const warning = req.flash('warning');
-            const info = req.flash('info');
-
-            // Keep only the first message of each type for display
-            if (success.length) {
-                flashMessages.success = success[0];
-            }
-            if (error.length) {
-                flashMessages.error = error[0];
-            }
-            if (warning.length) {
-                flashMessages.warning = warning[0];
-            }
-            if (info.length) {
-                flashMessages.info = info[0];
-            }
-
-            // Get form data from flash if available (for preserving input after validation errors)
-            const formDataFlash = req.flash('formData');
-            if (formDataFlash.length) {
-                formData = formDataFlash[0];
+        const formDataFlash = req.flash('formData');
+        
+        if (formDataFlash.length) {
+            try {
+                formData = JSON.parse(formDataFlash[0]);
+            } catch {
+                formData = {};
             }
         }
 
@@ -152,19 +113,15 @@ const vehicleDetailPage = async (req, res, next) => {
             vehicle,
             user: req.session?.user || null,
             currentSort,
-            // Review data from the model
             reviews: reviewStats.reviews,
             totalReviews: reviewStats.totalReviews,
             averageRating: reviewStats.averageRating,
             ratingCounts: reviewStats.ratingCounts,
             ratingPercentages: reviewStats.ratingPercentages,
-            // Flash messages
-            flash: flashMessages,
-            // Form data for preserving input
             formData: formData,
-            // Favorite status
             isLoggedIn: !!userId,
             isFavorite: isFavoriteStatus
+            // Flash messages are handled globally by header.ejs
         });
     } catch (error) {
         next(error);

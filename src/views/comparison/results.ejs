@@ -1,10 +1,12 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="comparison-results-page">
 
     <div class="comparison-header">
-        <h1>🚗 Vehicle Comparison</h1>
-        <a href="/compare" class="btn-new-compare">← New Comparison</a>
+        <h1 class="page-title">🚗 Vehicle Comparison</h1>
+        <a href="/compare" class="btn-secondary">
+            ← New Comparison
+        </a>
     </div>
 
     <div class="comparison-table-wrapper">
@@ -27,9 +29,11 @@
                     <td class="feature-label">Image</td>
                     <% vehicles.forEach(vehicle => { %>
                         <td class="feature-value">
-                            <img src="<%= vehicle.image_url || '/images/default-car.jpg' %>" 
-                                 alt="<%= vehicle.name %>"
-                                 class="comparison-image">
+                            <div class="comparison-image-wrapper">
+                                <img src="<%= vehicle.image_url || '/images/default-car.jpg' %>" 
+                                     alt="<%= vehicle.name %>"
+                                     class="comparison-image">
+                            </div>
                         </td>
                     <% }) %>
                 </tr>
@@ -139,8 +143,8 @@
     </div>
 
     <div class="comparison-footer">
-        <a href="/compare" class="btn-back">← Back to Compare</a>
-        <a href="/vehicles" class="btn-browse">Browse All Vehicles</a>
+        <a href="/compare" class="btn-secondary">← Back to Compare</a>
+        <a href="/vehicles" class="btn-primary">Browse All Vehicles</a>
     </div>
 
 </main>

@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { handleValidationErrors } from './handleValidation.js'; // Import the handler
+import { handleValidationErrors } from './handleValidation.js';
 
 /**
  * Contact validation rules
@@ -55,7 +55,6 @@ const contactValidation = [
             return true;
         }),
         
-    // ⭐ Add the error handler at the end
     handleValidationErrors
 ];
 
@@ -75,7 +74,6 @@ const loginValidation = [
         .notEmpty()
         .withMessage('Password is required'),
         
-    // ⭐ Add the error handler at the end
     handleValidationErrors
 ];
 
@@ -119,12 +117,12 @@ const registrationValidation = [
         .custom((value, { req }) => value === req.body.password)
         .withMessage('Passwords must match'),
         
-    // ⭐ Add the error handler at the end
     handleValidationErrors
 ];
 
 /**
  * Validation rules for editing user accounts
+ * Note: Password is optional here, but if provided, it must be secure.
  */
 const updateAccountValidation = [
     body('name')
@@ -141,8 +139,26 @@ const updateAccountValidation = [
         .withMessage('Must be a valid email address')
         .isLength({ max: 255 })
         .withMessage('Email address is too long'),
+
+    // Optional password validation for edits
+    body('password')
+        .optional({ checkFalsy: true })
+        .isLength({ min: 8, max: 128 })
+        .withMessage('Password must be between 8 and 128 characters')
+        .matches(/[0-9]/)
+        .withMessage('Password must contain at least one number')
+        .matches(/[A-Z]/)
+        .withMessage('Password must contain at least one uppercase letter')
+        .matches(/[a-z]/)
+        .withMessage('Password must contain at least one lowercase letter')
+        .matches(/[!@#$%^&*()_+\-=[\]{};':"|,.<>/?]/)
+        .withMessage('Password must contain at least one special character'),
+
+    body('passwordConfirm')
+        .optional({ checkFalsy: true })
+        .custom((value, { req }) => value === req.body.password)
+        .withMessage('Passwords must match'),
         
-    // ⭐ Add the error handler at the end
     handleValidationErrors
 ];
 
@@ -171,7 +187,6 @@ const reviewValidation = [
             return true;
         }),
         
-    // ⭐ Add the error handler at the end
     handleValidationErrors
 ];
 
@@ -194,7 +209,6 @@ const serviceRequestValidation = [
         .isInt({ min: 1 })
         .withMessage('Vehicle ID must be a valid number'),
         
-    // ⭐ Add the error handler at the end
     handleValidationErrors
 ];
 

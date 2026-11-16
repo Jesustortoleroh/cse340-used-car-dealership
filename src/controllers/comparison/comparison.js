@@ -14,9 +14,9 @@ const comparisonPage = async (req, res, next) => {
         res.render('comparison/index', {
             title: 'Compare Vehicles',
             vehicles,
-            isLoggedIn: req.session?.userId || false,
-            user: req.session?.user || null,
-            messages: req.flash()
+            isLoggedIn: !!req.session?.userId, // Convert to boolean
+            user: req.session?.user || null
+            // No need to pass messages, header.ejs handles it globally
         });
     } catch (error) {
         next(error);
@@ -44,15 +44,11 @@ const compareVehiclesController = async (req, res, next) => {
             return res.redirect('/compare');
         }
 
-        const allVehicles = await getAllVehiclesForComparison();
-
         res.render('comparison/results', {
             title: 'Vehicle Comparison Results',
             vehicles: results,
-            allVehicles,
-            isLoggedIn: req.session?.userId || false,
-            user: req.session?.user || null,
-            messages: req.flash()
+            isLoggedIn: !!req.session?.userId,
+            user: req.session?.user || null
         });
     } catch (error) {
         next(error);

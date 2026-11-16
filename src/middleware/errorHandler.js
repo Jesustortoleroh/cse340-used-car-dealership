@@ -21,23 +21,14 @@ export const globalErrorHandler = (err, req, res, next) => {
         logger.warn({ err: err.message, status }, 'Client error occurred');
     }
 
-    let template = '500';
-    let title = 'Server Error';
+    // Map status codes to templates and titles
+    const errorMap = {
+        400: { template: '400', title: 'Bad Request' },
+        403: { template: '403', title: 'Access Denied' },
+        404: { template: '404', title: 'Page Not Found' },
+    };
 
-    switch (status) {
-        case 400:
-            template = '400';
-            title = 'Bad Request';
-            break;
-        case 403:
-            template = '403';
-            title = 'Access Denied';
-            break;
-        case 404:
-            template = '404';
-            title = 'Page Not Found';
-            break;
-    }
+    const { template, title } = errorMap[status] || { template: '500', title: 'Server Error' };
 
     const context = {
         title,

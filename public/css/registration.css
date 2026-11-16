@@ -1,277 +1,224 @@
 /* ==========================================
-   Registration Form
+   Registration Pages Styles (NeoMotor)
 ========================================== */
-.registration-form {
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 2rem;
+
+/* ==========================================
+   1. Registration Form Page (form.ejs)
+========================================== */
+.register-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem 0;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 600px;
     background: var(--bg-card);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+.register-title {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+[data-theme="light"] .register-title {
+    text-shadow: none;
+}
+
+.register-subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
 .registration-form .form-group {
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
-.registration-form label {
-    display: block;
+.registration-form .form-group label {
     margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
-.registration-form input {
+.registration-form .form-group input {
     width: 100%;
-    padding: 0.85rem;
-    border: 1px solid var(--border-dark);
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
     background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
     color: var(--text-primary);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
 }
 
-/* Accessibility: Focus states */
-.registration-form input:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-.registration-form input:focus {
+.registration-form .form-group input:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-.registration-form .help-text {
-    font-size: 0.9rem;
+.help-text {
+    font-size: 0.8rem;
     color: var(--text-muted);
-    margin-top: 0.25rem;
+    margin-top: 0.4rem;
 }
 
-.registration-form button[type="submit"] {
+.btn-block {
     width: 100%;
-    padding: 1rem;
-    background-color: var(--primary);
-    color: var(--text-white);
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.registration-form button[type="submit"]:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-1px);
-}
-
-.registration-form button[type="submit"]:active {
-    transform: translateY(0);
-}
-
-.registration-form button[type="submit"]:focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-}
-
-/* ==========================================
-   Registered Users List
-========================================== */
-.users-list {
-    max-width: 1200px;
-    margin: 2rem auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-    gap: 1.5rem;
-}
-
-.user-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--card-radius);
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-}
-
-.user-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--card-shadow-hover);
-}
-
-.user-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid var(--primary);
-}
-
-.user-header h3 {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-}
-
-.user-id {
-    background-color: var(--primary-light);
-    color: var(--primary);
-    padding: 0.4rem 0.85rem;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-.user-details {
-    margin-bottom: 1rem;
-}
-
-.detail-item {
-    margin-bottom: 1rem;
-}
-
-.detail-item:last-child {
-    margin-bottom: 0;
-}
-
-.detail-item .label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: var(--text-muted);
-    margin-bottom: 0.25rem;
-}
-
-.detail-item .value {
-    color: var(--text-secondary);
-    font-size: 1rem;
-}
-
-/* ==========================================
-   User Actions (Buttons)
-========================================== */
-.user-actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
     margin-top: 1rem;
 }
 
-.delete-form {
-    margin: 0;
+.form-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-footer p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.form-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 8px var(--primary);
 }
 
 /* ==========================================
-   Footer Actions
+   2. Edit Account Page (edit.ejs)
 ========================================== */
-.page-actions {
+.edit-page {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 2.5rem 0;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem 0;
 }
 
-/* ==========================================
-   Empty State
-========================================== */
-.no-users {
-    text-align: center;
-    padding: 3rem;
+.edit-card {
+    width: 100%;
+    max-width: 650px;
     background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    border: 1px dashed var(--border-dark);
-    color: var(--text-muted);
-    transition: var(--transition);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
 }
 
-/* ==========================================
-   Edit Account Form
-========================================== */
-.account-edit {
-    max-width: 750px;
-    margin: 2rem auto;
-}
-
-.account-edit h1 {
+.edit-title {
+    color: var(--primary);
     text-align: center;
-    color: var(--text-primary);
     margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
 }
 
-.account-edit .text-muted {
+[data-theme="light"] .edit-title {
+    text-shadow: none;
+}
+
+.edit-subtitle {
     text-align: center;
     color: var(--text-muted);
-    margin-bottom: 2rem;
-}
-
-.account-form {
-    background-color: var(--bg-card);
-    padding: 2rem;
-    border-radius: var(--card-radius);
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
 }
 
 .account-form .form-group {
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
-.account-form label {
-    display: block;
+.account-form .form-group label {
     margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
-.account-form input {
+.account-form .form-group input {
     width: 100%;
-    padding: 0.85rem;
-    border: 1px solid var(--border-dark);
-    border-radius: 8px;
-    font-size: 1rem;
     background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
     color: var(--text-primary);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
 }
 
-/* Accessibility: Focus states */
-.account-form input:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-.account-form input:focus {
+.account-form .form-group input:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-.account-form input[disabled] {
-    background-color: var(--bg-hover);
+.account-form .form-group input[disabled] {
+    background: var(--bg-hover);
     color: var(--text-muted);
     cursor: not-allowed;
 }
 
-.help-text {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-muted);
+/* Role Display (Badge) */
+.role-display {
+    padding: 1rem;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
 }
 
+.role-badge {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.role-customer { background: var(--info-bg); color: var(--info); border: 1px solid var(--info); }
+.role-employee { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+.role-owner { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+
+/* Actions */
 .form-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
 }
 
 .form-actions .btn-primary,
@@ -281,9 +228,161 @@
 }
 
 /* ==========================================
-   Responsive
+   3. Registered Users List Page (list.ejs)
+========================================== */
+.users-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+[data-theme="light"] .page-title {
+    text-shadow: none;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.users-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.user-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.user-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.user-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+}
+
+.user-id {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex: 1;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-item .label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+}
+
+.detail-item .value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.user-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.delete-form {
+    margin: 0;
+    display: inline;
+}
+
+.page-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ==========================================
+   4. Empty State
+========================================== */
+.no-users {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--bg-card);
+    border-radius: var(--card-radius);
+    border: 1px dashed var(--border-color);
+    color: var(--text-muted);
+    margin-top: 2rem;
+}
+
+/* ==========================================
+   5. Responsive
 ========================================== */
 @media (max-width: 768px) {
+    .register-card,
+    .edit-card {
+        padding: 1.5rem;
+    }
+
+    .register-title,
+    .edit-title,
+    .page-title {
+        font-size: 2rem;
+    }
+
     .users-list {
         grid-template-columns: 1fr;
     }
@@ -303,15 +402,11 @@
         text-align: center;
     }
 
-    .account-edit {
-        padding: 0 1rem;
-    }
-
-    .account-form {
-        padding: 1.5rem;
-    }
-
     .form-actions {
+        flex-direction: column;
+    }
+
+    .page-actions {
         flex-direction: column;
     }
 }

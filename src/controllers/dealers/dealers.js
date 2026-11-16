@@ -4,10 +4,12 @@ import {
   getVehiclesByDealerId  
 } from '../../models/dealers/dealers.js';
 
+/**
+ * Show dealers list page
+ */
 const dealersListPage = async (req, res, next) => {
   try {
     const validSortOptions = ['name', 'location'];
-
     const sortBy = validSortOptions.includes(req.query.sort)
       ? req.query.sort
       : 'name';
@@ -24,6 +26,9 @@ const dealersListPage = async (req, res, next) => {
   }
 };
 
+/**
+ * Show dealer detail page
+ */
 const dealerDetailPage = async (req, res, next) => {
   try {
     const dealerSlug = req.params.dealerSlug;
@@ -42,7 +47,7 @@ const dealerDetailPage = async (req, res, next) => {
     res.render('dealers/detail', {
       title: `${dealer.name} - Dealer Profile`,
       dealer,
-      vehicles: vehicles,
+      vehicles,
       vehicleCount: vehicles.length
     });
   } catch (error) {

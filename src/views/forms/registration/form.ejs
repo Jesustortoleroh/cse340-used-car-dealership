@@ -1,112 +1,115 @@
 <%- include('../../partials/header') %>
 
-<main>
+<main class="register-page">
 
-    <h1><%= title %></h1>
+    <div class="register-card glass-card">
+        <h1 class="register-title"><%= title %></h1>
 
-    <p>
-        Create your dealership account to leave vehicle reviews,
-        request maintenance services, and manage your interactions
-        with our dealership.
-    </p>
+        <p class="register-subtitle">
+            Create your dealership account to leave vehicle reviews,
+            request maintenance services, and manage your interactions
+            with our dealership.
+        </p>
 
-    <form
-        method="POST"
-        action="/register"
-        class="registration-form"
-        novalidate
-    >
+        <form
+            method="POST"
+            action="/register"
+            class="registration-form"
+            novalidate
+        >
+            <!-- CSRF Token (Required for security) -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-        <!-- Full Name -->
-        <div class="form-group">
-            <label for="name">
-                Full Name
-            </label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Enter your full name"
-                minlength="2"
-                maxlength="100"
-                pattern="[a-zA-Z\s'-]+"
-                title="Letters, spaces, hyphens, and apostrophes only"
-                required
-            >
-            <div class="help-text">
-                Between 2 and 100 characters. Letters, spaces, hyphens, and apostrophes only.
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    minlength="2"
+                    maxlength="100"
+                    pattern="[a-zA-Z\s'-]+"
+                    title="Letters, spaces, hyphens, and apostrophes only"
+                    required
+                >
+                <div class="help-text">
+                    Between 2 and 100 characters.
+                </div>
             </div>
-        </div>
 
-        <!-- Email Address -->
-        <div class="form-group">
-            <label for="email">
-                Email Address
-            </label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="your@email.com"
-                maxlength="255"
-                required
-            >
-        </div>
-
-        <!-- Confirm Email -->
-        <div class="form-group">
-            <label for="emailConfirm">
-                Confirm Email Address
-            </label>
-            <input
-                type="email"
-                id="emailConfirm"
-                name="emailConfirm"
-                placeholder="Re-enter your email address"
-                maxlength="255"
-                required
-            >
-        </div>
-
-        <!-- Password -->
-        <div class="form-group">
-            <label for="password">
-                Password
-            </label>
-            <input type="password" id="password" name="password" minlength="8" maxlength="128" required>            
-            <div class="help-text">
-                Must be 8-128 characters and include at least one uppercase letter,
-                one lowercase letter, one number, and one special character.
+            <!-- Email Address -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="your@email.com"
+                    maxlength="255"
+                    required
+                >
             </div>
+
+            <!-- Confirm Email -->
+            <div class="form-group">
+                <label for="emailConfirm">Confirm Email</label>
+                <input
+                    type="email"
+                    id="emailConfirm"
+                    name="emailConfirm"
+                    placeholder="Re-enter your email"
+                    maxlength="255"
+                    required
+                >
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    minlength="8"
+                    maxlength="128"
+                    required
+                >
+                <div class="help-text">
+                    8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special.
+                </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="passwordConfirm">Confirm Password</label>
+                <input
+                    type="password"
+                    id="passwordConfirm"
+                    name="passwordConfirm"
+                    minlength="8"
+                    maxlength="128"
+                    required
+                >
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-primary btn-block">
+                Create Account
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <p>
+                Already have an account?
+                <a href="/login">Sign in here</a>
+            </p>
+            <p style="margin-top: 0.5rem;">
+                <a href="/register/list">View Registered Customers</a>
+            </p>
         </div>
-
-        <!-- Confirm Password -->
-        <div class="form-group">
-            <label for="passwordConfirm">
-                Confirm Password
-            </label>
-            <input
-                type="password"
-                id="passwordConfirm"
-                name="passwordConfirm"
-                minlength="8"
-                maxlength="128"
-                required
-            >
-        </div>
-
-        <!-- Submit -->
-        <button type="submit" class="btn-primary">
-            Create Account
-        </button>
-
-    </form>
-
-    <p class="contact-link">
-        <a href="/register/list">
-            View Registered Customers
-        </a>
-    </p>
+    </div>
 
 </main>
 

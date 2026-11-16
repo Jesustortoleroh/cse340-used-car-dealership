@@ -7,7 +7,8 @@ import { updateLastLogin } from '../../models/profile/profile.js';
  */
 const showLoginForm = (req, res) => {
     res.render('forms/login/form', {
-        title: 'Dealership Login'
+        title: 'Dealership Login',
+        csrfToken: res.locals.csrfToken // Explicitly pass the CSRF token
     });
 };
 
@@ -16,16 +17,12 @@ const showLoginForm = (req, res) => {
  * (Prevents account enumeration attacks)
  */
 const processLogin = async (req, res) => {
-    // NOTE: Validation errors are already handled by the handleValidationErrors middleware
-    
     const { email, password } = req.body;
 
     try {
-        // Find user by email
         const user = await findUserByEmail(email);
 
         // GENERIC ERROR MESSAGE - Security best practice
-        // Don't reveal if email exists or password is wrong
         if (!user) {
             req.flash('error', 'Invalid email or password');
             return res.redirect('/login');
@@ -40,7 +37,6 @@ const processLogin = async (req, res) => {
         // Verify password
         const validPassword = await verifyPassword(password, user.password);
 
-        // GENERIC ERROR MESSAGE - Same as above for security
         if (!validPassword) {
             req.flash('error', 'Invalid email or password');
             return res.redirect('/login');
@@ -73,9 +69,6 @@ const processLogin = async (req, res) => {
  * Logout user
  */
 const processLogout = (req, res) => {
-    // Add logout message before destroying session
-    req.flash('info', 'You have been successfully logged out.');
-
     if (!req.session) {
         return res.redirect('/');
     }
@@ -97,33 +90,27 @@ const processLogout = (req, res) => {
  */
 const showDashboard = async (req, res) => {
     try {
-        // Get user from session
         const userId = req.session.userId;
         const user = req.session.user;
-
-        // Security: Ensure password is never exposed
-        if (user && user.password) {
-            console.error('Security error: password found in user object');
-            delete user.password;
-        }
 
         if (!userId || !user) {
             req.flash('error', 'Please login first.');
             return res.redirect('/login');
         }
 
-        // Get user role name
+        // Security: Ensure password is never exposed
+        if (user.password) {
+            console.error('Security error: password found in user object');
+            delete user.password;
+        }
+
         const roleName = user?.roleName || 'customer';
 
-        // Get analytics based on user role
         const analytics = await getDashboardAnalytics(userId, roleName);
-        
-        // Get recent activity (limited to 3 each)
         const recentFavorites = await getRecentFavorites(userId, 3);
         const recentReviews = await getRecentReviews(userId, 3);
         const recentRequests = await getRecentRequests(userId, 3);
 
-        // Prepare analytics for display
         const analyticsData = {
             customer: {
                 favorites: parseInt(analytics.favorites_count) || 0,
@@ -151,7 +138,7 @@ const showDashboard = async (req, res) => {
             recentReviews,
             recentRequests,
             isLoggedIn: true,
-            // Note: flash() is already available in your views via the flash middleware
+            csrfToken: res.locals.csrfToken // Explicitly pass the CSRF token
         });
 
     } catch (error) {

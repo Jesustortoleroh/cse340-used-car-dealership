@@ -1,73 +1,66 @@
 <%- include('../../partials/header') %>
 
-<main>
+<main class="login-page">
 
-    <h1><%= title %></h1>
+    <div class="login-card glass-card">
+        <h1 class="login-title"><%= title %></h1>
 
-    <p>
-        Sign in to access your dealership account, manage your profile,
-        view service requests, and interact with our vehicle inventory.
-        Don't have an account yet?
-        <a href="/register">Create one here</a>.
-    </p>
+        <p class="login-subtitle">
+            Sign in to access your dealership account, manage your profile,
+            view service requests, and interact with our vehicle inventory.
+        </p>
 
-    <form
-        method="POST"
-        action="/login"
-        class="login-form"
-        novalidate
-    >
-        <!-- ⭐ CSRF Token (Required for security) -->
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <form
+            method="POST"
+            action="/login"
+            class="login-form"
+            novalidate
+        >
+            <!-- CSRF Token (Required for security) -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-        <!-- Email -->
-        <div class="form-group">
-            <label for="email">
-                Email Address
-            </label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Enter your email address"
-                maxlength="255"
-                required
-                autocomplete="email"
-            >
-        </div>
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    maxlength="255"
+                    required
+                    autocomplete="email"
+                >
+            </div>
 
-        <!-- Password -->
-        <div class="form-group">
-            <label for="password">
-                Password
-            </label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                minlength="8"
-                maxlength="128"
-                placeholder="Enter your password"
-                required
-                autocomplete="current-password"
-            >
-        </div>
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    minlength="8"
+                    maxlength="128"
+                    placeholder="Enter your password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
 
-        <!-- Submit -->
-        <button type="submit" class="btn-primary">
-            Sign In
-        </button>
+            <!-- Submit -->
+            <button type="submit" class="btn-primary btn-block">
+                Sign In
+            </button>
 
-        <div class="form-footer">
-            <p>
-                New customer?
-                <a href="/register">
-                    Create an account
-                </a>
-            </p>
-        </div>
-
-    </form>
+            <div class="form-footer">
+                <p>
+                    New customer?
+                    <a href="/register">Create an account</a>
+                </p>
+            </div>
+        </form>
+    </div>
 
 </main>
 

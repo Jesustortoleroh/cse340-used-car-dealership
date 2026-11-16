@@ -1,4 +1,3 @@
-import { validationResult } from 'express-validator';
 import { findUserByEmail } from '../../models/forms/login.js';
 import {
     createContactForm,
@@ -15,9 +14,7 @@ import { notifyInquiryResponse } from '../../models/notifications/notificationTr
  */
 const showContactForm = (req, res) => {
     res.render('forms/contact/form', {
-        title: 'Contact Our Dealership',
-        user: req.session?.user || null,
-        isLoggedIn: !!req.session?.user
+        title: 'Contact Our Dealership'
     });
 };
 
@@ -25,15 +22,7 @@ const showContactForm = (req, res) => {
  * Process contact form submission
  */
 const handleContactSubmission = async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        errors.array().forEach((error) => {
-            req.flash('error', error.msg);
-        });
-        return res.redirect('/contact');
-    }
-
+    // Validation is handled by the handleValidationErrors middleware
     const { customer_name, email, phone, subject, message } = req.body;
 
     try {
@@ -67,15 +56,10 @@ const showContactResponses = async (req, res) => {
         req.flash('error', 'Unable to retrieve customer inquiries. Please try again later.');
     }
 
-    // ⭐ Obtener mensajes flash
-    const messages = req.flash();
-
     res.render('forms/contact/responses', {
         title: 'Customer Inquiries',
-        inquiries: inquiries,
-        messages: messages,
-        user: req.session?.user || null,
-        isLoggedIn: !!req.session?.user
+        inquiries: inquiries
+        // Flash messages are handled globally by header.ejs
     });
 };
 
@@ -93,15 +77,10 @@ const showInquiryDetail = async (req, res) => {
             return res.redirect('/contact/responses');
         }
 
-        // ⭐ Obtener mensajes flash
-        const messages = req.flash();
-
         res.render('forms/contact/detail', {
             title: 'Inquiry Details',
-            inquiry: inquiry,
-            messages: messages,
-            user: req.session?.user || null,
-            isLoggedIn: !!req.session?.user
+            inquiry: inquiry
+            // Flash messages are handled globally by header.ejs
         });
     } catch (error) {
         console.error('Error retrieving inquiry:', error);
@@ -124,9 +103,8 @@ const updateInquiryStatus = async (req, res) => {
         if (updated) {
             req.flash('success', 'Inquiry status updated successfully.');
 
-            // ⭐ Notificar al usuario si la consulta fue resuelta
+            // Notify user if inquiry was resolved
             if (status === 'Resolved' && inquiry && inquiry.email) {
-                // Buscar usuario por email para obtener user_id
                 const user = await findUserByEmail(inquiry.email);
                 if (user) {
                     await notifyInquiryResponse(user.id, id, inquiry.subject);
@@ -150,7 +128,6 @@ const updateInquiryPriority = async (req, res) => {
     const id = parseInt(req.params.id);
     const { priority } = req.body;
 
-    // Validar que priority sea válido
     const validPriorities = ['Low', 'Normal', 'High', 'Urgent'];
     if (priority && !validPriorities.includes(priority)) {
         req.flash('error', 'Invalid priority value.');

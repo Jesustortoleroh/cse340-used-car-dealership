@@ -8,11 +8,13 @@ export const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        // Format errors for the flash message
+        // Format errors and flash each message individually
         const errorMessages = errors.array().map((err) => err.msg);
-
-        // Save errors in flash session
-        req.flash('error', errorMessages);
+        
+        // Flash each error as a separate message
+        errorMessages.forEach((msg) => {
+            req.flash('error', msg);
+        });
 
         // Save the form data so the user doesn't have to type it again
         // (excluding passwords for security)

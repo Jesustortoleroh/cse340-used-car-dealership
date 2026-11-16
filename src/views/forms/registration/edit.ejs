@@ -1,14 +1,10 @@
 <%- include('../../partials/header') %>
 
-<main>
+<main class="edit-page">
 
-    <section class="account-edit">
-
-        <h1><%= title %></h1>
-
-        <p class="text-muted">
-            Update your dealership account information below.
-        </p>
+    <div class="edit-card glass-card">
+        <h1 class="edit-title"><%= title %></h1>
+        <p class="edit-subtitle">Update your dealership account information below.</p>
 
         <form
             method="POST"
@@ -16,11 +12,12 @@
             class="account-form"
             novalidate
         >
+            <!-- CSRF Token (Required for security) -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
+            <!-- Full Name -->
             <div class="form-group">
-                <label for="name">
-                    Full Name
-                </label>
+                <label for="name">Full Name</label>
                 <input
                     type="text"
                     id="name"
@@ -33,14 +30,13 @@
                     title="Letters, spaces, hyphens, and apostrophes only"
                 >
                 <small class="help-text">
-                    Between 2 and 100 characters. Letters, spaces, hyphens, and apostrophes only.
+                    Between 2 and 100 characters.
                 </small>
             </div>
 
+            <!-- Email Address -->
             <div class="form-group">
-                <label for="email">
-                    Email Address
-                </label>
+                <label for="email">Email Address</label>
                 <input
                     type="email"
                     id="email"
@@ -54,38 +50,28 @@
                 </small>
             </div>
 
-            <!-- Role Display (read-only, only shown for owners) -->
+            <!-- Role Display (Read-only) -->
             <% if (user.roleName) { %>
                 <div class="form-group">
-                    <label for="role">
-                        Role
-                    </label>
-                    <input
-                        type="text"
-                        id="role"
-                        name="role"
-                        value="<%= user.roleName %>"
-                        disabled
-                        readonly
-                    >
+                    <label>Role</label>
+                    <div class="role-display">
+                        <span class="role-badge role-<%= user.roleName %>">
+                            <%= user.roleName %>
+                        </span>
+                    </div>
                     <small class="help-text">
                         Role cannot be changed here. Contact an administrator if you need to change your role.
                     </small>
                 </div>
             <% } %>
 
+            <!-- Actions -->
             <div class="form-actions">
-                <button type="submit" class="btn-primary">
-                    Update Account
-                </button>
-                <a href="/register/list" class="btn-secondary">
-                    Cancel
-                </a>
+                <a href="/dashboard" class="btn-secondary">Cancel</a>
+                <button type="submit" class="btn-primary">Update Account</button>
             </div>
-
         </form>
-
-    </section>
+    </div>
 
 </main>
 
