@@ -1,4 +1,4 @@
-# 🚗 Used Car Dealership Application
+# ⚡ NeoMotor | Used Car Dealership
 
 A full-stack, production-ready web application for a used car dealership. Built with modern Node.js (ESM), Express 5, EJS, and PostgreSQL (Neon). Users can browse inventory, leave reviews, manage favorites, track service requests, and compare vehicles side-by-side.
 
@@ -40,7 +40,7 @@ A full-stack, production-ready web application for a used car dealership. Built 
 
 ### 🌙 Modern UI & Accessibility (A11y)
 - Dark/Light mode toggle with `localStorage` persistence (no flash of unstyled content).
-- Fully responsive, mobile-first design.
+- Fully responsive, mobile-first design with a **futuristic glassmorphism** aesthetic.
 - **Accessible (A11y):** ARIA labels, semantic HTML, keyboard navigation for the mobile menu, and `aria-expanded` states.
 
 ## 🏗️ Architecture & Best Practices
