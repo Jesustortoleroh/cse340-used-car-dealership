@@ -1,121 +1,99 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="vehicle-detail-page">
 
-    <div class="vehicle-header">
-
-        <h1><%= vehicle.name %></h1>
-
-        <% if (vehicle.image_url) { %>
-            <img
-                src="<%= vehicle.image_url %>"
-                class="vehicle-detail-image"
-                alt="<%= vehicle.name %>"
-                loading="eager"
-            >
-        <% } %>
-
-        <!-- Price first - most important info -->
-        <p class="vehicle-price">
-            $<%= vehicle.price.toLocaleString() %>
-        </p>
-
-        <!-- Category -->
-        <p class="vehicle-category">
-            Category: <%= vehicle.category %>
-        </p>
-
-        <!-- FAVORITES BUTTON -->
-        <% if (isLoggedIn) { %>
-            <div class="favorite-action">
-                <% if (isFavorite) { %>
-                    <form action="/favorites/<%= vehicle.id %>/remove" method="POST">
-                        <!-- ⭐ CSRF Token -->
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button type="submit" class="btn-favorite saved" aria-label="Remove from favorites">
-                            ❤️ Saved
-                        </button>
-                    </form>
-                <% } else { %>
-                    <form action="/favorites/<%= vehicle.id %>/add" method="POST">
-                        <!-- ⭐ CSRF Token -->
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button type="submit" class="btn-favorite" aria-label="Save to favorites">
-                            ♡ Save Vehicle
-                        </button>
-                    </form>
-                <% } %>
-            </div>
-        <% } %>
-
-        <!-- Description -->
-        <p class="vehicle-description">
-            <%= vehicle.description %>
-        </p>
-
-        <!-- Dealer info -->
-        <% if (vehicle.dealer) { %>
-            <p class="vehicle-dealer">
-                Dealer:
-                <a href="/dealers/<%= vehicle.dealer_slug %>" class="dealer-link">
-                    <%= vehicle.dealer %>
-                </a>
-                • <%= vehicle.location %>
-            </p>
-        <% } %>
-
-    </div>
-
-    <section class="specs" aria-labelledby="specs-title">
-
-        <div class="sections-header">
-
-            <h2 id="specs-title">Specifications</h2>
-
-            <div class="sort-options">
-                <span>Sort by:</span>
-                <a href="/vehicles/<%= vehicle.slug %>?sort=feature" class="<%= currentSort === 'feature' ? 'active' : '' %>">
-                    Feature
-                </a>
-                <a href="/vehicles/<%= vehicle.slug %>?sort=value" class="<%= currentSort === 'value' ? 'active' : '' %>">
-                    Value
-                </a>
+    <!-- Vehicle Header Section (Glassmorphism Card) -->
+    <section class="vehicle-header-card">
+        <div class="vehicle-header-content">
+            <h1 class="vehicle-title"><%= vehicle.name %></h1>
+            
+            <div class="vehicle-meta">
+                <span class="vehicle-price">$<%= vehicle.price.toLocaleString() %></span>
+                <span class="vehicle-category">Category: <%= vehicle.category %></span>
             </div>
 
+            <!-- Favorites Action -->
+            <% if (isLoggedIn) { %>
+                <div class="favorite-action">
+                    <% if (isFavorite) { %>
+                        <form action="/favorites/<%= vehicle.id %>/remove" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn-favorite saved" aria-label="Remove from favorites">
+                                ❤️ Saved
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <form action="/favorites/<%= vehicle.id %>/add" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <button type="submit" class="btn-favorite" aria-label="Save to favorites">
+                                ♡ Save Vehicle
+                            </button>
+                        </form>
+                    <% } %>
+                </div>
+            <% } %>
         </div>
 
-        <div class="specs-list">
+        <div class="vehicle-header-image">
+            <% if (vehicle.image_url) { %>
+                <img
+                    src="<%= vehicle.image_url %>"
+                    class="vehicle-detail-image"
+                    alt="<%= vehicle.name %>"
+                    loading="eager"
+                >
+            <% } %>
+        </div>
+    </section>
 
+    <!-- Description & Dealer Info -->
+    <section class="vehicle-info-card">
+        <p class="vehicle-description"><%= vehicle.description %></p>
+        <% if (vehicle.dealer) { %>
+            <p class="vehicle-dealer">
+                Dealer: 
+                <a href="/dealers/<%= vehicle.dealer_slug %>" class="dealer-link">
+                    <%= vehicle.dealer %>
+                </a> • <%= vehicle.location %>
+            </p>
+        <% } %>
+    </section>
+
+    <!-- Specifications Section -->
+    <section class="specs-section" aria-labelledby="specs-title">
+        <div class="section-header">
+            <h2 id="specs-title">Specifications</h2>
+            <div class="sort-options">
+                <span>Sort by:</span>
+                <a href="/vehicles/<%= vehicle.slug %>?sort=feature" class="<%= currentSort === 'feature' ? 'active' : '' %>">Feature</a>
+                <a href="/vehicles/<%= vehicle.slug %>?sort=value" class="<%= currentSort === 'value' ? 'active' : '' %>">Value</a>
+            </div>
+        </div>
+
+        <div class="specs-grid">
             <% if (vehicle.specs && vehicle.specs.length > 0) { %>
                 <% vehicle.specs.forEach(spec => { %>
-                    <div class="spec-card">
+                    <div class="spec-item-card">
                         <strong><%= spec.feature %>:</strong>
                         <span><%= spec.value %></span>
                     </div>
                 <% }) %>
             <% } else { %>
-                <p>No specifications available.</p>
+                <p class="text-muted">No specifications available.</p>
             <% } %>
-
         </div>
-
     </section>
 
     <!-- Reviews Section -->
     <section class="reviews-section" aria-labelledby="reviews-title">
-
-        <div class="reviews-header">
+        <div class="section-header">
             <h2 id="reviews-title">Customer Reviews</h2>
             <% if (reviews && reviews.length > 0) { %>
                 <div class="reviews-summary-badge">
                     <span class="avg-rating"><%= averageRating %></span>
                     <div class="mini-stars" aria-label="Average rating: <%= averageRating %> out of 5 stars">
                         <% for(let i = 0; i < 5; i++) { %>
-                            <% if(i < Math.round(averageRating)) { %>
-                                <span class="star filled" aria-hidden="true">★</span>
-                            <% } else { %>
-                                <span class="star" aria-hidden="true">★</span>
-                            <% } %>
+                            <span class="star <%= i < Math.round(averageRating) ? 'filled' : '' %>" aria-hidden="true">★</span>
                         <% } %>
                     </div>
                     <span class="review-count">(<%= reviews.length %> reviews)</span>
@@ -124,14 +102,13 @@
         </div>
 
         <% if (reviews && reviews.length > 0) { %>
-
             <!-- Rating Breakdown -->
             <div class="rating-breakdown">
                 <% for(let i = 5; i >= 1; i--) { %>
                     <% const percentage = ratingPercentages ? ratingPercentages[i] : 0; %>
                     <div class="breakdown-row">
                         <span class="stars-label"><%= i %> star</span>
-                        <progress class="progress-bar" value="<%= percentage %>" max="100" aria-label="<%= i %> star reviews: <%= percentage %>%"><%= percentage %>%</progress>
+                        <progress class="progress-bar" value="<%= percentage %>" max="100"></progress>
                         <span class="percentage"><%= percentage %>%</span>
                     </div>
                 <% } %>
@@ -145,19 +122,11 @@
                             <h3><%= review.name %></h3>
                             <div class="review-stars" aria-label="Rating: <%= review.rating %> out of 5 stars">
                                 <% for(let i = 0; i < 5; i++) { %>
-                                    <% if(i < review.rating) { %>
-                                        <span class="star filled" aria-hidden="true">★</span>
-                                    <% } else { %>
-                                        <span class="star" aria-hidden="true">★</span>
-                                    <% } %>
+                                    <span class="star <%= i < review.rating ? 'filled' : '' %>" aria-hidden="true">★</span>
                                 <% } %>
                             </div>
                             <small class="review-date">
-                                <%= new Date(review.created_at).toLocaleDateString('en-US', { 
-                                    year: 'numeric', 
-                                    month: 'short', 
-                                    day: 'numeric' 
-                                }) %>
+                                <%= new Date(review.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
                             </small>
                         </div>
 
@@ -165,98 +134,65 @@
 
                         <% if (user && (user.id === review.user_id || user.roleName === 'employee' || user.roleName === 'owner')) { %>
                             <div class="review-actions">
-                                <a href="/reviews/<%= review.id %>/edit" class="btn-edit">
-                                    ✏️ Edit
-                                </a>
+                                <a href="/reviews/<%= review.id %>/edit" class="btn-edit">✏️ Edit</a>
                                 <form action="/reviews/<%= review.id %>/delete" method="POST" class="delete-form">
-                                    <!-- ⭐ CSRF Token -->
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this review?')">
-                                        🗑️ Delete
-                                    </button>
+                                    <button type="submit" class="btn-delete" onclick="return confirm('Are you sure you want to delete this review?')">🗑️ Delete</button>
                                 </form>
                             </div>
                         <% } %>
                     </article>
                 <% }) %>
             </div>
-
         <% } else { %>
-
             <div class="empty-state">
                 <span class="empty-icon" aria-hidden="true">🚗</span>
-                <p>No reviews have been submitted yet for this vehicle.</p>
+                <p>No reviews yet.</p>
                 <p class="empty-sub">Be the first to share your experience!</p>
             </div>
-
         <% } %>
-
     </section>
 
-    <!-- Leave Review -->
+    <!-- Leave Review Section -->
     <% if (user) { %>
-
         <section class="review-form-section" aria-labelledby="leave-review-title">
-
             <h2 id="leave-review-title">Leave a Review</h2>
-
             <form action="/reviews/create" method="POST" class="review-form">
-
-                <!-- ⭐ CSRF Token -->
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <input type="hidden" name="vehicle_id" value="<%= vehicle.id %>">
 
                 <div class="form-group">
-
                     <label>Rating <span class="text-danger">*</span></label>
-
                     <div class="star-rating">
                         <input type="radio" id="star5" name="rating" value="5" required>
                         <label for="star5" aria-label="5 stars">★</label>
-
                         <input type="radio" id="star4" name="rating" value="4">
                         <label for="star4" aria-label="4 stars">★</label>
-
                         <input type="radio" id="star3" name="rating" value="3">
                         <label for="star3" aria-label="3 stars">★</label>
-
                         <input type="radio" id="star2" name="rating" value="2">
                         <label for="star2" aria-label="2 stars">★</label>
-
                         <input type="radio" id="star1" name="rating" value="1">
                         <label for="star1" aria-label="1 star">★</label>
                     </div>
-
                 </div>
 
                 <div class="form-group">
-
                     <label for="comment">Review <span class="text-danger">*</span></label>
-
                     <textarea id="comment" name="comment" rows="5" class="form-control" required><%= formData?.comment || '' %></textarea>
-
                 </div>
 
                 <div class="review-actions">
                     <a href="/vehicles" class="btn-secondary">← Back to Vehicles</a>
                     <button type="submit" class="btn-primary">Submit Review</button>
                 </div>
-
             </form>
-
         </section>
-
     <% } else { %>
-
         <div class="login-prompt">
             <p><a href="/login" class="login-link">Login</a> to leave a review.</p>
         </div>
-
     <% } %>
-
-    <div class="navigation">
-        <a href="/vehicles<%= vehicle.category ? '?category=' + vehicle.category : '' %>">← Back to Vehicles</a>
-    </div>
 
 </main>
 
