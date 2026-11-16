@@ -31,8 +31,31 @@ const app = express();
 // Trust proxy for Render/Heroku
 app.set('trust proxy', 1);
 
-// Logging HTTP requests
-app.use(pinoHttp({ logger }));
+// ==========================================
+// Logging HTTP requests (Clean output)
+// ==========================================
+app.use(pinoHttp({ 
+    logger,
+    // Ignore static assets to keep the console clean
+    autoLogging: {
+        ignore: (req) => 
+            req.url.startsWith('/css/') || 
+            req.url.startsWith('/js/') || 
+            req.url.startsWith('/images/')
+    },
+    // Only log essential request/response data
+    serializers: {
+        req: (req) => ({ method: req.method, url: req.url }),
+        res: (res) => ({ statusCode: res.statusCode })
+    },
+    // Custom message format
+    customSuccessMessage: (req, res) => {
+        return `${req.method} ${req.url} - ${res.statusCode}`;
+    },
+    customErrorMessage: (req, res, err) => {
+        return `${req.method} ${req.url} - ${res.statusCode} - ${err.message}`;
+    }
+}));
 
 // Compression (gzip)
 app.use(compression());
@@ -92,8 +115,8 @@ app.use(rateLimit({
     message: 'Too many requests from this IP, please try again after 15 minutes',
     standardHeaders: true,
     legacyHeaders: false,
-    // ⭐ Skip rate limiting in development to avoid blocking during testing
-    skip: (req, res) => env.NODE_ENV !== 'production', 
+    // Skip rate limiting in development
+    skip: (_req, _res) => env.NODE_ENV !== 'production', 
 }));
 
 // CSRF Protection

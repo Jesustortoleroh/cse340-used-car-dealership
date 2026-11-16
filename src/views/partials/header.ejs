@@ -30,14 +30,9 @@
 
     <% if (NODE_ENV.includes('dev')) { %>
     <script>
-        // Get the current hostname and port from the browser
         const host = window.location.hostname;
         const currentPort = window.location.port;
-
-        // Calculate WebSocket port (current port + 1)
         const wsPort = currentPort ? (parseInt(currentPort) + 1) : 3001;
-
-        // Create WebSocket connection using dynamic hostname and port
         const ws = new WebSocket(`ws://${host}:${wsPort}`);
         ws.onclose = () => {
             setTimeout(() => location.reload(), 2000);
@@ -85,7 +80,7 @@
 
                     <!-- Notifications link -->
                     <li class="notification-link-wrapper">
-                        <a href="/notifications" class="notification-link">
+                        <a href="/notifications" class="notification-link" aria-label="Notifications">
                             🔔
                             <% if (unreadNotifications > 0) { %>
                                 <span class="notification-badge"><%= unreadNotifications %></span>
@@ -123,12 +118,10 @@
 
     <!-- Flash messages display -->
     <%
-    // Safely extract messages
     const messages = typeof flash === 'function' 
         ? flash() 
         : { success: [], error: [], warning: [], info: [] };
 
-    // Check if there is actual text in any message array to prevent empty bars
     const hasMessages = Object.keys(messages).some(type => 
         Array.isArray(messages[type]) && messages[type].some(msg => msg && msg.trim() !== '')
     );

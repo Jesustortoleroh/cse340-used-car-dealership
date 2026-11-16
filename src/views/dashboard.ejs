@@ -1,8 +1,8 @@
 <%- include('partials/header') %>
 
-<main>
+<main class="dashboard-page">
 
-    <h1><%= title %></h1>
+    <h1 class="page-title"><%= title %></h1>
 
     <% if (user) { %>
 
@@ -39,7 +39,7 @@
 
             <!-- Employee Analytics -->
             <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
-                <div class="analytics-grid employee-analytics">
+                <div class="analytics-grid">
                     <div class="analytics-card">
                         <div class="analytics-icon" aria-hidden="true">📨</div>
                         <div class="analytics-number"><%= analytics.employee.openInquiries %></div>
@@ -65,7 +65,7 @@
 
             <!-- Owner Analytics -->
             <% if (user.roleName === 'owner') { %>
-                <div class="analytics-grid owner-analytics">
+                <div class="analytics-grid">
                     <div class="analytics-card">
                         <div class="analytics-icon" aria-hidden="true">👥</div>
                         <div class="analytics-number"><%= analytics.owner.totalUsers %></div>
@@ -160,7 +160,7 @@
             <!-- Dashboard Cards Grid -->
             <section class="dashboard-cards" aria-labelledby="quick-access-title">
 
-                <h2 id="quick-access-title">Quick Access</h2>
+                <h2 id="quick-access-title" class="section-title">Quick Access</h2>
 
                 <div class="cards-grid">
 
@@ -227,9 +227,9 @@
             <!-- Customer Tools -->
             <section class="dashboard-actions" aria-labelledby="customer-tools-title">
 
-                <h2 id="customer-tools-title">Customer Tools</h2>
+                <h2 id="customer-tools-title" class="section-title">Customer Tools</h2>
 
-                <ul>
+                <ul class="action-list">
                     <li><a href="/vehicles">Browse Vehicles</a></li>
                     <li><a href="/dealers">View Dealers</a></li>
                     <li><a href="/service-requests">Service Requests</a></li>
@@ -244,9 +244,9 @@
 
                 <section class="dashboard-actions" aria-labelledby="staff-tools-title">
 
-                    <h2 id="staff-tools-title">Staff Tools</h2>
+                    <h2 id="staff-tools-title" class="section-title">Staff Tools</h2>
 
-                    <ul>
+                    <ul class="action-list">
                         <li><a href="/contact/responses">View Contact Responses</a></li>
                         <li><a href="/service-requests">Manage Service Requests</a></li>
                     </ul>
@@ -260,9 +260,9 @@
 
                 <section class="dashboard-actions" aria-labelledby="admin-tools-title">
 
-                    <h2 id="admin-tools-title">Administration</h2>
+                    <h2 id="admin-tools-title" class="section-title">Administration</h2>
 
-                    <ul>
+                    <ul class="action-list">
                         <li><a href="/register/list">Manage Users</a></li>
                     </ul>
 
@@ -274,7 +274,7 @@
 
     <% } else { %>
 
-        <p>Please log in to view your dashboard.</p>
+        <p class="text-center">Please log in to view your dashboard.</p>
 
     <% } %>
 
