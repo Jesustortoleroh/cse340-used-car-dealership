@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- ⭐ CSRF Token for AJAX requests -->
+    <!-- CSRF Token for AJAX requests -->
     <meta name="csrf-token" content="<%= csrfToken %>">
 
-    <title><%= title %></title>
+    <!-- Title and Favicon (NeoMotor) -->
+    <!-- Note: The emoji is only in the favicon to avoid duplication in the browser tab -->
+    <title>NeoMotor | <%= title %></title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/error.css">
@@ -16,13 +19,14 @@
     <%- renderStyles() %>
     <%- renderScripts() %>
 
-    <!-- ⭐ Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
+    <!-- Prevent FOUC (Flash of Unstyled Content) for Dark Mode -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme');
+            // Force dark mode by default if no theme is saved
             if (savedTheme) {
                 document.documentElement.setAttribute('data-theme', savedTheme);
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            } else {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
         })();
@@ -59,6 +63,13 @@
 
             <!-- Navigation menu list -->
             <ul id="nav-menu">
+                <!-- Brand Logo -->
+                <li class="nav-brand">
+                    <a href="/" style="font-size: 1.2rem; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem;">
+                        ⚡ NeoMotor
+                    </a>
+                </li>
+
                 <!-- Always visible links -->
                 <li><a href="/">Home</a></li>
                 <li><a href="/about">About</a></li>
@@ -69,13 +80,8 @@
 
                 <!-- Conditional content for logged-in users -->
                 <% if (isLoggedIn) { %>
-                    <!-- Dashboard link -->
                     <li><a href="/dashboard">Dashboard</a></li>
-
-                    <!-- Favorites link -->
                     <li><a href="/favorites">❤️ Favorites</a></li>
-
-                    <!-- Profile link -->
                     <li><a href="/profile">👤 Profile</a></li>
 
                     <!-- Notifications link -->
@@ -90,19 +96,14 @@
 
                     <!-- Conditional content for employee or owner roles -->
                     <% if (user && (user.roleName === 'employee' || user.roleName === 'owner')) { %>
-                        <!-- Vehicle registration list link -->
                         <li><a href="/register/list">Register List</a></li>
-                        <!-- Inquiries link -->
                         <li><a href="/contact/responses">Inquiries</a></li>
                     <% } %>
 
-                    <!-- Logout link -->
                     <li><a href="/logout">Logout</a></li>
 
                 <% } else { %>
-                    <!-- Login link for non-authenticated users -->
                     <li><a href="/login">Login</a></li>
-                    <!-- Registration link -->
                     <li><a href="/register">Create Account</a></li>
                 <% } %>
 
