@@ -283,7 +283,7 @@ header {
 }
 
 /* ==========================================
-   7. Buttons (Unified)
+   7. Buttons
 ========================================== */
 .btn-primary, .btn-secondary, .btn-search, button[type="submit"] {
     display: inline-flex;
@@ -543,7 +543,137 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ==========================================
-   12. Footer
+   12. About Page Specifics
+========================================== */
+.about-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.about-hero { 
+    text-align: center; 
+    margin-bottom: 4rem; 
+}
+
+.about-hero h1 {
+    color: var(--primary);
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    margin-bottom: 1.5rem;
+    font-size: 3rem;
+}
+
+[data-theme="light"] .about-hero h1 { text-shadow: none; }
+
+.about-intro {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* Each Section (Glass Card) */
+.about-section { 
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    padding: 3rem; 
+    margin-bottom: 2.5rem; 
+    box-shadow: var(--shadow-md);
+}
+
+.about-section h2 {
+    color: var(--primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem; 
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 2rem;
+}
+
+.about-section > p { 
+    color: var(--text-secondary); 
+    line-height: 1.8; 
+    font-size: 1.1rem; 
+}
+
+/* Feature Grid inside "Why Choose Us" */
+.about-features { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 2rem; 
+    margin-top: 2rem; 
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+}
+
+.feature-card:hover { 
+    background: var(--bg-hover); 
+    transform: translateX(5px); 
+}
+
+.feature-card h3 { 
+    color: var(--text-primary); 
+    margin-bottom: 0.75rem; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    font-size: 1.2rem; 
+}
+
+.feature-card p { 
+    font-size: 1rem; 
+    color: var(--text-muted); 
+    line-height: 1.6;
+}
+
+/* Final CTA */
+.about-cta {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(139, 92, 246, 0.1));
+    border-radius: var(--card-radius);
+    border: 1px solid var(--border-color);
+    margin-top: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-cta h2 { 
+    color: var(--text-primary); 
+    margin-bottom: 1rem; 
+    position: relative; 
+    z-index: 1; 
+}
+
+.about-cta p { 
+    color: var(--text-secondary); 
+    margin-bottom: 2rem; 
+    position: relative; 
+    z-index: 1; 
+    font-size: 1.1rem;
+}
+
+.about-cta .cta-buttons { 
+    position: relative; 
+    z-index: 1; 
+    display: flex; 
+    justify-content: center; 
+    gap: 1rem; 
+}
+
+/* ==========================================
+   13. Footer
 ========================================== */
 .main-footer {
     margin-top: auto;
@@ -569,7 +699,7 @@ input:focus, select:focus, textarea:focus {
 .footer-links a:hover { color: var(--primary); }
 
 /* ==========================================
-   13. Animations
+   14. Animations
 ========================================== */
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
@@ -585,7 +715,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ==========================================
-   14. Responsive
+   15. Responsive
 ========================================== */
 @media (max-width: 992px) {
     .hero-section { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
