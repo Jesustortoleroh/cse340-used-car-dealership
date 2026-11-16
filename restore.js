@@ -74,10 +74,14 @@ class PortKiller {
     async findProcess(port) {
         try {
             const { stdout } = await execAsync(this.commands.check(port));
-            if (!stdout) return null;
+            if (!stdout) {
+                return null;
+            }
 
             const pid = this.commands.getPid(stdout);
-            if (!pid) return null;
+            if (!pid) {
+                return null;
+            }
 
             return { pid, port };
         } catch (error) {
