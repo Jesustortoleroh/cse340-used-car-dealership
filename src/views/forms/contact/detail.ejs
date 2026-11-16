@@ -1,25 +1,22 @@
 <%- include('../../partials/header') %>
 
-<main>
+<main class="contact-detail-page">
 
-    <h1><%= title %></h1>
+    <h1 class="page-title"><%= title %></h1>
 
+    <!-- Flash Messages -->
     <% if (messages && messages.error) { %>
-        <div class="flash error">
-            <%= messages.error %>
-        </div>
+        <div class="flash error"><%= messages.error %></div>
     <% } %>
-
     <% if (messages && messages.success) { %>
-        <div class="flash success">
-            <%= messages.success %>
-        </div>
+        <div class="flash success"><%= messages.success %></div>
     <% } %>
 
     <% if (inquiry) { %>
 
-        <div class="inquiry-detail">
+        <div class="inquiry-detail-card">
 
+            <!-- Header -->
             <div class="inquiry-header">
                 <h2><%= inquiry.subject %></h2>
                 <span class="status-badge status-<%= inquiry.status ? inquiry.status.toLowerCase().replace(/\s+/g, '-') : 'received' %>">
@@ -27,63 +24,70 @@
                 </span>
             </div>
 
-            <div class="inquiry-meta">
-                <p>
+            <!-- Meta Information -->
+            <div class="inquiry-meta-grid">
+                <div class="meta-item">
                     <strong>Customer:</strong>
-                    <%= inquiry.customer_name %>
-                </p>
-                <p>
+                    <span><%= inquiry.customer_name %></span>
+                </div>
+                <div class="meta-item">
                     <strong>Email:</strong>
-                    <%= inquiry.email %>
-                </p>
-                <p>
+                    <span><%= inquiry.email %></span>
+                </div>
+                <div class="meta-item">
                     <strong>Phone:</strong>
-                    <%= inquiry.phone || 'Not Provided' %>
-                </p>
-                <p>
+                    <span><%= inquiry.phone || 'Not Provided' %></span>
+                </div>
+                <div class="meta-item">
                     <strong>Priority:</strong>
-                    <%= inquiry.priority || 'Normal' %>
-                </p>
-                <p>
+                    <span><%= inquiry.priority || 'Normal' %></span>
+                </div>
+                <div class="meta-item">
                     <strong>Submitted:</strong>
-                    <%= new Date(inquiry.created_at).toLocaleDateString() %>
-                </p>
+                    <span><%= new Date(inquiry.created_at).toLocaleDateString() %></span>
+                </div>
                 <% if (inquiry.resolved_at) { %>
-                    <p>
+                    <div class="meta-item">
                         <strong>Resolved:</strong>
-                        <%= new Date(inquiry.resolved_at).toLocaleDateString() %>
-                    </p>
+                        <span><%= new Date(inquiry.resolved_at).toLocaleDateString() %></span>
+                    </div>
                 <% } %>
             </div>
 
-            <div class="inquiry-message">
+            <!-- Message Body -->
+            <div class="inquiry-message-box">
                 <h3>Message</h3>
                 <p><%= inquiry.message %></p>
             </div>
 
-            <div class="inquiry-detail-actions">
-                <a href="/contact/responses" class="btn-back">
+            <!-- Actions -->
+            <div class="inquiry-actions">
+                <a href="/contact/responses" class="btn-secondary">
                     ← Back to Inquiries
                 </a>
 
-                <!-- Form to update status -->
-                <form action="/contact/<%= inquiry.id %>/status" method="POST" class="status-form">
-                    <label for="status">Update Status:</label>
-                    <select name="status" id="status">
-                        <option value="Received" <%= inquiry.status === 'Received' ? 'selected' : '' %>>Received</option>
-                        <option value="In Progress" <%= inquiry.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
-                        <option value="Resolved" <%= inquiry.status === 'Resolved' ? 'selected' : '' %>>Resolved</option>
-                        <option value="Closed" <%= inquiry.status === 'Closed' ? 'selected' : '' %>>Closed</option>
-                    </select>
-                    <button type="submit" class="btn-update">Update Status</button>
-                </form>
+                <div class="inquiry-forms">
+                    <!-- Form to update status -->
+                    <form action="/contact/<%= inquiry.id %>/status" method="POST" class="status-form">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <label for="status">Update Status:</label>
+                        <select name="status" id="status">
+                            <option value="Received" <%= inquiry.status === 'Received' ? 'selected' : '' %>>Received</option>
+                            <option value="In Progress" <%= inquiry.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+                            <option value="Resolved" <%= inquiry.status === 'Resolved' ? 'selected' : '' %>>Resolved</option>
+                            <option value="Closed" <%= inquiry.status === 'Closed' ? 'selected' : '' %>>Closed</option>
+                        </select>
+                        <button type="submit" class="btn-primary">Update</button>
+                    </form>
 
-                <!-- Form to delete inquiry -->
-                <form action="/contact/<%= inquiry.id %>/delete" method="POST" class="delete-form">
-                    <button type="submit" class="btn-delete-detail" onclick="return confirm('Are you sure you want to delete this inquiry?')">
-                        🗑️ Delete
-                    </button>
-                </form>
+                    <!-- Form to delete inquiry -->
+                    <form action="/contact/<%= inquiry.id %>/delete" method="POST" class="delete-form">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="btn-delete-detail" onclick="return confirm('Are you sure you want to delete this inquiry?')">
+                            🗑️ Delete
+                        </button>
+                    </form>
+                </div>
             </div>
 
         </div>
@@ -91,7 +95,7 @@
     <% } else { %>
 
         <div class="empty-state">
-            <span class="empty-icon">📨</span>
+            <span class="empty-icon" aria-hidden="true">📨</span>
             <p>Inquiry not found.</p>
             <a href="/contact/responses" class="btn-primary">Back to Inquiries</a>
         </div>

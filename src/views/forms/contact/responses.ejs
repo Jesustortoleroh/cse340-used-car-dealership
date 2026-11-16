@@ -1,70 +1,56 @@
 <%- include('../../partials/header') %>
 
-<main>
+<main class="contact-responses-page">
 
-    <h1><%= title %></h1>
-
-    <p>
-        Below are the inquiries submitted by potential customers interested in
-        our vehicles and services.
-    </p>
+    <div class="page-header">
+        <h1 class="page-title"><%= title %></h1>
+        <p class="page-subtitle">
+            Below are the inquiries submitted by potential customers interested in
+            our vehicles and services.
+        </p>
+    </div>
 
     <%
-    // ⭐ SOLUCIÓN DEFENSIVA
+    // Defensive fallback in case inquiries is undefined
     const inquiryList = typeof inquiries !== 'undefined' ? inquiries : [];
     %>
 
     <% if (inquiryList.length > 0) { %>
 
-        <div class="contact-responses">
+        <div class="contact-responses-grid">
 
             <% inquiryList.forEach(inquiry => { %>
 
-                <div class="response-item">
+                <div class="response-card">
 
-                    <h3 class="response-subject">
-                        <%= inquiry.subject %>
-                    </h3>
-
-                    <p>
-                        <strong>Customer:</strong>
-                        <%= inquiry.customer_name %>
-                    </p>
-
-                    <p>
-                        <strong>Email:</strong>
-                        <%= inquiry.email %>
-                    </p>
-
-                    <p>
-                        <strong>Phone:</strong>
-                        <%= inquiry.phone || 'Not Provided' %>
-                    </p>
-
-                    <p>
-                        <strong>Status:</strong>
+                    <!-- Card Header: Subject & Status -->
+                    <div class="response-card-header">
+                        <h3 class="response-subject"><%= inquiry.subject %></h3>
                         <span class="status-badge status-<%= inquiry.status ? inquiry.status.toLowerCase().replace(/\s+/g, '-') : 'received' %>">
                             <%= inquiry.status || 'Received' %>
                         </span>
-                    </p>
+                    </div>
 
-                    <p>
-                        <strong>Priority:</strong>
-                        <%= inquiry.priority || 'Normal' %>
-                    </p>
+                    <!-- Card Body: Customer Info -->
+                    <div class="response-card-body">
+                        <p><strong>Customer:</strong> <%= inquiry.customer_name %></p>
+                        <p><strong>Email:</strong> <%= inquiry.email %></p>
+                        <p><strong>Phone:</strong> <%= inquiry.phone || 'Not Provided' %></p>
+                        <p><strong>Priority:</strong> <%= inquiry.priority || 'Normal' %></p>
+                        
+                        <div class="response-message-preview">
+                            <%= inquiry.message %>
+                        </div>
+                    </div>
 
-                    <p class="response-message">
-                        <%= inquiry.message %>
-                    </p>
-
-                    <p class="response-date">
-                        Submitted:
-                        <%= new Date(inquiry.submitted || inquiry.created_at).toLocaleDateString() %>
-                    </p>
-
-                    <div class="inquiry-actions">
+                    <!-- Card Footer: Date & Action -->
+                    <div class="response-card-footer">
+                        <p class="response-date">
+                            <span aria-hidden="true">📅</span> 
+                            <%= new Date(inquiry.submitted || inquiry.created_at).toLocaleDateString() %>
+                        </p>
                         <a href="/contact/<%= inquiry.id %>" class="btn-view">
-                            View Details
+                            View Details →
                         </a>
                     </div>
 
@@ -77,16 +63,17 @@
     <% } else { %>
 
         <div class="empty-state">
-            <span class="empty-icon">📨</span>
+            <span class="empty-icon" aria-hidden="true">📨</span>
             <h2>No Customer Inquiries</h2>
             <p>No customer inquiries have been submitted yet.</p>
         </div>
 
     <% } %>
 
-    <div class="contact-link">
-        <a href="/contact" class="btn-primary">
-            Submit a New Inquiry
+    <!-- Back to Contact Form -->
+    <div class="contact-link" style="text-align: center; margin-top: 3rem;">
+        <a href="/contact" class="btn-secondary">
+            ← Submit a New Inquiry
         </a>
     </div>
 

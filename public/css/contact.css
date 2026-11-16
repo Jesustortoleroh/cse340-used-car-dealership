@@ -1,350 +1,493 @@
 /* ==========================================
-   Contact Form
+   Contact Pages Styles (NeoMotor)
 ========================================== */
-.contact-form {
-    max-width: 700px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: var(--bg-card);
-    border-radius: var(--card-radius);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-
-    h2 {
-        color: var(--text-primary);
-        text-align: center;
-        margin-bottom: 1.5rem;
-        border-bottom: 2px solid var(--primary);
-        padding-bottom: 0.5rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: var(--text-primary);
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-dark);
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            background: var(--bg-input);
-            color: var(--text-primary);
-            transition: var(--transition);
-        }
-
-        input:focus-visible,
-        textarea:focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-light);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-    }
-
-    button[type="submit"] {
-        width: 100%;
-        padding: 1rem;
-        border: none;
-        border-radius: 8px;
-        background-color: var(--primary);
-        color: var(--text-white);
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: var(--transition);
-
-        &:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-        
-        &:active {
-            transform: translateY(0);
-        }
-
-        &:focus-visible {
-            outline: 3px solid var(--primary);
-            outline-offset: 2px;
-        }
-    }
-}
 
 /* ==========================================
-   Contact Link / Button
+   1. Contact Form Page (form.ejs)
 ========================================== */
-.contact-link {
-    text-align: center;
-    margin-top: 2rem;
-}
-
-/* ==========================================
-   Contact Responses (Inquiries List)
-========================================== */
-.contact-responses {
-    max-width: 900px;
-    margin: 2rem auto;
-
-    .response-item {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: var(--card-radius);
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        box-shadow: var(--card-shadow);
-        transition: var(--transition);
-
-        &:hover {
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .response-subject {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
-        }
-
-        p {
-            margin: 0.5rem 0;
-            color: var(--text-secondary);
-        }
-
-        strong {
-            color: var(--text-primary);
-        }
-
-        .response-message {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            white-space: pre-wrap;
-            margin: 1rem 0;
-            padding: 1rem;
-            background-color: var(--bg-hover);
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-
-        .response-date {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 0.75rem;
-            margin-top: 1rem;
-        }
-    }
-}
-
-.no-responses {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-muted);
-    font-style: italic;
-}
-
-/* ==========================================
-   Inquiry Actions (List)
-========================================== */
-.inquiry-actions {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-    flex-wrap: wrap;
-}
-
-/* ==========================================
-   Inquiry Detail
-========================================== */
-.inquiry-detail {
+.contact-form-page {
     max-width: 800px;
     margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.contact-header h1 {
+    color: var(--primary);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+}
+
+[data-theme="light"] .contact-header h1 {
+    text-shadow: none;
+}
+
+.contact-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Glassmorphism Card */
+.glass-card {
     background: var(--bg-card);
-    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    box-shadow: var(--card-shadow);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+/* Form Rows (2 columns on desktop) */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
     transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Full width button */
+.btn-block {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Footer Link */
+.contact-footer-link {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.contact-footer-link p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+/* ==========================================
+   2. Contact Responses List Page (responses.ejs)
+========================================== */
+.contact-responses-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    color: var(--primary);
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    margin-bottom: 1rem;
+}
+
+[data-theme="light"] .page-title {
+    text-shadow: none;
+}
+
+.page-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Grid of Response Cards */
+.contact-responses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+/* Individual Response Card */
+.response-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.response-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Card Header */
+.response-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.response-subject {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+/* Card Body */
+.response-card-body {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.response-card-body p {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.response-card-body p strong {
+    color: var(--text-primary);
+}
+
+/* Message Preview */
+.response-message-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    border-left: 2px solid var(--border-color);
+}
+
+/* Card Footer */
+.response-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.response-date {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-view {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: var(--transition);
+}
+
+.btn-view:hover {
+    background: var(--primary);
+    color: var(--bg-body);
+    box-shadow: var(--neon-glow);
+}
+
+/* ==========================================
+   3. Contact Detail Page (detail.ejs)
+========================================== */
+.contact-detail-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.inquiry-detail-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
 }
 
 .inquiry-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
-    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-color);
     gap: 1rem;
-
-    h2 {
-        margin: 0;
-        color: var(--text-primary);
-    }
+    flex-wrap: wrap;
 }
 
-.inquiry-meta {
-    margin-bottom: 1.5rem;
-
-    p {
-        margin: 0.5rem 0;
-        color: var(--text-secondary);
-
-        strong {
-            color: var(--text-primary);
-        }
-    }
+.inquiry-header h2 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 2rem;
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }
 
-.inquiry-message {
-    background: var(--bg-hover);
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    border-left: 4px solid var(--primary);
-
-    h3 {
-        margin-top: 0;
-        color: var(--text-primary);
-    }
-
-    p {
-        margin: 0;
-        color: var(--text-secondary);
-        line-height: 1.6;
-    }
+[data-theme="light"] .inquiry-header h2 {
+    text-shadow: none;
 }
 
-/* ==========================================
-   Inquiry Detail Actions
-========================================== */
-.inquiry-detail-actions {
+.inquiry-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.meta-item {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+}
+
+.meta-item strong {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.25rem;
+}
+
+.meta-item span {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.inquiry-message-box {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 3rem;
+}
+
+.inquiry-message-box h3 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.inquiry-message-box p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1.1rem;
+    white-space: pre-wrap;
+}
+
+.inquiry-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     flex-wrap: wrap;
-    align-items: center;
-    padding-top: 1.5rem;
+    gap: 2rem;
+    padding-top: 2rem;
     border-top: 1px solid var(--border-color);
+}
+
+.inquiry-forms {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
 }
 
 .status-form {
     display: flex;
-    gap: 0.75rem;
     align-items: center;
-    flex-wrap: wrap;
-
-    label {
-        font-weight: bold;
-        color: var(--text-primary);
-    }
-
-    select {
-        padding: 0.5rem 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        background: var(--bg-input);
-        color: var(--text-primary);
-        font-size: 0.95rem;
-
-        &:focus-visible {
-            outline: 2px solid var(--primary);
-            outline-offset: 2px;
-        }
-
-        &:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-    }
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
 }
 
-.delete-form {
-    display: inline;
-    margin: 0;
+.status-form label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.status-form select {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-delete-detail {
+    background: transparent;
+    color: var(--error);
+    border: 1px solid var(--error);
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-delete-detail:hover {
+    background: var(--error);
+    color: var(--white);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
 }
 
 /* ==========================================
-   Empty State
+   4. Status Badges (Global)
+========================================== */
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-received { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+.status-in-progress { background: var(--info-bg); color: var(--info); border: 1px solid var(--info); }
+.status-resolved { background: var(--success-bg); color: var(--success); border: 1px solid var(--success); }
+.status-closed { background: var(--bg-hover); color: var(--text-muted); border: 1px solid var(--border-color); }
+
+/* ==========================================
+   5. Empty State
 ========================================== */
 .empty-state {
     text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
+    padding: 4rem 2rem;
     background: var(--bg-card);
     border-radius: var(--card-radius);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    border: 1px dashed var(--border-color);
+    margin-top: 2rem;
+}
 
-    .empty-icon {
-        font-size: 3rem;
-        display: block;
-        margin-bottom: 1rem;
-    }
-
-    p {
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        margin: 0.5rem 0;
-    }
+.empty-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
 }
 
 /* ==========================================
-   Responsive
+   6. Responsive
 ========================================== */
 @media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .glass-card {
+        padding: 1.5rem;
+    }
+
+    .contact-header h1 {
+        font-size: 2rem;
+    }
+
+    .contact-responses-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .response-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .response-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .inquiry-detail-card {
+        padding: 1.5rem;
+    }
+
     .inquiry-actions {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .inquiry-detail {
-        padding: 1rem;
-    }
-
-    .inquiry-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .inquiry-detail-actions {
-        flex-direction: column;
+    .inquiry-forms {
         align-items: stretch;
     }
 
     .status-form {
         flex-direction: column;
         align-items: stretch;
-        width: 100%;
-
-        select {
-            width: 100%;
-        }
-    }
-
-    .empty-state {
-        padding: 2rem 1rem;
     }
 }
