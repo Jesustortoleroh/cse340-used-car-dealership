@@ -1,48 +1,34 @@
-import fs from 'fs';
-import path from 'path';
 import { Pool } from 'pg';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Read the CA certificate content
-const caCert = fs.readFileSync(path.join(__dirname, '../../bin', 'byuicse-psql-cert.pem'));
 
 /**
  * Connection pool for PostgreSQL database.
+ * Configured for Neon (standard SSL).
  *
  * A connection pool maintains a set of reusable database connections
  * to avoid the overhead of creating new connections for each request.
- * This improves performance and reduces load on the database server.
- *
- * Uses a connection string from environment variables for simplified setup.
- * The connection string format is:
- * postgresql://username:password@host:port/database
  */
 const pool = new Pool({
     connectionString: process.env.DB_URL,
     ssl: {
-        ca: caCert,  // Use the certificate content, not the file path
-        rejectUnauthorized: true,  // Keep this true for proper security
-        checkServerIdentity: () => { return undefined; }  // Skip hostname verification but keep cert chain validation
+        // Neon requires SSL. Node.js automatically recognizes Let's Encrypt 
+        // certificates, so you don't need to pass a .pem file.
+        require: true
     }
 });
 
-/**
- * Since we will modify the normal pool object in development mode, we need to create and
- * export a reference to the pool object. This allows us to use the same name for the
- * export regardless of whether we are in development or production mode.
- */
+// Handle unexpected errors on idle clients
+pool.on('error', (err) => {
+    console.error('Unexpected error on idle PostgreSQL client', err);
+    process.exit(-1);
+});
+
 let db = null;
 
-if (process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {
+// Ensure NODE_ENV exists before using .includes to avoid errors
+if (process.env.NODE_ENV && process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {
     /**
-     * In development mode, we wrap the pool to provide query logging.
+     * In development mode, wrap the pool to provide query logging.
      * This helps with debugging by showing all executed queries in the console.
-     *
-     * The wrapper also adds timing information to help identify slow queries
-     * and tracks the number of rows affected by each query.
      */
     db = {
         async query(text, params) {
@@ -64,7 +50,6 @@ if (process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === '
                 throw error;
             }
         },
-
         async close() {
             await pool.end();
         }
@@ -75,4 +60,3 @@ if (process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === '
 }
 
 export default db;
-export { caCert };
