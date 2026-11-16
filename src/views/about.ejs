@@ -2,9 +2,9 @@
 
 <main class="about-page">
 
-    <section class="about-hero">
+    <section class="about-hero" aria-labelledby="about-title">
 
-        <h1><%= title %></h1>
+        <h1 id="about-title"><%= title %></h1>
 
         <p class="about-intro">
             Welcome to our Used Car Dealership, your trusted destination
@@ -15,9 +15,9 @@
 
     </section>
 
-    <section class="about-section">
+    <section class="about-section" aria-labelledby="mission-title">
 
-        <h2>🚗 Our Mission</h2>
+        <h2 id="mission-title"><span aria-hidden="true">🚗</span> Our Mission</h2>
 
         <p>
             Our mission is to provide dependable vehicles and exceptional
@@ -28,9 +28,9 @@
 
     </section>
 
-    <section class="about-section">
+    <section class="about-section" aria-labelledby="story-title">
 
-        <h2>📖 Our Story</h2>
+        <h2 id="story-title"><span aria-hidden="true">📖</span> Our Story</h2>
 
         <p>
             Since opening our doors in 2010, we have built a reputation for
@@ -41,35 +41,35 @@
 
     </section>
 
-    <section class="about-section">
+    <section class="about-section" aria-labelledby="why-choose-title">
 
-        <h2>⭐ Why Customers Choose Us</h2>
+        <h2 id="why-choose-title"><span aria-hidden="true">⭐</span> Why Customers Choose Us</h2>
 
         <div class="about-features">
 
             <div class="feature-card">
-                <h3>✅ Quality Inventory</h3>
+                <h3><span aria-hidden="true">✅</span> Quality Inventory</h3>
                 <p>
                     Carefully selected vehicles inspected for quality and reliability.
                 </p>
             </div>
 
             <div class="feature-card">
-                <h3>💰 Fair Pricing</h3>
+                <h3><span aria-hidden="true">💰</span> Fair Pricing</h3>
                 <p>
                     Competitive prices that provide excellent value for every budget.
                 </p>
             </div>
 
             <div class="feature-card">
-                <h3>📋 Vehicle History</h3>
+                <h3><span aria-hidden="true">📋</span> Vehicle History</h3>
                 <p>
                     Access to vehicle information and transparent records.
                 </p>
             </div>
 
             <div class="feature-card">
-                <h3>🤝 Customer Service</h3>
+                <h3><span aria-hidden="true">🤝</span> Customer Service</h3>
                 <p>
                     Friendly staff committed to helping you find the right vehicle.
                 </p>
@@ -79,9 +79,9 @@
 
     </section>
 
-    <section class="about-section">
+    <section class="about-section" aria-labelledby="services-title">
 
-        <h2>🛠️ Additional Services</h2>
+        <h2 id="services-title"><span aria-hidden="true">🛠️</span> Additional Services</h2>
 
         <p>
             Beyond vehicle sales, we help customers manage service requests,
@@ -91,9 +91,9 @@
 
     </section>
 
-    <section class="about-cta">
+    <section class="about-cta" aria-labelledby="about-cta-title">
 
-        <h2>Find Your Next Vehicle Today</h2>
+        <h2 id="about-cta-title">Find Your Next Vehicle Today</h2>
 
         <p>
             Explore our inventory and discover why drivers continue to trust
@@ -101,8 +101,8 @@
         </p>
 
         <div class="cta-buttons">
-            <a href="/vehicles" class="btn-primary">Browse Vehicles</a>
-            <a href="/contact" class="btn-secondary">Contact Us</a>
+            <a href="/vehicles" class="btn btn-primary">Browse Vehicles</a>
+            <a href="/contact" class="btn btn-secondary">Contact Us</a>
         </div>
 
     </section>

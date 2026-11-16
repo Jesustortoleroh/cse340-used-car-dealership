@@ -2,40 +2,28 @@
 
 <main>
 
-    <% if (flash) { %>
-
-        <% if (flash.error) { %>
-            <div class="flash error">
-                <%= flash.error %>
-            </div>
-        <% } %>
-
-        <% if (flash.success) { %>
-            <div class="flash success">
-                <%= flash.success %>
-            </div>
-        <% } %>
-
-    <% } %>
-
     <h1><%= title %></h1>
 
     <!-- ==========================================
-         Vehicle Search Toolbar - One Line Layout
+         Vehicle Search Toolbar
     ========================================== -->
     <div class="vehicles-toolbar">
-        <form action="/vehicles" method="GET" class="vehicle-search-form">
+        <form action="/vehicles" method="GET" class="vehicle-search-form" role="search">
+            
             <!-- Search input -->
+            <label for="search-input" class="visually-hidden">Search vehicles</label>
             <input 
                 type="text" 
+                id="search-input"
                 name="search" 
                 placeholder="🔍 Search vehicles by name or description..."
                 value="<%= queryParams && queryParams.search ? queryParams.search : '' %>"
                 class="search-input"
+                aria-label="Search vehicles by name or description"
             >
 
             <!-- Category filter -->
-            <select name="category" class="category-select">
+            <select name="category" class="category-select" aria-label="Filter by category">
                 <option value="All" <%= currentCategory === 'All' ? 'selected' : '' %>>
                     All Categories
                 </option>
@@ -57,7 +45,7 @@
             </select>
 
             <!-- Sort filter -->
-            <select name="sort" class="sort-select">
+            <select name="sort" class="sort-select" aria-label="Sort vehicles">
                 <option value="name_asc" <%= queryParams && queryParams.sort === 'name_asc' ? 'selected' : '' %>>
                     Sort By
                 </option>
@@ -83,17 +71,17 @@
                 Search
             </button>
 
-            <!-- Clear button (only shows when searching or filtering) -->
+            <!-- Clear button -->
             <% if ((queryParams && queryParams.search) || (queryParams && queryParams.category && queryParams.category !== 'All') || (queryParams && queryParams.sort && queryParams.sort !== 'name_asc')) { %>
                 <a href="/vehicles" class="btn-clear">
-                    ✕ Clear
+                    <span aria-hidden="true">✕</span> Clear
                 </a>
             <% } %>
         </form>
     </div>
 
     <!-- Results count with sort info -->
-    <p class="results-count">
+    <p class="results-count" role="status" aria-live="polite">
         Showing <strong><%= vehicleCount %></strong> <%= vehicleCount === 1 ? 'vehicle' : 'vehicles' %>
         <% if (queryParams && queryParams.search) { %>
             matching "<%= queryParams.search %>"
@@ -122,6 +110,7 @@
                         <img src="<%= vehicle.image_url %>"
                             alt="<%= vehicle.name %>"
                             class="vehicle-image"
+                            loading="lazy"
                         >
 
                     <% } %>
@@ -144,21 +133,17 @@
 
                         <% if (vehicle.average_rating) { %>
 
-                            <div class="vehicle-rating">
+                            <div class="vehicle-rating" aria-label="Rating: <%= Math.round(vehicle.average_rating) %> out of 5 stars">
 
                                 <% for(let i = 0; i < 5; i++) { %>
 
                                     <% if(i < Math.round(vehicle.average_rating)) { %>
 
-                                        <span class="star filled">
-                                            ★
-                                        </span>
+                                        <span class="star filled" aria-hidden="true">★</span>
 
                                     <% } else { %>
 
-                                        <span class="star">
-                                            ★
-                                        </span>
+                                        <span class="star" aria-hidden="true">★</span>
 
                                     <% } %>
 
@@ -172,8 +157,8 @@
 
                         <% } %>
 
-                        <!-- View Details button - Now a blue button -->
-                        <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
+                        <!-- View Details button -->
+                        <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details" aria-label="View details for <%= vehicle.name %>">
                             View Details →
                         </a>
 
@@ -189,9 +174,7 @@
 
         <div class="empty-state">
 
-            <span class="empty-icon">
-                🚗
-            </span>
+            <span class="empty-icon" aria-hidden="true">🚗</span>
 
             <p>
                 <% if (queryParams && queryParams.search) { %>

@@ -5,7 +5,6 @@
 /* ==========================================
    Index Page
 ========================================== */
-
 .compare-subtitle {
     text-align: center;
     color: var(--text-muted);
@@ -17,7 +16,7 @@
     margin: 0 auto;
     padding: 2rem;
     background: var(--bg-card);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     box-shadow: var(--card-shadow);
     transition: var(--transition);
 }
@@ -51,6 +50,11 @@
     transition: var(--transition);
 }
 
+.selector-group select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .selector-group select:focus {
     outline: none;
     border-color: var(--primary);
@@ -72,7 +76,7 @@
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .btn-compare:hover {
@@ -85,12 +89,17 @@
     transform: translateY(0);
 }
 
+.btn-compare:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .compare-tips {
     max-width: 900px;
     margin: 2rem auto;
     padding: 1.5rem;
     background: var(--bg-hover);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     border: 1px solid var(--border-color);
     transition: var(--transition);
 }
@@ -112,7 +121,6 @@
 /* ==========================================
    Results Page
 ========================================== */
-
 .comparison-header {
     display: flex;
     justify-content: space-between;
@@ -133,12 +141,18 @@
     text-decoration: none;
     border-radius: 8px;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: var(--transition);
+    display: inline-block;
 }
 
 .btn-new-compare:hover {
     background: var(--primary);
     transform: translateY(-2px);
+}
+
+.btn-new-compare:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
 }
 
 .comparison-table-wrapper {
@@ -150,7 +164,7 @@
     width: 100%;
     border-collapse: collapse;
     background: var(--bg-card);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     overflow: hidden;
     box-shadow: var(--card-shadow);
 }
@@ -177,6 +191,11 @@
 .comparison-table th a:hover {
     color: var(--primary-light);
     text-decoration: underline;
+}
+
+.comparison-table th a:focus-visible {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
 }
 
 .comparison-table .feature-label {
@@ -249,12 +268,17 @@
     text-decoration: none;
     border-radius: 6px;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: var(--transition);
 }
 
 .btn-details:hover {
     background: var(--primary-hover);
     transform: scale(1.02);
+}
+
+.btn-details:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
 }
 
 .comparison-footer {
@@ -264,64 +288,9 @@
     flex-wrap: wrap;
 }
 
-.btn-back,
-.btn-browse {
-    padding: 0.7rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.btn-back {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-}
-
-.btn-back:hover {
-    background: var(--border-color);
-    transform: translateY(-2px);
-}
-
-.btn-browse {
-    background: var(--primary);
-    color: var(--text-white);
-}
-
-.btn-browse:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-}
-
-/* ==========================================
-   Flash Messages
-========================================== */
-
-.flash {
-    max-width: 900px;
-    margin: 0 auto 1rem auto;
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-    font-weight: 500;
-}
-
-.flash.error {
-    background: var(--error-bg);
-    color: var(--error-text);
-    border: 1px solid var(--error);
-}
-
-.flash.success {
-    background: var(--success-bg);
-    color: var(--success-text);
-    border: 1px solid var(--success);
-}
-
 /* ==========================================
    Responsive
 ========================================== */
-
 @media (max-width: 768px) {
     .compare-selectors {
         grid-template-columns: 1fr;

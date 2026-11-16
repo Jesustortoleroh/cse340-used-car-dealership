@@ -1,28 +1,56 @@
 {
-  "name": "cse340-used-car-dealership",
-  "version": "1.0.0",
-  "description": "Used Car Dealership - CSE 340 Final Project",
-  "type": "module",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "connect-pg-simple": "^10.0.0",
-    "ejs": "^6.0.1",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "express-validator": "^7.3.2",
-    "pg": "^8.21.0"
-  },
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon --env-file=.env server.js",
-    "start": "node server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.28.2",
-  "devDependencies": {
-    "nodemon": "^3.1.11",
-    "ws": "^8.20.0"
-  }
+    "name": "used-car-dealership",
+    "version": "1.0.0",
+    "description": "A full-stack used car dealership application built with Node.js, Express, EJS, and PostgreSQL (Neon).",
+    "type": "module",
+    "main": "server.js",
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "scripts": {
+        "dev": "nodemon --env-file=.env server.js",
+        "start": "node server.js",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write ."
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "ejs",
+        "postgresql",
+        "neon",
+        "car-dealership",
+        "fullstack",
+        "esm"
+    ],
+    "author": "Jesus Tortolero",
+    "license": "MIT",
+    "packageManager": "pnpm@10.28.2",
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "compression": "^1.8.2",
+        "connect-pg-simple": "^10.0.0",
+        "csrf-sync": "^4.2.1",
+        "ejs": "^6.0.1",
+        "express": "^5.2.1",
+        "express-rate-limit": "^8.7.4",
+        "express-session": "^1.19.0",
+        "express-validator": "^7.3.2",
+        "helmet": "^8.3.0",
+        "pg": "^8.21.0",
+        "pino": "^10.4.0",
+        "pino-http": "^11.0.0",
+        "zod": "^4.6.7"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.15.0",
+        "eslint-config-prettier": "^10.1.8",
+        "globals": "^17.14.0",
+        "nodemon": "^3.1.11",
+        "pino-pretty": "^13.2.0",
+        "prettier": "^3.10.1",
+        "ws": "^8.20.0"
+    }
 }

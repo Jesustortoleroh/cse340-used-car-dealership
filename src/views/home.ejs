@@ -3,9 +3,9 @@
 <main class="home-page">
 
     <!-- Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" aria-labelledby="hero-title">
         <div class="hero-content">
-            <h1>Find Your Perfect Used Vehicle</h1>
+            <h1 id="hero-title">Find Your Perfect Used Vehicle</h1>
             <p class="hero-text">
                 Quality pre-owned cars, SUVs, trucks, luxury vehicles,
                 and electric vehicles from trusted dealerships across
@@ -17,88 +17,70 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="/images/homecar.jpg" alt="Quality pre-owned vehicles" class="hero-img">
+            <img src="/images/homecar.jpg" alt="A lineup of quality pre-owned vehicles at a dealership" class="hero-img" fetchpriority="high">
         </div>
     </section>
 
-    <!-- Browse By Category -->
-<section class="home-section">
+    <!-- Featured Vehicles -->
+    <section class="home-section" aria-labelledby="featured-title">
+        <h2 id="featured-title">Featured Vehicles</h2>
 
-    <h2>Featured Vehicles</h2>
-
-    <div class="carousel-container">
-
-        <div class="carousel-track">
-
-            <div class="vehicle-feature-card">
-
-                <img src="/images/vehicles/toyota-corolla.jpg" alt="Toyota Corolla 2020">
-
-                <div class="card-content">
-                    <h3>Toyota Corolla 2020</h3>
-                    <p class="card-price">$12,000</p>
-
-                    <a href="/vehicles/toyota-corolla-2020" class="btn-primary">
-                        View Details
-                    </a>
+        <div class="carousel-container">
+            <div class="carousel-track">
+                <!-- Vehicle 1 -->
+                <div class="vehicle-feature-card">
+                    <img src="/images/vehicles/toyota-corolla.jpg" alt="White 2020 Toyota Corolla" loading="lazy">
+                    <div class="card-content">
+                        <h3>Toyota Corolla 2020</h3>
+                        <p class="card-price">$12,000</p>
+                        <a href="/vehicles/toyota-corolla-2020" class="btn-primary" aria-label="View details for Toyota Corolla 2020">
+                            View Details
+                        </a>
+                    </div>
                 </div>
 
-            </div>
-
-            <div class="vehicle-feature-card">
-
-                <img src="/images/vehicles/ford-explorer.jpg" alt="Ford Explorer 2019">
-
-                <div class="card-content">
-                    <h3>Ford Explorer 2019</h3>
-                    <p class="card-price">$18,500</p>
-
-                    <a href="/vehicles/ford-explorer-2019" class="btn-primary">
-                        View Details
-                    </a>
+                <!-- Vehicle 2 -->
+                <div class="vehicle-feature-card">
+                    <img src="/images/vehicles/ford-explorer.jpg" alt="Silver 2019 Ford Explorer" loading="lazy">
+                    <div class="card-content">
+                        <h3>Ford Explorer 2019</h3>
+                        <p class="card-price">$18,500</p>
+                        <a href="/vehicles/ford-explorer-2019" class="btn-primary" aria-label="View details for Ford Explorer 2019">
+                            View Details
+                        </a>
+                    </div>
                 </div>
 
-            </div>
-
-            <div class="vehicle-feature-card">
-
-                <img src="/images/vehicles/bmw-3-series.jpg" alt="BMW 3 Series 2021">
-
-                <div class="card-content">
-                    <h3>BMW 3 Series 2021</h3>
-                    <p class="card-price">$28,000</p>
-
-                    <a href="/vehicles/bmw-3-series-2021" class="btn-primary">
-                        View Details
-                    </a>
+                <!-- Vehicle 3 -->
+                <div class="vehicle-feature-card">
+                    <img src="/images/vehicles/bmw-3-series.jpg" alt="Blue 2021 BMW 3 Series" loading="lazy">
+                    <div class="card-content">
+                        <h3>BMW 3 Series 2021</h3>
+                        <p class="card-price">$28,000</p>
+                        <a href="/vehicles/bmw-3-series-2021" class="btn-primary" aria-label="View details for BMW 3 Series 2021">
+                            View Details
+                        </a>
+                    </div>
                 </div>
 
-            </div>
-
-            <div class="vehicle-feature-card">
-
-                <img src="/images/vehicles/tesla-model-3.jpg" alt="Tesla Model 3 2022">
-
-                <div class="card-content">
-                    <h3>Tesla Model 3 2022</h3>
-                    <p class="card-price">$45,000</p>
-
-                    <a href="/vehicles/tesla-model-3-2022" class="btn-primary">
-                        View Details
-                    </a>
+                <!-- Vehicle 4 -->
+                <div class="vehicle-feature-card">
+                    <img src="/images/vehicles/tesla-model-3.jpg" alt="Red 2022 Tesla Model 3" loading="lazy">
+                    <div class="card-content">
+                        <h3>Tesla Model 3 2022</h3>
+                        <p class="card-price">$45,000</p>
+                        <a href="/vehicles/tesla-model-3-2022" class="btn-primary" aria-label="View details for Tesla Model 3 2022">
+                            View Details
+                        </a>
+                    </div>
                 </div>
-
             </div>
-
         </div>
-
-    </div>
-
-</section>
+    </section>
 
     <!-- Statistics -->
-    <section class="home-section stats-section">
-        <h2>Dealership Statistics</h2>
+    <section class="home-section stats-section" aria-labelledby="stats-title">
+        <h2 id="stats-title">Dealership Statistics</h2>
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>12</h3>
@@ -120,33 +102,33 @@
     </section>
 
     <!-- Why Choose Us -->
-    <section class="home-section">
-        <h2>Why Choose Us?</h2>
+    <section class="home-section" aria-labelledby="why-choose-title">
+        <h2 id="why-choose-title">Why Choose Us?</h2>
         <div class="benefits-grid">
             <div class="benefit-card">
-                ✅ Quality Inspected Vehicles
+                <span aria-hidden="true">✅</span> Quality Inspected Vehicles
             </div>
             <div class="benefit-card">
-                💰 Competitive Pricing
+                <span aria-hidden="true">💰</span> Competitive Pricing
             </div>
             <div class="benefit-card">
-                📋 Transparent Vehicle Information
+                <span aria-hidden="true">📋</span> Transparent Vehicle Information
             </div>
             <div class="benefit-card">
-                🤝 Trusted Dealership Network
+                <span aria-hidden="true">🤝</span> Trusted Dealership Network
             </div>
             <div class="benefit-card">
-                ⭐ Customer Reviews
+                <span aria-hidden="true">⭐</span> Customer Reviews
             </div>
             <div class="benefit-card">
-                🛠 Professional Service Support
+                <span aria-hidden="true">🛠</span> Professional Service Support
             </div>
         </div>
     </section>
 
     <!-- Featured Dealer -->
-    <section class="home-section">
-        <h2>Featured Dealer</h2>
+    <section class="home-section" aria-labelledby="featured-dealer-title">
+        <h2 id="featured-dealer-title">Featured Dealer</h2>
         <div class="dealer-highlight">
             <h3>Atlantic Auto Center</h3>
             <p>Virginia</p>
@@ -155,8 +137,8 @@
     </section>
 
     <!-- Final Call To Action -->
-    <section class="home-cta">
-        <h2>Ready to Find Your Next Vehicle?</h2>
+    <section class="home-cta" aria-labelledby="cta-title">
+        <h2 id="cta-title">Ready to Find Your Next Vehicle?</h2>
         <p>
             Explore our inventory and discover why drivers continue
             to trust our dealership for their automotive needs.

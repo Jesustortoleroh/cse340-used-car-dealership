@@ -1,4 +1,3 @@
-import { validationResult } from 'express-validator';
 import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
 import { getDashboardAnalytics, getRecentFavorites, getRecentReviews, getRecentRequests } from '../../models/analytics/analytics.js';
 import { updateLastLogin } from '../../models/profile/profile.js';
@@ -17,19 +16,8 @@ const showLoginForm = (req, res) => {
  * (Prevents account enumeration attacks)
  */
 const processLogin = async (req, res) => {
-    // Check for validation errors
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        // Store validation errors as flash messages
-        errors.array().forEach(error => {
-            if (typeof req.flash === 'function') {
-                req.flash('error', error.msg);
-            }
-        });
-        return res.redirect('/login');
-    }
-
+    // NOTE: Validation errors are already handled by the handleValidationErrors middleware
+    
     const { email, password } = req.body;
 
     try {
@@ -39,17 +27,13 @@ const processLogin = async (req, res) => {
         // GENERIC ERROR MESSAGE - Security best practice
         // Don't reveal if email exists or password is wrong
         if (!user) {
-            if (typeof req.flash === 'function') {
-                req.flash('error', 'Invalid email or password');
-            }
+            req.flash('error', 'Invalid email or password');
             return res.redirect('/login');
         }
 
         // Check if user account is active
         if (user.is_active === false) {
-            if (typeof req.flash === 'function') {
-                req.flash('error', 'Your account has been deactivated. Please contact support.');
-            }
+            req.flash('error', 'Your account has been deactivated. Please contact support.');
             return res.redirect('/login');
         }
 
@@ -58,16 +42,14 @@ const processLogin = async (req, res) => {
 
         // GENERIC ERROR MESSAGE - Same as above for security
         if (!validPassword) {
-            if (typeof req.flash === 'function') {
-                req.flash('error', 'Invalid email or password');
-            }
+            req.flash('error', 'Invalid email or password');
             return res.redirect('/login');
         }
 
         // Update last login timestamp
         await updateLastLogin(user.id);
 
-        // Remove password before storing in session
+        // Remove password before storing in session (Security best practice)
         delete user.password;
 
         // Store user in session
@@ -75,18 +57,14 @@ const processLogin = async (req, res) => {
         req.session.userId = user.id;
 
         // Success message
-        if (typeof req.flash === 'function') {
-            req.flash('success', `Welcome back to our dealership, ${user.name || user.email}!`);
-        }
+        req.flash('success', `Welcome back to our dealership, ${user.name || user.email}!`);
 
         // Redirect to dashboard
         res.redirect('/dashboard');
 
     } catch (error) {
         console.error('Login error:', error);
-        if (typeof req.flash === 'function') {
-            req.flash('error', 'Unable to log in. Please try again later.');
-        }
+        req.flash('error', 'Unable to log in. Please try again later.');
         res.redirect('/login');
     }
 };
@@ -96,9 +74,7 @@ const processLogin = async (req, res) => {
  */
 const processLogout = (req, res) => {
     // Add logout message before destroying session
-    if (typeof req.flash === 'function') {
-        req.flash('info', 'You have been successfully logged out.');
-    }
+    req.flash('info', 'You have been successfully logged out.');
 
     if (!req.session) {
         return res.redirect('/');
@@ -175,7 +151,7 @@ const showDashboard = async (req, res) => {
             recentReviews,
             recentRequests,
             isLoggedIn: true,
-            messages: req.flash()
+            // Note: flash() is already available in your views via the flash middleware
         });
 
     } catch (error) {

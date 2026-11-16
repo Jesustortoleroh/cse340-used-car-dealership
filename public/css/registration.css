@@ -7,7 +7,7 @@
     padding: 2rem;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     box-shadow: var(--card-shadow);
     transition: var(--transition);
 }
@@ -30,16 +30,21 @@
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
-    box-sizing: border-box;
     background: var(--bg-input);
     color: var(--text-primary);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Accessibility: Focus states */
+.registration-form input:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .registration-form input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .registration-form .help-text {
@@ -58,15 +63,25 @@
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: var(--transition);
 }
 
 .registration-form button[type="submit"]:hover {
     background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.registration-form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+.registration-form button[type="submit"]:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
 }
 
 /* ==========================================
-   Registered Users
+   Registered Users List
 ========================================== */
 .users-list {
     max-width: 1200px;
@@ -79,10 +94,10 @@
 .user-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     padding: 1.5rem;
     box-shadow: var(--card-shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: var(--transition);
 }
 
 .user-card:hover {
@@ -141,64 +156,13 @@
 }
 
 /* ==========================================
-   User Actions
+   User Actions (Buttons)
 ========================================== */
 .user-actions {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
     margin-top: 1rem;
-}
-
-.btn-edit,
-.btn-delete,
-.btn-primary,
-.btn-secondary {
-    display: inline-block;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
-
-.btn-edit {
-    background-color: var(--bg-nav);
-    color: var(--text-white);
-}
-
-.btn-edit:hover {
-    background-color: var(--primary);
-}
-
-.btn-delete {
-    background-color: var(--error);
-    color: var(--text-white);
-}
-
-.btn-delete:hover {
-    background-color: #b91c1c;
-}
-
-.btn-primary {
-    background-color: var(--primary);
-    color: var(--text-white);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-}
-
-.btn-secondary {
-    background-color: var(--bg-nav);
-    color: var(--text-white);
-}
-
-.btn-secondary:hover {
-    background-color: var(--text-secondary);
 }
 
 .delete-form {
@@ -223,36 +187,14 @@
     text-align: center;
     padding: 3rem;
     background: var(--bg-card);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     border: 1px dashed var(--border-dark);
     color: var(--text-muted);
     transition: var(--transition);
 }
 
 /* ==========================================
-   Flash Messages
-========================================== */
-.flash {
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-weight: 500;
-}
-
-.flash.success {
-    background-color: var(--success-bg);
-    color: var(--success-text);
-    border: 1px solid var(--success);
-}
-
-.flash.error {
-    background-color: var(--error-bg);
-    color: var(--error-text);
-    border: 1px solid var(--error);
-}
-
-/* ==========================================
-   Edit Account
+   Edit Account Form
 ========================================== */
 .account-edit {
     max-width: 750px;
@@ -274,7 +216,7 @@
 .account-form {
     background-color: var(--bg-card);
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     box-shadow: var(--card-shadow);
     transition: var(--transition);
 }
@@ -296,21 +238,27 @@
     border: 1px solid var(--border-dark);
     border-radius: 8px;
     font-size: 1rem;
-    box-sizing: border-box;
     background: var(--bg-input);
     color: var(--text-primary);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Accessibility: Focus states */
+.account-form input:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .account-form input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .account-form input[disabled] {
     background-color: var(--bg-hover);
     color: var(--text-muted);
+    cursor: not-allowed;
 }
 
 .help-text {

@@ -21,16 +21,17 @@
 ========================================== */
 .vehicle-list {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     max-width: 1000px;
     margin: 0 auto;
 
     .vehicle-card {
-        border-radius: 10px;
+        border-radius: var(--card-radius);
         overflow: hidden;
         background: var(--bg-card);
         box-shadow: var(--card-shadow);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: var(--transition);
 
         &:hover {
             transform: translateY(-5px);
@@ -56,6 +57,11 @@
 
                     &:hover {
                         color: var(--primary);
+                    }
+
+                    &:focus-visible {
+                        outline: 2px solid var(--primary);
+                        outline-offset: 2px;
                     }
                 }
             }
@@ -116,11 +122,20 @@
                     text-decoration: none;
                     font-weight: bold;
                     border-radius: 8px;
-                    transition: background-color 0.2s ease, transform 0.2s ease;
+                    transition: var(--transition);
 
                     &:hover {
                         background-color: var(--primary-hover);
                         transform: scale(1.02);
+                    }
+
+                    &:active {
+                        transform: scale(0.98);
+                    }
+
+                    &:focus-visible {
+                        outline: 3px solid var(--primary);
+                        outline-offset: 2px;
                     }
                 }
 
@@ -134,8 +149,8 @@
                     cursor: pointer;
                     font-weight: bold;
                     font-size: 0.95rem;
-                    transition: all 0.2s ease;
-                    margin-left: auto; /* Empuja el botón a la derecha */
+                    transition: var(--transition);
+                    margin-left: auto; /* Pushes button to the right */
 
                     &:hover {
                         background: #dc2626;
@@ -144,6 +159,11 @@
 
                     &:active {
                         transform: scale(0.98);
+                    }
+
+                    &:focus-visible {
+                        outline: 3px solid var(--error);
+                        outline-offset: 2px;
                     }
                 }
 
@@ -163,7 +183,7 @@
     text-align: center;
     padding: 3rem 1.5rem;
     background: var(--bg-hover);
-    border-radius: 12px;
+    border-radius: var(--card-radius);
     border: 1px solid var(--border-color);
     transition: var(--transition);
 
@@ -193,28 +213,12 @@
         &:hover {
             text-decoration: underline;
         }
-    }
-}
 
-/* ==========================================
-   Flash messages
-========================================== */
-.flash {
-    padding: 0.75rem 1.25rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
-    font-weight: 500;
-
-    &.success {
-        background: var(--success-bg);
-        color: var(--success-text);
-        border: 1px solid var(--success);
-    }
-
-    &.error {
-        background: var(--error-bg);
-        color: var(--error-text);
-        border: 1px solid var(--error);
+        &:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
     }
 }
 

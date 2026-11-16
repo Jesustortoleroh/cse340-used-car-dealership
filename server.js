@@ -1,209 +1,125 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import session from 'express-session';
+import connectPgSimple from 'connect-pg-simple';
+import compression from 'compression';
+import pinoHttp from 'pino-http';
 
-// Import MVC components
+// Configuration & Logger
+import { env } from './src/config/env.js';
+import { logger } from './src/config/logger.js';
+
+// Middlewares
 import routes from './src/controllers/routes.js';
 import { addLocalVariables } from './src/middleware/global.js';
 import flash from './src/middleware/flash.js';
-import { setupDatabase, testConnection } from './src/models/setup.js';
-import session from 'express-session';
-import connectPgSimple from 'connect-pg-simple';
+import { attachCsrfToken, csrfProtection } from './src/middleware/csrf.js';
+import { notFoundHandler, globalErrorHandler } from './src/middleware/errorHandler.js';
 
-import { caCert } from './src/models/db.js';
+// Database & Utils
+import { setupDatabase, testConnection } from './src/models/setup.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 
-
-/**
- * Server configuration
- */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
-const PORT = process.env.PORT || 3000;
 
-/**
- * Setup Express Server
- */
 const app = express();
 
+// Trust proxy for Render/Heroku
+app.set('trust proxy', 1);
 
-// Initialize PostgreSQL session store
+// Logging HTTP requests
+app.use(pinoHttp({ logger }));
+
+// Compression (gzip)
+app.use(compression());
+
+// Security Headers
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:", "https:"],
+            connectSrc: ["'self'", "ws:", "wss:"],
+        },
+    },
+}));
+
+// Session Store
 const pgSession = connectPgSimple(session);
-
-// Configure session middleware
 app.use(session({
     store: new pgSession({
         conObject: {
-            connectionString: process.env.DB_URL,
-            // Configure SSL for session store connection (required by BYU-I databases)
-            ssl: {
-                ca: caCert,
-                rejectUnauthorized: true,
-                checkServerIdentity: () => { return undefined; }
-            }
+            connectionString: env.DB_URL,
+            ssl: { require: true }
         },
         tableName: 'session',
         createTableIfMissing: true
     }),
-    secret: process.env.SESSION_SECRET,
+    secret: env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: NODE_ENV === 'production', // ✅ CORRECTED: Only use secure in production
+        secure: env.NODE_ENV === 'production',
         httpOnly: true,
         sameSite: 'lax',
         maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
-
-
-// Start automatic session cleanup
-startSessionCleanup();
-
-/**
- * Configure Express
- */
+// Core Middleware
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Allow Express to receive and process POST data
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
+app.use(express.json({ limit: '100kb' }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
 
-
-
-/**
- * Global Middleware
- */
-// Global middleware (sets res.locals variables)
+// Custom Middleware
+app.use(attachCsrfToken);
 app.use(addLocalVariables);
-
-// Flash message middleware (must come after session and global middleware)
 app.use(flash);
 
+// Rate Limiting (Only in production)
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100, 
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+    standardHeaders: true,
+    legacyHeaders: false,
+    // ⭐ Skip rate limiting in development to avoid blocking during testing
+    skip: (req, res) => env.NODE_ENV !== 'production', 
+}));
 
-/**
- * Routes
- */
-app.use('/', routes);
-
-/**
- * Error Handling
- */
-
-// 404 handler
-app.use((req, res, next) => {
-    const err = new Error('Page Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-    // Prevent infinite loops, if a response has already been sent, do nothing
-    if (res.headersSent || res.finished) {
-        return next(err);
+// CSRF Protection
+const csrfMiddleware = (req, res, next) => {
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+        return csrfProtection(req, res, next);
     }
+    next();
+};
 
-    // Determine status and template
-    const status = err.status || 500;
-    
-    // Mapeo de errores para diferentes códigos de estado
-    let template = '500';
-    let title = 'Server Error';
-    
-    switch (status) {
-        case 400:
-            template = '400';
-            title = 'Bad Request';
-            break;
-        case 403:
-            template = '403';
-            title = 'Access Denied';
-            break;
-        case 404:
-            template = '404';
-            title = 'Page Not Found';
-            break;
-        default:
-            template = '500';
-            title = 'Server Error';
-    }
+// Routes
+app.use('/', csrfMiddleware, routes);
 
-    // Prepare data for the template
-    const context = {
-        title,
-        error: NODE_ENV === 'production' 
-            ? 'An error occurred.' 
-            : err.message,
-        stack: NODE_ENV === 'production' 
-            ? null 
-            : err.stack,
-        user: req.session?.user || null,
-        requiredRole: err.requiredRole || null,
-        NODE_ENV
-    };
+// Error Handling
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
 
-    // Render the appropriate error template with fallback
+// Start Server
+app.listen(env.PORT, async () => {
     try {
-        res.status(status).render(`errors/${template}`, context);
-    } catch (renderErr) {
-        // If rendering fails, send a simple error page instead
-        if (!res.headersSent) {
-            res.status(status).send(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Error ${status}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-                        h1 { font-size: 2.5em; color: #333; }
-                        p { color: #666; }
-                        a { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #2563eb; color: white; text-decoration: none; border-radius: 5px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>⚠️ Error ${status}</h1>
-                    <p>${status === 404 ? 'Page not found' : 'An error occurred'}</p>
-                    <a href="/">Return Home</a>
-                </body>
-                </html>
-            `);
-        }
-    }
-});
-
-/**
- * Start WebSocket Server in Development Mode; used for live reloading
- */
-if (NODE_ENV.includes('dev')) {
-    const ws = await import('ws');
-
-    try {
-        const wsPort = parseInt(PORT) + 1;
-        const wsServer = new ws.WebSocketServer({ port: wsPort });
-
-        wsServer.on('listening', () => {
-            console.log(`WebSocket server is running on port ${wsPort}`);
-        });
-
-        wsServer.on('error', (error) => {
-            console.error('WebSocket server error:', error);
-        });
+        await testConnection();
+        await setupDatabase();
+        startSessionCleanup();
+        logger.info(`🚀 Server running on http://127.0.0.1:${env.PORT} [${env.NODE_ENV}]`);
     } catch (error) {
-        console.error('Failed to start WebSocket server:', error);
+        logger.fatal(error, '❌ Failed to start server');
+        process.exit(1);
     }
-}
-
-/**
- * Start Server
- */
-app.listen(PORT, async () => {
-    await setupDatabase();
-    await testConnection();
-    console.log(`Server is running on http://127.0.0.1:${PORT}`);
 });

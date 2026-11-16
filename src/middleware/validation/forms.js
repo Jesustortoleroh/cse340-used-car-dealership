@@ -1,4 +1,5 @@
 import { body } from 'express-validator';
+import { handleValidationErrors } from './handleValidation.js'; // Import the handler
 
 /**
  * Contact validation rules
@@ -8,7 +9,7 @@ const contactValidation = [
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s\'-]+$/)
+        .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
 
     body('email')
@@ -52,7 +53,10 @@ const contactValidation = [
             }
 
             return true;
-        })
+        }),
+        
+    // ⭐ Add the error handler at the end
+    handleValidationErrors
 ];
 
 /**
@@ -69,9 +73,10 @@ const loginValidation = [
 
     body('password')
         .notEmpty()
-        .withMessage('Password is required')
-        .isLength({ min: 8, max: 128 })
-        .withMessage('Password must be between 8 and 128 characters')
+        .withMessage('Password is required'),
+        
+    // ⭐ Add the error handler at the end
+    handleValidationErrors
 ];
 
 /**
@@ -82,7 +87,7 @@ const registrationValidation = [
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s\'-]+$/)
+        .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
 
     body('email')
@@ -107,12 +112,15 @@ const registrationValidation = [
         .withMessage('Password must contain at least one uppercase letter')
         .matches(/[a-z]/)
         .withMessage('Password must contain at least one lowercase letter')
-        .matches(/[!@#$%^&*()_+\-=[\]{};':"\|,.<>\/?]/)
+        .matches(/[!@#$%^&*()_+\-=[\]{};':"|,.<>/?]/)
         .withMessage('Password must contain at least one special character'),
 
     body('passwordConfirm')
         .custom((value, { req }) => value === req.body.password)
-        .withMessage('Passwords must match')
+        .withMessage('Passwords must match'),
+        
+    // ⭐ Add the error handler at the end
+    handleValidationErrors
 ];
 
 /**
@@ -123,7 +131,7 @@ const updateAccountValidation = [
         .trim()
         .isLength({ min: 2, max: 100 })
         .withMessage('Name must be between 2 and 100 characters')
-        .matches(/^[a-zA-Z\s\'-]+$/)
+        .matches(/^[a-zA-Z\s'-]+$/)
         .withMessage('Name can only contain letters, spaces, hyphens, and apostrophes'),
 
     body('email')
@@ -132,7 +140,10 @@ const updateAccountValidation = [
         .normalizeEmail()
         .withMessage('Must be a valid email address')
         .isLength({ max: 255 })
-        .withMessage('Email address is too long')
+        .withMessage('Email address is too long'),
+        
+    // ⭐ Add the error handler at the end
+    handleValidationErrors
 ];
 
 /**
@@ -158,7 +169,10 @@ const reviewValidation = [
             }
 
             return true;
-        })
+        }),
+        
+    // ⭐ Add the error handler at the end
+    handleValidationErrors
 ];
 
 /**
@@ -178,7 +192,10 @@ const serviceRequestValidation = [
     body('vehicle_id')
         .optional({ checkFalsy: true })
         .isInt({ min: 1 })
-        .withMessage('Vehicle ID must be a valid number')
+        .withMessage('Vehicle ID must be a valid number'),
+        
+    // ⭐ Add the error handler at the end
+    handleValidationErrors
 ];
 
 export {
