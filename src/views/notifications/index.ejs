@@ -7,17 +7,18 @@
         <div class="notifications-actions">
             <% if (unreadCount > 0) { %>
                 <form action="/notifications/read-all" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" class="btn-mark-all">Mark all as read</button>
                 </form>
             <% } %>
         </div>
     </div>
 
-    <% if (messages && messages.success) { %>
+    <% if (messages && messages.success && messages.success.length > 0) { %>
         <div class="flash success"><%= messages.success %></div>
     <% } %>
 
-    <% if (messages && messages.error) { %>
+    <% if (messages && messages.error && messages.error.length > 0) { %>
         <div class="flash error"><%= messages.error %></div>
     <% } %>
 
@@ -43,10 +44,12 @@
                     <div class="notification-actions">
                         <% if (!notification.is_read) { %>
                             <form action="/notifications/<%= notification.id %>/read" method="POST">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button type="submit" class="btn-read">Mark as read</button>
                             </form>
                         <% } %>
                         <form action="/notifications/<%= notification.id %>/delete" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             <button type="submit" class="btn-delete-notification">🗑️</button>
                         </form>
                     </div>
