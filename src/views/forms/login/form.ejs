@@ -61,17 +61,27 @@
             </div>
         </form>
 
-        <% if (oauthProviders.google || oauthProviders.github) { %>
-            <div class="oauth-options">
-                <p class="oauth-divider">Or continue with</p>
-                <% if (oauthProviders.google) { %>
-                    <a class="oauth-button" href="/auth/google">Continue with Google</a>
-                <% } %>
-                <% if (oauthProviders.github) { %>
-                    <a class="oauth-button" href="/auth/github">Continue with GitHub</a>
-                <% } %>
+        <section class="oauth-options" aria-labelledby="oauth-title">
+            <div class="oauth-divider">
+                <span></span>
+                <p id="oauth-title">Or continue with</p>
+                <span></span>
             </div>
-        <% } %>
+
+            <a class="oauth-button oauth-button-google" href="/auth/google">
+                <span class="oauth-icon oauth-icon-google" aria-hidden="true">G</span>
+                <span>Continue with Google</span>
+            </a>
+
+            <a class="oauth-button oauth-button-github" href="/auth/github">
+                <span class="oauth-icon oauth-icon-github" aria-hidden="true">GH</span>
+                <span>Continue with GitHub</span>
+            </a>
+
+            <p class="oauth-note">
+                If a sign-in option is unavailable, its provider credentials may not be configured yet.
+            </p>
+        </section>
     </div>
 
 </main>
