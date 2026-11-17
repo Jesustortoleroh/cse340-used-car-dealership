@@ -42,17 +42,23 @@ if (isDevelopment && isSqlLoggingEnabled) {
                 const start = Date.now();
                 const res = await pool.query(text, params);
                 const duration = Date.now() - start;
-                logger.debug({
-                    query: text.replace(/\s+/g, ' ').trim(),
-                    duration: `${duration}ms`,
-                    rows: res.rowCount
-                }, 'Executed query');
+                logger.debug(
+                    {
+                        query: text.replace(/\s+/g, ' ').trim(),
+                        duration: `${duration}ms`,
+                        rows: res.rowCount
+                    },
+                    'Executed query'
+                );
                 return res;
             } catch (error) {
-                logger.error({
-                    query: text.replace(/\s+/g, ' ').trim(),
-                    error: error.message
-                }, 'Query error');
+                logger.error(
+                    {
+                        query: text.replace(/\s+/g, ' ').trim(),
+                        error: error.message
+                    },
+                    'Query error'
+                );
                 throw error;
             }
         },

@@ -1,5 +1,10 @@
 import { findUserByEmail, verifyPassword } from '../../models/forms/login.js';
-import { getDashboardAnalytics, getRecentFavorites, getRecentReviews, getRecentRequests } from '../../models/analytics/analytics.js';
+import {
+    getDashboardAnalytics,
+    getRecentFavorites,
+    getRecentReviews,
+    getRecentRequests
+} from '../../models/analytics/analytics.js';
 import { updateLastLogin } from '../../models/profile/profile.js';
 
 /**
@@ -57,7 +62,6 @@ const processLogin = async (req, res) => {
 
         // Redirect to dashboard
         res.redirect('/dashboard');
-
     } catch (error) {
         console.error('Login error:', error);
         req.flash('error', 'Unable to log in. Please try again later.');
@@ -140,7 +144,6 @@ const showDashboard = async (req, res) => {
             isLoggedIn: true,
             csrfToken: res.locals.csrfToken // Explicitly pass the CSRF token
         });
-
     } catch (error) {
         console.error('Dashboard error:', error);
         req.flash('error', 'Unable to load dashboard. Please try again later.');

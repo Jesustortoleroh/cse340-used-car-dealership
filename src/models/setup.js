@@ -18,9 +18,7 @@ const setupDatabase = async () => {
      */
     let hasData;
     try {
-        const result = await db.query(
-            "SELECT EXISTS (SELECT 1 FROM vehicles LIMIT 1) as has_data"
-        );
+        const result = await db.query('SELECT EXISTS (SELECT 1 FROM vehicles LIMIT 1) as has_data');
         hasData = result.rows[0]?.has_data || false;
     } catch {
         /**

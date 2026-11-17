@@ -54,7 +54,7 @@ const contactValidation = [
 
             return true;
         }),
-        
+
     handleValidationErrors
 ];
 
@@ -70,10 +70,8 @@ const loginValidation = [
         .isLength({ max: 255 })
         .withMessage('Email address is too long'),
 
-    body('password')
-        .notEmpty()
-        .withMessage('Password is required'),
-        
+    body('password').notEmpty().withMessage('Password is required'),
+
     handleValidationErrors
 ];
 
@@ -116,7 +114,7 @@ const registrationValidation = [
     body('passwordConfirm')
         .custom((value, { req }) => value === req.body.password)
         .withMessage('Passwords must match'),
-        
+
     handleValidationErrors
 ];
 
@@ -158,7 +156,7 @@ const updateAccountValidation = [
         .optional({ checkFalsy: true })
         .custom((value, { req }) => value === req.body.password)
         .withMessage('Passwords must match'),
-        
+
     handleValidationErrors
 ];
 
@@ -186,7 +184,7 @@ const reviewValidation = [
 
             return true;
         }),
-        
+
     handleValidationErrors
 ];
 
@@ -208,7 +206,7 @@ const serviceRequestValidation = [
         .optional({ checkFalsy: true })
         .isInt({ min: 1 })
         .withMessage('Vehicle ID must be a valid number'),
-        
+
     handleValidationErrors
 ];
 

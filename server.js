@@ -34,66 +34,72 @@ app.set('trust proxy', 1);
 // ==========================================
 // Logging HTTP requests (Clean output)
 // ==========================================
-app.use(pinoHttp({ 
-    logger,
-    // Ignore static assets to keep the console clean
-    autoLogging: {
-        ignore: (req) => 
-            req.url.startsWith('/css/') || 
-            req.url.startsWith('/js/') || 
-            req.url.startsWith('/images/')
-    },
-    // Only log essential request/response data
-    serializers: {
-        req: (req) => ({ method: req.method, url: req.url }),
-        res: (res) => ({ statusCode: res.statusCode })
-    },
-    // Custom message format
-    customSuccessMessage: (req, res) => {
-        return `${req.method} ${req.url} - ${res.statusCode}`;
-    },
-    customErrorMessage: (req, res, err) => {
-        return `${req.method} ${req.url} - ${res.statusCode} - ${err.message}`;
-    }
-}));
+app.use(
+    pinoHttp({
+        logger,
+        // Ignore static assets to keep the console clean
+        autoLogging: {
+            ignore: (req) =>
+                req.url.startsWith('/css/') ||
+                req.url.startsWith('/js/') ||
+                req.url.startsWith('/images/')
+        },
+        // Only log essential request/response data
+        serializers: {
+            req: (req) => ({ method: req.method, url: req.url }),
+            res: (res) => ({ statusCode: res.statusCode })
+        },
+        // Custom message format
+        customSuccessMessage: (req, res) => {
+            return `${req.method} ${req.url} - ${res.statusCode}`;
+        },
+        customErrorMessage: (req, res, err) => {
+            return `${req.method} ${req.url} - ${res.statusCode} - ${err.message}`;
+        }
+    })
+);
 
 // Compression (gzip)
 app.use(compression());
 
 // Security Headers
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
-            imgSrc: ["'self'", "data:", "https:"],
-            connectSrc: ["'self'", "ws:", "wss:"],
-        },
-    },
-}));
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                scriptSrc: ["'self'", "'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-inline'"],
+                imgSrc: ["'self'", 'data:', 'https:'],
+                connectSrc: ["'self'", 'ws:', 'wss:']
+            }
+        }
+    })
+);
 
 // Session Store
 const pgSession = connectPgSimple(session);
-app.use(session({
-    store: new pgSession({
-        conObject: {
-            connectionString: env.DB_URL,
-            ssl: { require: true }
-        },
-        tableName: 'session',
-        createTableIfMissing: true
-    }),
-    secret: env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: env.NODE_ENV === 'production',
-        httpOnly: true,
-        sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000
-    }
-}));
+app.use(
+    session({
+        store: new pgSession({
+            conObject: {
+                connectionString: env.DB_URL,
+                ssl: { require: true }
+            },
+            tableName: 'session',
+            createTableIfMissing: true
+        }),
+        secret: env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            secure: env.NODE_ENV === 'production',
+            httpOnly: true,
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000
+        }
+    })
+);
 
 // Core Middleware
 app.use(express.static(path.join(__dirname, 'public')));
@@ -109,15 +115,17 @@ app.use(addLocalVariables);
 app.use(flash);
 
 // Rate Limiting (Only in production)
-app.use(rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 100, 
-    message: 'Too many requests from this IP, please try again after 15 minutes',
-    standardHeaders: true,
-    legacyHeaders: false,
-    // Skip rate limiting in development
-    skip: (_req, _res) => env.NODE_ENV !== 'production', 
-}));
+app.use(
+    rateLimit({
+        windowMs: 15 * 60 * 1000,
+        max: 100,
+        message: 'Too many requests from this IP, please try again after 15 minutes',
+        standardHeaders: true,
+        legacyHeaders: false,
+        // Skip rate limiting in development
+        skip: (_req, _res) => env.NODE_ENV !== 'production'
+    })
+);
 
 // CSRF Protection
 const csrfMiddleware = (req, res, next) => {

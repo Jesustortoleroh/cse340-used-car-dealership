@@ -1,4 +1,8 @@
-import { getVehicleBySlug, getVehiclesByCategory, searchVehicles } from '../../models/vehicles/vehicles.js';
+import {
+    getVehicleBySlug,
+    getVehiclesByCategory,
+    searchVehicles
+} from '../../models/vehicles/vehicles.js';
 import { getReviewStats } from '../../models/reviews/reviews.js';
 import { isFavorite } from '../../models/favorites/favorites.js';
 
@@ -39,21 +43,27 @@ const vehiclesPage = async (req, res, next) => {
             if (sort && sort !== 'name_asc') {
                 vehicles.sort((a, b) => {
                     switch (sort) {
-                        case 'price_asc': return a.price - b.price;
-                        case 'price_desc': return b.price - a.price;
-                        case 'name_desc': return b.name.localeCompare(a.name);
-                        case 'newest': return b.id - a.id;
+                        case 'price_asc':
+                            return a.price - b.price;
+                        case 'price_desc':
+                            return b.price - a.price;
+                        case 'name_desc':
+                            return b.name.localeCompare(a.name);
+                        case 'newest':
+                            return b.id - a.id;
                         case 'name_asc':
-                        default: return a.name.localeCompare(b.name);
+                        default:
+                            return a.name.localeCompare(b.name);
                     }
                 });
             }
         }
 
         res.render('vehicles/list', {
-            title: search && search.trim()
-                ? `Search results for "${search.trim()}"`
-                : 'Available Vehicles',
+            title:
+                search && search.trim()
+                    ? `Search results for "${search.trim()}"`
+                    : 'Available Vehicles',
             vehicles,
             currentCategory,
             queryParams: {
@@ -99,7 +109,7 @@ const vehicleDetailPage = async (req, res, next) => {
         // Form data is stored as a JSON string in flash, so we need to parse it
         let formData = {};
         const formDataFlash = req.flash('formData');
-        
+
         if (formDataFlash.length) {
             try {
                 formData = JSON.parse(formDataFlash[0]);

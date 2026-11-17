@@ -10,7 +10,7 @@ export const handleValidationErrors = (req, res, next) => {
     if (!errors.isEmpty()) {
         // Format errors and flash each message individually
         const errorMessages = errors.array().map((err) => err.msg);
-        
+
         // Flash each error as a separate message
         errorMessages.forEach((msg) => {
             req.flash('error', msg);

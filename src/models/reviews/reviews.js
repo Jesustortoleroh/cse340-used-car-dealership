@@ -138,11 +138,7 @@ const canUserModifyReview = (user, review) => {
     if (!user) {
         return false;
     }
-    return (
-        user.id === review.user_id ||
-        user.roleName === 'employee' ||
-        user.roleName === 'owner'
-    );
+    return user.id === review.user_id || user.roleName === 'employee' || user.roleName === 'owner';
 };
 
 export {

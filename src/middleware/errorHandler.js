@@ -25,7 +25,7 @@ export const globalErrorHandler = (err, req, res, next) => {
     const errorMap = {
         400: { template: '400', title: 'Bad Request' },
         403: { template: '403', title: 'Access Denied' },
-        404: { template: '404', title: 'Page Not Found' },
+        404: { template: '404', title: 'Page Not Found' }
     };
 
     const { template, title } = errorMap[status] || { template: '500', title: 'Server Error' };
