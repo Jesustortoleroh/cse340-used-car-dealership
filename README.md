@@ -99,6 +99,17 @@ _Entity-Relationship Diagram showing the database structure and relationships._
     git clone https://github.com/jesustortoleroh/cse340-used-car-dealership.git
     cd cse340-used-car-dealership
     ```
+2. **Create a `.env` file** in the project root with your local settings:
+    ```env
+    NODE_ENV=development
+    PORT=3000
+    DB_URL=postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require
+    SESSION_SECRET=replace-with-a-random-secret-at-least-32-characters-long
+    OAUTH_CALLBACK_BASE_URL=http://localhost:3000
+    ```
+    Replace the database URL with your PostgreSQL connection URL and set
+    `SESSION_SECRET` to a random value of at least 32 characters. Keep `.env`
+    private and out of version control.
 
 Run the focused automated tests with `pnpm test` and lint with `pnpm lint`.
 
