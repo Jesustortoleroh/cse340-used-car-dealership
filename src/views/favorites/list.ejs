@@ -1,24 +1,8 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="favorites-page">
 
-    <% if (flash) { %>
-
-        <% if (flash.error) { %>
-            <div class="flash error">
-                <%= flash.error %>
-            </div>
-        <% } %>
-
-        <% if (flash.success) { %>
-            <div class="flash success">
-                <%= flash.success %>
-            </div>
-        <% } %>
-
-    <% } %>
-
-    <h1><%= title %></h1>
+    <h1 class="page-title"><%= title %></h1>
 
     <!-- Results count -->
     <p class="results-count">
@@ -36,12 +20,13 @@
                 <div class="vehicle-card">
 
                     <% if (vehicle.image_url) { %>
-
-                        <img src="<%= vehicle.image_url %>"
-                            alt="<%= vehicle.name %>"
-                            class="vehicle-image"
-                        >
-
+                        <div class="vehicle-image-wrapper">
+                            <img src="<%= vehicle.image_url %>"
+                                alt="<%= vehicle.name %>"
+                                class="vehicle-image"
+                                loading="lazy"
+                            >
+                        </div>
                     <% } %>
 
                     <div class="vehicle-info">
@@ -52,57 +37,38 @@
                             </a>
                         </h3>
 
-                        <p class="vehicle-price">
-                            $<%= vehicle.price.toLocaleString() %>
-                        </p>
-
                         <p class="vehicle-category">
                             Category: <%= vehicle.category_name || 'Uncategorized' %>
                         </p>
 
                         <% if (vehicle.average_rating) { %>
-
-                            <div class="vehicle-rating">
-
+                            <div class="vehicle-rating" aria-label="Rating: <%= Math.round(vehicle.average_rating) %> out of 5 stars">
                                 <% for(let i = 0; i < 5; i++) { %>
-
-                                    <% if(i < Math.round(vehicle.average_rating)) { %>
-
-                                        <span class="star filled">
-                                            ★
-                                        </span>
-
-                                    <% } else { %>
-
-                                        <span class="star">
-                                            ★
-                                        </span>
-
-                                    <% } %>
-
+                                    <span class="star <%= i < Math.round(vehicle.average_rating) ? 'filled' : '' %>" aria-hidden="true">★</span>
                                 <% } %>
-
                                 <span class="rating-count">
                                     (<%= vehicle.review_count || 0 %>)
                                 </span>
-
                             </div>
-
                         <% } %>
 
                         <!-- Actions: View Details + Remove -->
-                        <div class="favorite-actions">
+                        <div class="vehicle-card-footer">
+                            <p class="vehicle-price">$<%= vehicle.price.toLocaleString() %></p>
+                            
+                            <div class="favorite-actions">
+                                <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
+                                    View Details →
+                                </a>
 
-                            <a href="/vehicles/<%= vehicle.slug %>" class="btn-view-details">
-                                View Details →
-                            </a>
-
-                            <form action="/favorites/<%= vehicle.id %>/remove" method="POST" class="inline-form">
-                                <button type="submit" class="btn-remove-favorite" onclick="return confirm('Remove this vehicle from your favorites?')">
-                                    ❌ Remove
-                                </button>
-                            </form>
-
+                                <form action="/favorites/<%= vehicle.id %>/remove" method="POST" class="inline-form">
+                                    <!-- CSRF Token (Required for security) -->
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" class="btn-remove-favorite" onclick="return confirm('Remove this vehicle from your favorites?')">
+                                        ❌ Remove
+                                    </button>
+                                </form>
+                            </div>
                         </div>
 
                     </div>
@@ -117,9 +83,7 @@
 
         <div class="empty-state">
 
-            <span class="empty-icon">
-                ❤️
-            </span>
+            <span class="empty-icon" aria-hidden="true">❤️</span>
 
             <p>
                 You haven't added any vehicles to your favorites yet.
