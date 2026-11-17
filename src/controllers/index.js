@@ -5,9 +5,15 @@ import { getHomePageData } from '../models/vehicles/vehicles.js';
 const homePage = async (req, res, next) => {
     try {
         const homeData = await getHomePageData();
+        if (!Array.isArray(homeData.vehicles) || !homeData.stats) {
+            throw new Error('Home page data is incomplete');
+        }
+
         res.render('home', {
             title: 'NeoMotor | Premium Used Vehicles',
-            ...homeData
+            vehicles: homeData.vehicles,
+            stats: homeData.stats,
+            dealer: homeData.dealer
         });
     } catch (error) {
         next(error);
