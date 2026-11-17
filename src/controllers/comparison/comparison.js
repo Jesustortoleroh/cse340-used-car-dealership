@@ -29,11 +29,33 @@ const comparisonPage = async (req, res, next) => {
 const compareVehiclesController = async (req, res, next) => {
     try {
         const { vehicle1, vehicle2, vehicle3 } = req.body;
-        
-        const vehicleIds = [vehicle1, vehicle2, vehicle3].filter(id => id);
+
+        const selectedIds = [vehicle1, vehicle2, vehicle3].filter(
+            id => id !== undefined && id !== null && id !== ''
+        );
+
+        if (
+            selectedIds.some(
+                id =>
+                    typeof id !== 'string' ||
+                    !/^\d+$/.test(id) ||
+                    !Number.isSafeInteger(Number(id)) ||
+                    Number(id) <= 0
+            )
+        ) {
+            req.flash('error', 'Please select valid vehicles to compare.');
+            return res.redirect('/compare');
+        }
+
+        const vehicleIds = selectedIds.map(Number);
         
         if (vehicleIds.length < 2) {
             req.flash('error', 'Please select at least 2 vehicles to compare.');
+            return res.redirect('/compare');
+        }
+
+        if (new Set(vehicleIds).size !== vehicleIds.length) {
+            req.flash('error', 'Please select different vehicles to compare.');
             return res.redirect('/compare');
         }
 
@@ -60,9 +82,13 @@ const compareVehiclesController = async (req, res, next) => {
  */
 const getVehicleDetails = async (req, res, next) => {
     try {
-        const vehicleId = parseInt(req.params.vehicleId);
-        
-        if (!vehicleId) {
+        const vehicleId = Number(req.params.vehicleId);
+
+        if (
+            !/^\d+$/.test(req.params.vehicleId) ||
+            !Number.isSafeInteger(vehicleId) ||
+            vehicleId <= 0
+        ) {
             return res.status(400).json({ error: 'Invalid vehicle ID' });
         }
 

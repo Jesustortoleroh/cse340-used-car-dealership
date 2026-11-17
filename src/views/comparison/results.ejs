@@ -30,7 +30,7 @@
                     <% vehicles.forEach(vehicle => { %>
                         <td class="feature-value">
                             <div class="comparison-image-wrapper">
-                                <img src="<%= vehicle.image_url || '/images/default-car.jpg' %>" 
+                                <img src="<%= vehicle.image_url || '/images/homecar.jpg' %>"
                                      alt="<%= vehicle.name %>"
                                      class="comparison-image">
                             </div>
@@ -61,7 +61,7 @@
                     <td class="feature-label">Mileage</td>
                     <% vehicles.forEach(vehicle => { %>
                         <td class="feature-value">
-                            <%= vehicle.mileage ? vehicle.mileage.toLocaleString() + ' mi' : 'N/A' %>
+                            <%= vehicle.mileage !== null && vehicle.mileage !== undefined ? Number(vehicle.mileage).toLocaleString('en-US') + ' mi' : 'N/A' %>
                         </td>
                     <% }) %>
                 </tr>
