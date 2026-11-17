@@ -3,7 +3,7 @@ import db from '../db.js';
 /**
  * Get all service requests
  */
-const getAllServiceRequests = async () => {
+const getAllServiceRequests = async (status = '') => {
     const query = `
         SELECT
             sr.*,
@@ -14,10 +14,11 @@ const getAllServiceRequests = async () => {
         JOIN users u ON u.id = sr.user_id
         JOIN service_types st ON st.id = sr.service_type_id
         LEFT JOIN vehicles v ON v.id = sr.vehicle_id
+        WHERE ($1 = '' OR sr.status = $1)
         ORDER BY sr.created_at DESC
     `;
 
-    const result = await db.query(query);
+    const result = await db.query(query, [status]);
     return result.rows;
 };
 

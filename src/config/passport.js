@@ -15,15 +15,17 @@ if (oauthProviders.google) {
             {
                 clientID: env.GOOGLE_CLIENT_ID,
                 clientSecret: env.GOOGLE_CLIENT_SECRET,
-                callbackURL: new URL('/auth/google/callback', env.OAUTH_CALLBACK_BASE_URL).toString(),
+                callbackURL: new URL(
+                    '/auth/google/callback',
+                    env.OAUTH_CALLBACK_BASE_URL
+                ).toString(),
                 scope: ['profile', 'email'],
                 state: true
             },
             async (_accessToken, _refreshToken, profile, done) => {
                 try {
                     const verifiedEmail = profile.emails?.find(
-                        (email) =>
-                            email.verified === true && profile._json.email_verified === true
+                        (email) => email.verified === true && profile._json.email_verified === true
                     );
                     const result = await findOrCreateSocialUser({
                         provider: 'google',
@@ -49,7 +51,10 @@ if (oauthProviders.github) {
             {
                 clientID: env.GITHUB_CLIENT_ID,
                 clientSecret: env.GITHUB_CLIENT_SECRET,
-                callbackURL: new URL('/auth/github/callback', env.OAUTH_CALLBACK_BASE_URL).toString(),
+                callbackURL: new URL(
+                    '/auth/github/callback',
+                    env.OAUTH_CALLBACK_BASE_URL
+                ).toString(),
                 scope: ['user:email'],
                 state: true,
                 allRawEmails: true,

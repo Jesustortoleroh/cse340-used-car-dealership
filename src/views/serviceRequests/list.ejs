@@ -9,6 +9,19 @@
         </a>
     </div>
 
+    <% if (isStaff) { %>
+        <form action="/service-requests/manage" method="GET" class="request-filter-form">
+            <label for="request-status">Filter by status</label>
+            <select id="request-status" name="status">
+                <option value="" <%= statusFilter === '' ? 'selected' : '' %>>All requests</option>
+                <% ['Submitted', 'In Progress', 'Scheduled', 'Completed', 'Cancelled'].forEach(status => { %>
+                    <option value="<%= status %>" <%= statusFilter === status ? 'selected' : '' %>><%= status %></option>
+                <% }) %>
+            </select>
+            <button type="submit" class="btn-primary">Apply</button>
+        </form>
+    <% } %>
+
     <% if (requests && requests.length > 0) { %>
 
         <div class="request-list">
@@ -37,6 +50,20 @@
                             <p>
                                 <strong>Vehicle:</strong>
                                 <%= request.vehicle_name %>
+                            </p>
+                        <% } %>
+                        <% if (request.preferred_date) { %>
+                            <p>
+                                <strong><%= request.status === 'Scheduled' ? 'Appointment date:' : 'Preferred date:' %></strong>
+                                <%= new Date(request.preferred_date).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    timeZone: 'UTC'
+                                }) %>
+                                <% if (request.preferred_time) { %>
+                                    at <%= String(request.preferred_time).slice(0, 5) %>
+                                <% } %>
                             </p>
                         <% } %>
 

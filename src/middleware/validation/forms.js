@@ -210,11 +210,51 @@ const serviceRequestValidation = [
     handleValidationErrors
 ];
 
+const testDriveValidation = [
+    body('preferred_date')
+        .trim()
+        .isISO8601({ strict: true, strictSeparator: true })
+        .withMessage('Please choose a valid test-drive date')
+        .custom((value) => {
+            const today = new Date().toISOString().slice(0, 10);
+            if (value < today) {
+                throw new Error('Test-drive date cannot be in the past');
+            }
+            return true;
+        }),
+
+    body('preferred_time')
+        .trim()
+        .matches(/^([01]\d|2[0-3]):[0-5]\d$/)
+        .withMessage('Please choose a valid test-drive time'),
+
+    handleValidationErrors
+];
+
+const vehicleTrustDetailsValidation = [
+    body('vin')
+        .optional({ checkFalsy: true })
+        .trim()
+        .matches(/^[A-HJ-NPR-Z0-9]{17}$/i)
+        .withMessage('VIN must contain 17 letters or numbers (excluding I, O, and Q)'),
+    body('inspection_notes')
+        .trim()
+        .isLength({ max: 5000 })
+        .withMessage('Inspection notes must be 5000 characters or fewer'),
+    body('service_history')
+        .trim()
+        .isLength({ max: 5000 })
+        .withMessage('Service history must be 5000 characters or fewer'),
+    handleValidationErrors
+];
+
 export {
     contactValidation,
     registrationValidation,
     loginValidation,
     updateAccountValidation,
     reviewValidation,
-    serviceRequestValidation
+    serviceRequestValidation,
+    testDriveValidation,
+    vehicleTrustDetailsValidation
 };

@@ -47,7 +47,12 @@
 }
 
 .filter-group {
-    min-width: 160px;
+    flex: 1 1 140px;
+    min-width: 120px;
+}
+
+.search-group {
+    flex: 2 1 250px;
 }
 
 .vehicle-search-form input,
@@ -181,6 +186,35 @@
     color: var(--text-muted);
     font-size: 0.9rem;
     margin-bottom: 1rem;
+}
+
+.vehicle-meta,
+.vehicle-dealer {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem;
+}
+
+.inventory-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+}
+
+.inventory-pagination a {
+    color: var(--primary);
+    font-weight: 600;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.inventory-pagination a:hover {
+    color: var(--bg-body);
+    background: var(--primary);
 }
 
 .vehicle-rating-wrapper {
@@ -359,6 +393,91 @@
     margin-bottom: 3rem;
 }
 
+.vehicle-condition-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    color: var(--text-secondary);
+}
+
+.vehicle-condition-details p {
+    margin: 0;
+}
+
+.vehicle-history {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.vehicle-history h2,
+.test-drive-section h2 {
+    color: var(--primary);
+}
+
+.vehicle-history p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    white-space: pre-line;
+}
+
+.vehicle-trust-editor,
+.test-drive-section {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.vehicle-trust-editor summary {
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.trust-details-form,
+.test-drive-form {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+}
+
+.test-drive-form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.trust-details-form label,
+.test-drive-form label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.trust-details-form input,
+.trust-details-form textarea,
+.test-drive-form input {
+    width: 100%;
+    padding: 0.8rem;
+    color: var(--text-primary);
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font: inherit;
+}
+
+.trust-details-form small {
+    color: var(--text-muted);
+}
+
+.trust-details-form button,
+.test-drive-form button {
+    justify-self: start;
+}
+
+.test-drive-form button {
+    grid-column: 1 / -1;
+}
+
 .vehicle-description {
     font-size: 1.1rem;
     line-height: 1.8;
@@ -505,6 +624,11 @@
         flex-direction: column;
         align-items: stretch;
     }
+
+    .search-group,
+    .filter-group {
+        width: 100%;
+    }
     
     .search-actions {
         flex-direction: column;
@@ -528,6 +652,19 @@
     
     .vehicle-header-content h1 {
         font-size: 2rem;
+    }
+
+    .test-drive-form {
+        grid-template-columns: 1fr;
+    }
+
+    .test-drive-form button {
+        grid-column: auto;
+        width: 100%;
+    }
+
+    .inventory-pagination {
+        gap: 0.75rem;
     }
 
     .section-header {

@@ -8,7 +8,11 @@ import {
     updateServiceRequestNotes,
     deleteServiceRequest
 } from '../../models/serviceRequest/serviceRequests.js';
-import { getAllVehicles } from '../../models/vehicles/vehicles.js';
+import {
+    getAllVehicles,
+    getVehicleBySlug,
+    createTestDriveRequest
+} from '../../models/vehicles/vehicles.js';
 import { notifyServiceUpdate } from '../../models/notifications/notificationTriggers.js';
 
 /**
@@ -17,16 +21,34 @@ import { notifyServiceUpdate } from '../../models/notifications/notificationTrig
 const showServiceRequests = async (req, res, next) => {
     try {
         let requests = [];
+        const isStaff = ['employee', 'owner'].includes(req.session.user.roleName);
+        const status = typeof req.query.status === 'string' ? req.query.status : '';
+        const allowedStatuses = [
+            '',
+            'Submitted',
+            'In Progress',
+            'Scheduled',
+            'Completed',
+            'Cancelled'
+        ];
 
-        if (req.session.user.roleName === 'customer') {
+        if (!allowedStatuses.includes(status)) {
+            const error = new Error('Invalid service-request status filter');
+            error.status = 400;
+            return next(error);
+        }
+
+        if (!isStaff) {
             requests = await getServiceRequestsByUserId(req.session.user.id);
         } else {
-            requests = await getAllServiceRequests();
+            requests = await getAllServiceRequests(status);
         }
 
         res.render('serviceRequests/list', {
-            title: 'Service Requests',
-            requests
+            title: isStaff ? 'Manage Service Requests' : 'Service Requests',
+            requests,
+            isStaff,
+            statusFilter: status
         });
     } catch (error) {
         next(error);
@@ -85,6 +107,43 @@ const processCreateRequest = async (req, res, next) => {
     }
 };
 
+const processTestDriveRequest = async (req, res, next) => {
+    try {
+        const vehicle = await getVehicleBySlug(req.params.slugId);
+        if (!vehicle) {
+            const error = new Error('Vehicle not found');
+            error.status = 404;
+            return next(error);
+        }
+
+        if (!vehicle.available) {
+            req.flash('error', 'This vehicle is no longer available for a test drive.');
+            return res.redirect(`/vehicles/${vehicle.slug}`);
+        }
+
+        const request = await createTestDriveRequest(
+            req.session.user.id,
+            vehicle.id,
+            req.body.preferred_date,
+            req.body.preferred_time,
+            `Test drive requested for ${vehicle.name}`
+        );
+
+        if (!request) {
+            req.flash('error', 'This vehicle is no longer available for a test drive.');
+            return res.redirect(`/vehicles/${vehicle.slug}`);
+        }
+
+        req.flash(
+            'success',
+            'Test-drive request submitted. The dealership will confirm the appointment.'
+        );
+        return res.redirect('/service-requests');
+    } catch (error) {
+        return next(error);
+    }
+};
+
 /**
  * Show edit form
  */
@@ -95,6 +154,14 @@ const showEditRequestForm = async (req, res, next) => {
         if (!request) {
             req.flash('error', 'Service request not found.');
             return res.redirect('/service-requests');
+        }
+        if (
+            req.session.user.roleName === 'customer' &&
+            Number(request.user_id) !== Number(req.session.user.id)
+        ) {
+            const error = new Error('You do not have permission to edit this request.');
+            error.status = 403;
+            return next(error);
         }
 
         const serviceTypes = await getAllServiceTypes();
@@ -149,7 +216,7 @@ const processUpdateRequest = async (req, res, next) => {
         }
 
         // Check ownership for customers
-        if (userRole === 'customer' && request.user_id !== userId) {
+        if (userRole === 'customer' && Number(request.user_id) !== Number(userId)) {
             req.flash('error', 'You do not have permission to modify this request.');
             return res.redirect('/service-requests');
         }
@@ -198,6 +265,15 @@ const processDeleteRequest = async (req, res, next) => {
             return res.redirect('/service-requests');
         }
 
+        if (
+            req.session.user.roleName === 'customer' &&
+            Number(request.user_id) !== Number(req.session.user.id)
+        ) {
+            const error = new Error('You do not have permission to delete this request.');
+            error.status = 403;
+            return next(error);
+        }
+
         await deleteServiceRequest(requestId);
         req.flash('success', 'Service request deleted successfully.');
         res.redirect('/service-requests');
@@ -210,6 +286,7 @@ export {
     showServiceRequests,
     showCreateRequestForm,
     processCreateRequest,
+    processTestDriveRequest,
     showEditRequestForm,
     processUpdateRequest,
     processDeleteRequest

@@ -61,6 +61,11 @@
                         >
                             In Progress
                         </option>
+                        <option value="Scheduled"
+                            <%= formData?.status == 'Scheduled' || (!formData && request.status === 'Scheduled') ? 'selected' : '' %>
+                        >
+                            Scheduled
+                        </option>
                         <option value="Completed"
                             <%= formData?.status == 'Completed' || (!formData && request.status === 'Completed') ? 'selected' : '' %>
                         >

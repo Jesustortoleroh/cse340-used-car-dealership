@@ -1,7 +1,7 @@
 // Import the necessary modules and controllers
 import { Router } from 'express';
 import { homePage, aboutPage, testErrorPage } from './index.js';
-import { vehiclesPage, vehicleDetailPage } from './vehicles/vehicles.js';
+import { vehiclesPage, vehicleDetailPage, processVehicleTrustDetails } from './vehicles/vehicles.js';
 import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
 import { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, updateInquiryPriority, deleteInquiry } from './forms/contact.js';
 import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
@@ -13,9 +13,9 @@ import {
     gitHubLoginCallback
 } from './forms/socialAuth.js';
 import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
-import { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
+import { showServiceRequests, showCreateRequestForm, processCreateRequest, processTestDriveRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
 import { requireLogin, requireEmployee, requireOwner } from '../middleware/auth.js';
-import { contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation } from '../middleware/validation/forms.js';
+import { contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation, testDriveValidation, vehicleTrustDetailsValidation } from '../middleware/validation/forms.js';
 import { addFavoriteController, removeFavoriteController, favoritesListPage } from '../controllers/favorites/favorites.js';
 import { profilePage } from '../controllers/profile/profile.js';
 import { comparisonPage, compareVehiclesController, getVehicleDetails } from '../controllers/comparison/comparison.js';
@@ -105,6 +105,8 @@ router.get('/dealers/:dealerSlug', dealerDetailPage);
 // Vehicles
 // ============================================
 router.get('/vehicles', vehiclesPage);
+router.post('/vehicles/:slugId/test-drive', requireLogin, testDriveValidation, processTestDriveRequest);
+router.post('/vehicles/:slugId/inspection', requireEmployee, vehicleTrustDetailsValidation, processVehicleTrustDetails);
 router.get('/vehicles/:slugId', vehicleDetailPage);
 
 // ============================================
@@ -169,7 +171,7 @@ router.post('/service-requests/create', requireLogin, serviceRequestValidation, 
 router.get('/service-requests/:id/edit', requireLogin, showEditRequestForm);
 router.post('/service-requests/:id/edit', requireLogin, processUpdateRequest);
 router.post('/service-requests/:id/delete', requireLogin, processDeleteRequest);
-router.get('/service-requests/manage', requireLogin, showServiceRequests);
+router.get('/service-requests/manage', requireEmployee, showServiceRequests);
 
 // ============================================
 // Favorites (Protected)

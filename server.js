@@ -21,7 +21,7 @@ import { attachCsrfToken, csrfProtection } from './src/middleware/csrf.js';
 import { notFoundHandler, globalErrorHandler } from './src/middleware/errorHandler.js';
 
 // Database & Utils
-import { setupDatabase, testConnection } from './src/models/setup.js';
+import { setupDatabase, ensureEnhancementSchema, testConnection } from './src/models/setup.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
 import { ensureSocialAuthSchema } from './src/models/forms/socialAuth.js';
 
@@ -145,16 +145,23 @@ app.use('/', csrfMiddleware, routes);
 app.use(notFoundHandler);
 app.use(globalErrorHandler);
 
-// Start Server
-app.listen(env.PORT, async () => {
+// Prepare the database before accepting requests that depend on the schema.
+const startServer = async () => {
     try {
         await testConnection();
         await setupDatabase();
+        await ensureEnhancementSchema();
         await ensureSocialAuthSchema();
         startSessionCleanup();
+        await new Promise((resolve, reject) => {
+            const server = app.listen(env.PORT, resolve);
+            server.once('error', reject);
+        });
         logger.info(`🚀 Server running on http://127.0.0.1:${env.PORT} [${env.NODE_ENV}]`);
     } catch (error) {
         logger.fatal(error, '❌ Failed to start server');
         process.exit(1);
     }
-});
+};
+
+startServer();

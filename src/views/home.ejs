@@ -28,52 +28,24 @@
         <div class="carousel-container">
             <div class="carousel-track">
                 <!-- Vehicle 1 -->
-                <div class="vehicle-feature-card">
-                    <img src="/images/vehicles/toyota-corolla.jpg" alt="White 2020 Toyota Corolla" loading="lazy">
-                    <div class="card-content">
-                        <h3>Toyota Corolla 2020</h3>
-                        <p class="card-price">$12,000</p>
-                        <a href="/vehicles/toyota-corolla-2020" class="btn-primary" aria-label="View details for Toyota Corolla 2020">
-                            View Details
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Vehicle 2 -->
-                <div class="vehicle-feature-card">
-                    <img src="/images/vehicles/ford-explorer.jpg" alt="Silver 2019 Ford Explorer" loading="lazy">
-                    <div class="card-content">
-                        <h3>Ford Explorer 2019</h3>
-                        <p class="card-price">$18,500</p>
-                        <a href="/vehicles/ford-explorer-2019" class="btn-primary" aria-label="View details for Ford Explorer 2019">
-                            View Details
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Vehicle 3 -->
-                <div class="vehicle-feature-card">
-                    <img src="/images/vehicles/bmw-3-series.jpg" alt="Blue 2021 BMW 3 Series" loading="lazy">
-                    <div class="card-content">
-                        <h3>BMW 3 Series 2021</h3>
-                        <p class="card-price">$28,000</p>
-                        <a href="/vehicles/bmw-3-series-2021" class="btn-primary" aria-label="View details for BMW 3 Series 2021">
-                            View Details
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Vehicle 4 -->
-                <div class="vehicle-feature-card">
-                    <img src="/images/vehicles/tesla-model-3.jpg" alt="Red 2022 Tesla Model 3" loading="lazy">
-                    <div class="card-content">
-                        <h3>Tesla Model 3 2022</h3>
-                        <p class="card-price">$45,000</p>
-                        <a href="/vehicles/tesla-model-3-2022" class="btn-primary" aria-label="View details for Tesla Model 3 2022">
-                            View Details
-                        </a>
-                    </div>
-                </div>
+                    <% if (vehicles.length) { %>
+                        <% vehicles.forEach(vehicle => { %>
+                            <article class="vehicle-feature-card">
+                                <% if (vehicle.image_url) { %>
+                                    <img src="<%= vehicle.image_url %>" alt="<%= vehicle.name %>" loading="lazy">
+                                <% } %>
+                                <div class="card-content">
+                                    <h3><%= vehicle.name %><% if (vehicle.year) { %> <%= vehicle.year %><% } %></h3>
+                                    <p class="card-price">$<%= Number(vehicle.price).toLocaleString('en-US') %></p>
+                                    <a href="/vehicles/<%= vehicle.slug %>" class="btn-primary" aria-label="View details for <%= vehicle.name %>">
+                                        View Details
+                                    </a>
+                                </div>
+                            </article>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="empty-state">No vehicles are currently available. Please check back soon.</p>
+                    <% } %>
             </div>
         </div>
     </section>
@@ -83,19 +55,19 @@
         <h2 id="stats-title">Dealership Statistics</h2>
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>12</h3>
+                <h3><%= stats.vehicles %></h3>
                 <p>Vehicles Available</p>
             </div>
             <div class="stat-card">
-                <h3>10</h3>
+                <h3><%= stats.dealers %></h3>
                 <p>Trusted Dealers</p>
             </div>
             <div class="stat-card">
-                <h3>7</h3>
+                <h3><%= stats.categories %></h3>
                 <p>Vehicle Categories</p>
             </div>
             <div class="stat-card">
-                <h3>13</h3>
+                <h3><%= stats.services %></h3>
                 <p>Service Types</p>
             </div>
         </div>
@@ -129,11 +101,15 @@
     <!-- Featured Dealer -->
     <section class="home-section" aria-labelledby="featured-dealer-title">
         <h2 id="featured-dealer-title">Featured Dealer</h2>
-        <div class="dealer-highlight">
-            <h3>Atlantic Auto Center</h3>
-            <p>Virginia</p>
-            <a href="/dealers/atlantic-auto-center" class="btn-primary">Visit Dealer</a>
-        </div>
+        <% if (dealer) { %>
+            <div class="dealer-highlight">
+                <h3><%= dealer.name %></h3>
+                <p><%= dealer.location || 'Contact dealer for location details' %></p>
+                <a href="/dealers/<%= dealer.slug %>" class="btn-primary">Visit Dealer</a>
+            </div>
+        <% } else { %>
+            <p>Visit our <a href="/dealers">dealer directory</a> to explore our network.</p>
+        <% } %>
     </section>
 
     <!-- Final Call To Action -->

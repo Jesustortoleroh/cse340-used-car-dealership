@@ -23,7 +23,16 @@ const getDashboardAnalytics = async (userId, roleName) => {
             SELECT 
                 (SELECT COUNT(*) FROM contact_form WHERE status = 'Received') AS open_inquiries,
                 (SELECT COUNT(*) FROM service_requests WHERE status = 'Submitted' OR status = 'In Progress') AS pending_requests,
-                (SELECT COUNT(*) FROM vehicles) AS total_vehicles
+                (SELECT COUNT(*) FROM vehicles) AS total_vehicles,
+                (SELECT COUNT(*) FROM vehicles WHERE available = true) AS available_vehicles,
+                (SELECT COUNT(*) FROM service_requests WHERE created_at >= CURRENT_DATE - INTERVAL '7 days') AS requests_last_7_days,
+                (SELECT COUNT(*) FROM service_requests
+                    WHERE created_at >= CURRENT_DATE - INTERVAL '14 days'
+                      AND created_at < CURRENT_DATE - INTERVAL '7 days') AS requests_previous_7_days,
+                (SELECT ROUND(AVG(price)::numeric, 0) FROM vehicles WHERE available = true) AS average_inventory_price,
+                (SELECT COUNT(*) FROM service_requests WHERE status = 'Submitted') AS submitted_requests,
+                (SELECT COUNT(*) FROM service_requests WHERE status = 'In Progress') AS in_progress_requests,
+                (SELECT COUNT(*) FROM service_requests WHERE status = 'Scheduled') AS scheduled_requests
         `;
         const employeeResult = await db.query(employeeQueries);
         analytics = { ...analytics, ...employeeResult.rows[0] };

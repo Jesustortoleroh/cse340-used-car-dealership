@@ -98,17 +98,21 @@ const findOrCreateSocialUser = async (identity, retryOnConflict = true) => {
             return { user };
         }
 
-        const roleResult = await client.query(
-            `SELECT id FROM roles WHERE role_name = 'customer'`
-        );
+        const roleResult = await client.query(`SELECT id FROM roles WHERE role_name = 'customer'`);
 
         if (!roleResult.rows[0]) {
             throw new Error('The customer role is missing from the database');
         }
 
-        const candidateName = typeof identity.name === 'string' ? identity.name.trim().slice(0, 255) : '';
+        const candidateName =
+            typeof identity.name === 'string' ? identity.name.trim().slice(0, 255) : '';
         const emailName = email.split('@')[0].slice(0, 255);
-        const name = candidateName.length >= 2 ? candidateName : emailName.length >= 2 ? emailName : 'Customer';
+        const name =
+            candidateName.length >= 2
+                ? candidateName
+                : emailName.length >= 2
+                  ? emailName
+                  : 'Customer';
         const profileImage =
             typeof identity.profileImage === 'string' && identity.profileImage.length <= 255
                 ? identity.profileImage

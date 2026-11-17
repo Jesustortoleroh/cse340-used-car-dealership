@@ -30,16 +30,22 @@ A full-stack, production-ready web application for a used car dealership. Built 
 
 ### 🚗 Vehicle Management
 
-- Browse vehicles with search, category filters, and sorting.
+- Browse vehicles with search, category, dealer, price, year, and mileage filters, sorting, and pagination.
 - View detailed vehicle specifications and image galleries.
+- See VIN, inspection reports, and service history maintained by dealership staff.
+- Request a test-drive appointment and track its confirmation in service requests.
 - Dealer inventory display.
 - Side-by-side vehicle comparison (up to 3 vehicles).
 
 ### 📊 Dashboard Analytics
 
 - **Customer:** Favorites count, reviews submitted, and service requests.
-- **Employee:** Open inquiries, pending requests, and total vehicles.
+- **Employee:** Open inquiries, pending requests, inventory pricing, and request trends/statuses.
 - **Owner:** Global stats (Total users, vehicles, dealers, and reviews).
+
+The home page featured inventory and dealership statistics are loaded from PostgreSQL.
+Vehicle details can be edited by employees and owners; test-drive requests are
+created as service requests and remain pending until dealership staff confirms them.
 
 ### 🌙 Modern UI & Accessibility (A11y)
 
@@ -55,7 +61,7 @@ This project was refactored from a university assignment into a production-grade
 2. **Fail-Fast Environment**: The server won't start if critical `.env` variables are missing, thanks to `zod`.
 3. **Centralized Error Handling**: A global error handler middleware catches both 404s and 500s, rendering safe, user-friendly error pages.
 4. **Structured Logging**: Replaced `console.log` with `pino` for production-ready, structured HTTP and server logs.
-5. **Database Safety**: The `setup.js` script verifies table existence before attempting to seed, preventing accidental data loss.
+5. **Database Safety**: Additive app schema changes are applied at startup; existing inventory is not reseeded to add new fields.
 
 ## 🗄️ Database Schema
 
@@ -93,6 +99,8 @@ _Entity-Relationship Diagram showing the database structure and relationships._
     git clone https://github.com/jesustortoleroh/cse340-used-car-dealership.git
     cd cse340-used-car-dealership
     ```
+
+Run the focused automated tests with `pnpm test` and lint with `pnpm lint`.
 
 ### Google and GitHub Sign-In
 

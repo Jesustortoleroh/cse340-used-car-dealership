@@ -125,7 +125,13 @@ const showDashboard = async (req, res) => {
             employee: {
                 openInquiries: parseInt(analytics.open_inquiries) || 0,
                 pendingRequests: parseInt(analytics.pending_requests) || 0,
-                totalVehicles: parseInt(analytics.total_vehicles) || 0
+                totalVehicles: parseInt(analytics.available_vehicles) || 0,
+                requestsLast7Days: parseInt(analytics.requests_last_7_days) || 0,
+                requestsPrevious7Days: parseInt(analytics.requests_previous_7_days) || 0,
+                averageInventoryPrice: parseInt(analytics.average_inventory_price) || 0,
+                submittedRequests: parseInt(analytics.submitted_requests) || 0,
+                inProgressRequests: parseInt(analytics.in_progress_requests) || 0,
+                scheduledRequests: parseInt(analytics.scheduled_requests) || 0
             },
             owner: {
                 totalUsers: parseInt(analytics.total_users) || 0,

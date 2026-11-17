@@ -124,6 +124,31 @@
     padding: 2rem 0;
 }
 
+.request-filter-form {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 2rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.request-filter-form label {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.request-filter-form select {
+    min-width: 180px;
+    padding: 0.7rem;
+    color: var(--text-primary);
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -275,6 +300,12 @@
     border: 1px solid var(--success);
 }
 
+.status-scheduled {
+    background-color: var(--success-bg);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
 /* ==========================================
    4. Empty State
 ========================================== */
@@ -349,6 +380,15 @@
     .request-header {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .request-filter-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .request-filter-form select {
+        width: 100%;
     }
 
     .form-actions {

@@ -1,10 +1,12 @@
 import {
     getVehicleBySlug,
-    getVehiclesByCategory,
-    searchVehicles
+    getInventoryFilters,
+    getFilteredVehicles,
+    updateVehicleTrustDetails
 } from '../../models/vehicles/vehicles.js';
 import { getReviewStats } from '../../models/reviews/reviews.js';
 import { isFavorite } from '../../models/favorites/favorites.js';
+import { parseInventoryFilters } from '../../utils/inventoryFilters.js';
 
 /**
  * Get sort label for display
@@ -15,7 +17,9 @@ const getSortLabel = (sort) => {
         price_desc: 'Price: High to Low',
         name_asc: 'Name: A to Z',
         name_desc: 'Name: Z to A',
-        newest: 'Newest First'
+        newest: 'Newest First',
+        year_desc: 'Newest Model Year',
+        mileage_asc: 'Lowest Mileage'
     };
     return labels[sort] || 'Name: A to Z';
 };
@@ -26,54 +30,53 @@ const getSortLabel = (sort) => {
  */
 const vehiclesPage = async (req, res, next) => {
     try {
-        const category = req.query.category || 'All';
-        const search = req.query.search || '';
-        const sort = req.query.sort || 'name_asc';
-
-        let vehicles;
-        let currentCategory = category;
-
-        if (search && search.trim()) {
-            vehicles = await searchVehicles(search.trim(), category, sort);
-            currentCategory = category || 'All';
-        } else {
-            vehicles = await getVehiclesByCategory(category);
-            currentCategory = category || 'All';
-
-            if (sort && sort !== 'name_asc') {
-                vehicles.sort((a, b) => {
-                    switch (sort) {
-                        case 'price_asc':
-                            return a.price - b.price;
-                        case 'price_desc':
-                            return b.price - a.price;
-                        case 'name_desc':
-                            return b.name.localeCompare(a.name);
-                        case 'newest':
-                            return b.id - a.id;
-                        case 'name_asc':
-                        default:
-                            return a.name.localeCompare(b.name);
-                    }
-                });
+        const filters = parseInventoryFilters(req.query);
+        const { page: requestedPage, ...inventoryFilters } = filters;
+        const pageSize = 9;
+        const [inventory, { categories, dealers }] = await Promise.all([
+            getFilteredVehicles({ ...inventoryFilters, limit: pageSize, page: requestedPage }),
+            getInventoryFilters()
+        ]);
+        const { vehicles, total, page: currentPage } = inventory;
+        const pageCount = Math.ceil(total / pageSize);
+        const queryParams = {
+            ...inventoryFilters,
+            category: inventoryFilters.category || 'All',
+            minPrice: inventoryFilters.minPrice ?? '',
+            maxPrice: inventoryFilters.maxPrice ?? '',
+            minYear: inventoryFilters.minYear ?? '',
+            maxYear: inventoryFilters.maxYear ?? '',
+            maxMileage: inventoryFilters.maxMileage ?? ''
+        };
+        const buildPageUrl = (page) => {
+            const params = new URLSearchParams();
+            for (const [key, value] of Object.entries({ ...queryParams, page })) {
+                if (value !== '' && value !== 'All') {
+                    params.set(key, String(value));
+                }
             }
-        }
+            return `/vehicles?${params.toString()}`;
+        };
 
         res.render('vehicles/list', {
-            title:
-                search && search.trim()
-                    ? `Search results for "${search.trim()}"`
-                    : 'Available Vehicles',
+            title: inventoryFilters.search
+                ? `Search results for "${inventoryFilters.search}"`
+                : 'Available Vehicles',
             vehicles,
-            currentCategory,
-            queryParams: {
-                search: search || '',
-                category: category || '',
-                sort: sort || 'name_asc'
-            },
-            sortLabel: getSortLabel(sort),
-            vehicleCount: vehicles.length
-            // Flash messages are handled globally by header.ejs
+            categories,
+            dealers,
+            currentCategory: queryParams.category,
+            queryParams,
+            sortLabel: getSortLabel(inventoryFilters.sort),
+            vehicleCount: total,
+            pagination: {
+                page: currentPage,
+                pageCount,
+                start: total ? (currentPage - 1) * pageSize + 1 : 0,
+                end: Math.min(currentPage * pageSize, total),
+                previousUrl: currentPage > 1 ? buildPageUrl(currentPage - 1) : null,
+                nextUrl: currentPage < pageCount ? buildPageUrl(currentPage + 1) : null
+            }
         });
     } catch (error) {
         next(error);
@@ -138,4 +141,29 @@ const vehicleDetailPage = async (req, res, next) => {
     }
 };
 
-export { vehiclesPage, vehicleDetailPage };
+const processVehicleTrustDetails = async (req, res, next) => {
+    try {
+        const updatedVehicle = await updateVehicleTrustDetails(req.params.slugId, {
+            vin: (req.body.vin || '').trim().toUpperCase(),
+            inspectionNotes: (req.body.inspection_notes || '').trim(),
+            serviceHistory: (req.body.service_history || '').trim()
+        });
+
+        if (!updatedVehicle) {
+            const error = new Error('Vehicle not found');
+            error.status = 404;
+            return next(error);
+        }
+
+        req.flash('success', 'Vehicle inspection and history details updated.');
+        return res.redirect(`/vehicles/${req.params.slugId}`);
+    } catch (error) {
+        if (error.code === '23505') {
+            req.flash('error', 'That VIN is already assigned to another vehicle.');
+            return res.redirect(`/vehicles/${req.params.slugId}`);
+        }
+        return next(error);
+    }
+};
+
+export { vehiclesPage, vehicleDetailPage, processVehicleTrustDetails };

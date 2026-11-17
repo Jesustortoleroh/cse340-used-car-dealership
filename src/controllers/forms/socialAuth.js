@@ -41,7 +41,10 @@ const finishSocialLogin = (provider) => (req, res, next) => {
         }
 
         if (!user) {
-            req.flash('error', info?.message || `Unable to sign in with ${providerName[provider]}.`);
+            req.flash(
+                'error',
+                info?.message || `Unable to sign in with ${providerName[provider]}.`
+            );
             return res.redirect('/login');
         }
 
@@ -54,9 +57,4 @@ const googleLoginCallback = finishSocialLogin('google');
 const startGitHubLogin = startSocialLogin('github');
 const gitHubLoginCallback = finishSocialLogin('github');
 
-export {
-    startGoogleLogin,
-    googleLoginCallback,
-    startGitHubLogin,
-    gitHubLoginCallback
-};
+export { startGoogleLogin, googleLoginCallback, startGitHubLogin, gitHubLoginCallback };

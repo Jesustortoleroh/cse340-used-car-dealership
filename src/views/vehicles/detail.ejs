@@ -49,6 +49,44 @@
     <!-- Description & Dealer Info -->
     <section class="vehicle-info-card">
         <p class="vehicle-description"><%= vehicle.description %></p>
+        <div class="vehicle-condition-details">
+            <% if (vehicle.year) { %><p><strong>Year:</strong> <%= vehicle.year %></p><% } %>
+            <% if (vehicle.mileage !== null && vehicle.mileage !== undefined) { %>
+                <p><strong>Mileage:</strong> <%= Number(vehicle.mileage).toLocaleString('en-US') %> mi</p>
+            <% } %>
+            <% if (vehicle.condition) { %><p><strong>Condition:</strong> <%= vehicle.condition %></p><% } %>
+            <% if (vehicle.vin) { %><p><strong>VIN:</strong> <%= vehicle.vin %></p><% } %>
+        </div>
+        <% if (vehicle.inspection_notes) { %>
+            <div class="vehicle-history">
+                <h2>Inspection Report</h2>
+                <p><%= vehicle.inspection_notes %></p>
+            </div>
+        <% } %>
+        <% if (vehicle.service_history) { %>
+            <div class="vehicle-history">
+                <h2>Service History</h2>
+                <p><%= vehicle.service_history %></p>
+            </div>
+        <% } %>
+        <% if (user && (user.roleName === 'employee' || user.roleName === 'owner')) { %>
+            <details class="vehicle-trust-editor">
+                <summary>Update VIN, inspection, or service history</summary>
+                <form action="/vehicles/<%= vehicle.slug %>/inspection" method="POST" class="trust-details-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <label for="vehicle-vin">VIN</label>
+                    <input id="vehicle-vin" name="vin" type="text" maxlength="17" autocomplete="off"
+                        value="<%= formData?.vin ?? vehicle.vin ?? '' %>"
+                        aria-describedby="vin-help">
+                    <small id="vin-help">Optional. Enter all 17 characters; I, O, and Q are not valid VIN characters.</small>
+                    <label for="inspection-notes">Inspection report</label>
+                    <textarea id="inspection-notes" name="inspection_notes" maxlength="5000" rows="4"><%= formData?.inspection_notes ?? vehicle.inspection_notes ?? '' %></textarea>
+                    <label for="service-history">Service history</label>
+                    <textarea id="service-history" name="service_history" maxlength="5000" rows="4"><%= formData?.service_history ?? vehicle.service_history ?? '' %></textarea>
+                    <button type="submit" class="btn-primary">Save vehicle details</button>
+                </form>
+            </details>
+        <% } %>
         <% if (vehicle.dealer) { %>
             <p class="vehicle-dealer">
                 Dealer: 
@@ -56,6 +94,34 @@
                     <%= vehicle.dealer %>
                 </a> • <%= vehicle.location %>
             </p>
+        <% } %>
+    </section>
+
+    <section class="test-drive-section" aria-labelledby="test-drive-title">
+        <h2 id="test-drive-title">Request a Test Drive</h2>
+        <% if (vehicle.available) { %>
+            <% if (isLoggedIn) { %>
+                <p>Choose a preferred date and time. The dealership will confirm your appointment.</p>
+                <form action="/vehicles/<%= vehicle.slug %>/test-drive" method="POST" class="test-drive-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="form-group">
+                        <label for="preferred-date">Preferred date</label>
+                        <input id="preferred-date" name="preferred_date" type="date"
+                            min="<%= new Date().toISOString().slice(0, 10) %>"
+                            value="<%= formData?.preferred_date || '' %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="preferred-time">Preferred time</label>
+                        <input id="preferred-time" name="preferred_time" type="time"
+                            value="<%= formData?.preferred_time || '' %>" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Request Test Drive</button>
+                </form>
+            <% } else { %>
+                <p><a href="/login">Log in</a> to request a test drive.</p>
+            <% } %>
+        <% } else { %>
+            <p>This vehicle is not currently available for test-drive requests.</p>
         <% } %>
     </section>
 

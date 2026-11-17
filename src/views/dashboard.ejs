@@ -57,8 +57,33 @@
                     <div class="analytics-card">
                         <div class="analytics-icon" aria-hidden="true">🚗</div>
                         <div class="analytics-number"><%= analytics.employee.totalVehicles %></div>
-                        <div class="analytics-label">Total Vehicles</div>
+                        <div class="analytics-label">Available Vehicles</div>
                         <a href="/vehicles" class="analytics-link" aria-label="View all vehicles">View All →</a>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-icon" aria-hidden="true">📈</div>
+                        <div class="analytics-number"><%= analytics.employee.requestsLast7Days %></div>
+                        <div class="analytics-label">Requests in the last 7 days</div>
+                        <p class="analytics-trend">
+                            <% if (analytics.employee.requestsLast7Days > analytics.employee.requestsPrevious7Days) { %>
+                                Up from <%= analytics.employee.requestsPrevious7Days %> in the previous 7 days
+                            <% } else if (analytics.employee.requestsLast7Days < analytics.employee.requestsPrevious7Days) { %>
+                                Down from <%= analytics.employee.requestsPrevious7Days %> in the previous 7 days
+                            <% } else { %>
+                                Same as the previous period (<%= analytics.employee.requestsPrevious7Days %>)
+                            <% } %>
+                        </p>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-icon" aria-hidden="true">💵</div>
+                        <div class="analytics-number">$<%= analytics.employee.averageInventoryPrice.toLocaleString('en-US') %></div>
+                        <div class="analytics-label">Average available price</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-icon" aria-hidden="true">🗂️</div>
+                        <div class="analytics-number analytics-number-compact"><%= analytics.employee.submittedRequests %> / <%= analytics.employee.inProgressRequests %> / <%= analytics.employee.scheduledRequests %></div>
+                        <div class="analytics-label">Submitted / In progress / Scheduled</div>
+                        <a href="/service-requests/manage" class="analytics-link">Manage requests →</a>
                     </div>
                 </div>
             <% } %>
@@ -248,7 +273,7 @@
 
                     <ul class="action-list">
                         <li><a href="/contact/responses">View Contact Responses</a></li>
-                        <li><a href="/service-requests">Manage Service Requests</a></li>
+                        <li><a href="/service-requests/manage">Manage Service Requests</a></li>
                     </ul>
 
                 </section>

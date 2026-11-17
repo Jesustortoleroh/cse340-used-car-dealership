@@ -44,6 +44,33 @@ const setupDatabase = async () => {
 };
 
 /**
+ * Apply additive schema changes without reseeding existing inventory.
+ */
+const ensureEnhancementSchema = async () => {
+    await db.query(`
+        ALTER TABLE vehicles
+            ADD COLUMN IF NOT EXISTS vin VARCHAR(17),
+            ADD COLUMN IF NOT EXISTS inspection_notes TEXT,
+            ADD COLUMN IF NOT EXISTS service_history TEXT
+    `);
+    await db.query(`
+        ALTER TABLE service_requests
+            ADD COLUMN IF NOT EXISTS preferred_date DATE,
+            ADD COLUMN IF NOT EXISTS preferred_time TIME
+    `);
+    await db.query(`
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_vehicles_vin
+            ON vehicles (vin)
+            WHERE vin IS NOT NULL
+    `);
+    await db.query(`
+        INSERT INTO service_types (name, description)
+        VALUES ('Test Drive', 'Request an appointment to test drive an available vehicle')
+        ON CONFLICT (name) DO NOTHING
+    `);
+};
+
+/**
  * Tests the database connection by executing a simple query.
  */
 const testConnection = async () => {
@@ -52,4 +79,4 @@ const testConnection = async () => {
     return true;
 };
 
-export { setupDatabase, testConnection };
+export { setupDatabase, ensureEnhancementSchema, testConnection };
