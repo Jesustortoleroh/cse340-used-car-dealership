@@ -18,7 +18,7 @@
                     <option value="">Select a vehicle...</option>
                     <% vehicles.forEach(vehicle => { %>
                         <option value="<%= vehicle.id %>">
-                            <%= vehicle.name %> ($<%= vehicle.price.toLocaleString() %>)
+                            <%= vehicle.name %> ($<%= Number(vehicle.price).toLocaleString('en-US') %>)
                         </option>
                     <% }) %>
                 </select>
@@ -30,7 +30,7 @@
                     <option value="">Select a vehicle...</option>
                     <% vehicles.forEach(vehicle => { %>
                         <option value="<%= vehicle.id %>">
-                            <%= vehicle.name %> ($<%= vehicle.price.toLocaleString() %>)
+                            <%= vehicle.name %> ($<%= Number(vehicle.price).toLocaleString('en-US') %>)
                         </option>
                     <% }) %>
                 </select>
@@ -42,7 +42,7 @@
                     <option value="">Select a vehicle...</option>
                     <% vehicles.forEach(vehicle => { %>
                         <option value="<%= vehicle.id %>">
-                            <%= vehicle.name %> ($<%= vehicle.price.toLocaleString() %>)
+                            <%= vehicle.name %> ($<%= Number(vehicle.price).toLocaleString('en-US') %>)
                         </option>
                     <% }) %>
                 </select>

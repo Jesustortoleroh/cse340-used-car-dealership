@@ -43,7 +43,7 @@
                     <td class="feature-label">Price</td>
                     <% vehicles.forEach(vehicle => { %>
                         <td class="feature-value price-highlight">
-                            $<%= vehicle.price.toLocaleString() %>
+                            $<%= Number(vehicle.price).toLocaleString('en-US') %>
                         </td>
                     <% }) %>
                 </tr>
