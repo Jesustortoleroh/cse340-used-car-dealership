@@ -1,150 +1,99 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="service-request-page">
 
-    <h1><%= title %></h1>
+    <div class="service-request-card glass-card">
+        <h1 class="page-title"><%= title %></h1>
+        <p class="page-subtitle">Fill out the form below to submit a new service request.</p>
 
-    <!-- Show flash messages -->
-    <% if (flash) { %>
-        <% if (flash.error) { %>
-            <div class="flash error">
-                <%= flash.error %>
+        <form
+            action="/service-requests/create"
+            method="POST"
+            class="service-form"
+        >
+            <!-- CSRF Token (Required for security) -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+            <!-- Service Type -->
+            <div class="form-group">
+                <label for="service_type_id">
+                    Service Type <span class="text-danger">*</span>
+                </label>
+                <select
+                    id="service_type_id"
+                    name="service_type_id"
+                    class="form-control"
+                    required
+                >
+                    <option value="">Select a service type...</option>
+                    <% if (serviceTypes && serviceTypes.length > 0) { %>
+                        <% serviceTypes.forEach(type => { %>
+                            <option
+                                value="<%= type.id %>"
+                                <%= formData?.service_type_id == type.id ? 'selected' : '' %>
+                            >
+                                <%= type.name %>
+                            </option>
+                        <% }) %>
+                    <% } else { %>
+                        <option value="" disabled>No service types available</option>
+                    <% } %>
+                </select>
             </div>
-        <% } %>
-        <% if (flash.success) { %>
-            <div class="flash success">
-                <%= flash.success %>
+
+            <!-- Vehicle -->
+            <div class="form-group">
+                <label for="vehicle_id">
+                    Vehicle <span class="text-danger">*</span>
+                </label>
+                <select
+                    id="vehicle_id"
+                    name="vehicle_id"
+                    class="form-control"
+                    required
+                >
+                    <option value="">Select a vehicle...</option>
+                    <% if (vehicles && vehicles.length > 0) { %>
+                        <% vehicles.forEach(vehicle => { %>
+                            <option
+                                value="<%= vehicle.id %>"
+                                <%= formData?.vehicle_id == vehicle.id ? 'selected' : '' %>
+                            >
+                                <%= vehicle.name %> - $<%= vehicle.price.toLocaleString() %>
+                            </option>
+                        <% }) %>
+                    <% } else { %>
+                        <option value="" disabled>No vehicles available</option>
+                    <% } %>
+                </select>
             </div>
-        <% } %>
-    <% } %>
 
-    <form
-        action="/service-requests/create"
-        method="POST"
-        class="service-form"
-    >
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">
+                    Description <span class="text-danger">*</span>
+                </label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Describe the issue or service you need..."
+                    required
+                ><%= formData?.description || '' %></textarea>
+            </div>
 
-        <div class="form-group">
-
-            <label for="service_type_id">
-                Service Type <span class="text-danger">*</span>
-            </label>
-
-            <select
-                id="service_type_id"
-                name="service_type_id"
-                class="form-control"
-                required
-            >
-
-                <option value="">
-                    Select a service type...
-                </option>
-
-                <% if (serviceTypes && serviceTypes.length > 0) { %>
-
-                    <% serviceTypes.forEach(type => { %>
-
-                        <option
-                            value="<%= type.id %>"
-                            <%= formData?.service_type_id == type.id
-                                ? 'selected'
-                                : '' %>
-                        >
-                            <%= type.name %>
-                        </option>
-
-                    <% }) %>
-
-                <% } else { %>
-
-                    <option value="" disabled>
-                        No service types available
-                    </option>
-
-                <% } %>
-
-            </select>
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="vehicle_id">
-                Vehicle <span class="text-danger">*</span>
-            </label>
-
-            <select
-                id="vehicle_id"
-                name="vehicle_id"
-                class="form-control"
-                required
-            >
-
-                <option value="">
-                    Select a vehicle...
-                </option>
-
-                <% if (vehicles && vehicles.length > 0) { %>
-
-                    <% vehicles.forEach(vehicle => { %>
-
-                        <option
-                            value="<%= vehicle.id %>"
-                            <%= formData?.vehicle_id == vehicle.id
-                                ? 'selected'
-                                : '' %>
-                        >
-                            <%= vehicle.name %> -
-                            $<%= vehicle.price.toLocaleString() %>
-                        </option>
-
-                    <% }) %>
-
-                <% } else { %>
-
-                    <option value="" disabled>
-                        No vehicles available
-                    </option>
-
-                <% } %>
-
-            </select>
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="description">
-                Description <span class="text-danger">*</span>
-            </label>
-
-            <textarea
-                id="description"
-                name="description"
-                rows="5"
-                class="form-control"
-                required
-            ><%= formData?.description || '' %></textarea>
-
-        </div>
-
-        <div class="request-actions">
-
-            <a href="/service-requests" class="btn-secondary">
-                ← Back to Requests
-            </a>
-
-            <button
-                type="submit"
-                class="btn-primary"
-            >
-                Submit Request
-            </button>
-
-        </div>
-
-    </form>
+            <!-- Actions -->
+            <div class="form-actions">
+                <a href="/service-requests" class="btn-secondary">
+                    ← Back to Requests
+                </a>
+                <button type="submit" class="btn-primary">
+                    Submit Request
+                </button>
+            </div>
+        </form>
+    </div>
 
 </main>
 

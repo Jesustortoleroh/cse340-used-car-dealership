@@ -1,159 +1,115 @@
 <%- include('../partials/header') %>
 
-<main>
+<main class="service-request-page">
 
-    <h1><%= title %></h1>
+    <div class="service-request-card glass-card">
+        <h1 class="page-title"><%= title %></h1>
+        <p class="page-subtitle">Update the details of your service request below.</p>
 
-    <!-- show flash messages -->
-    <% if (flash) { %>
-        <% if (flash.error) { %>
-            <div class="flash error">
-                <%= flash.error %>
-            </div>
-        <% } %>
-        <% if (flash.success) { %>
-            <div class="flash success">
-                <%= flash.success %>
-            </div>
-        <% } %>
-    <% } %>
+        <form action="/service-requests/<%= request.id %>/edit" method="POST" class="service-form">
+            <!-- CSRF Token (Required for security) -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <form action="/service-requests/<%= request.id %>/edit" method="POST" class="service-form">
-
-        <div class="form-group">
-
-            <label for="service_type_id">
-                Service Type <span class="text-danger">*</span>
-            </label>
-
-            <select
-                id="service_type_id"
-                name="service_type_id"
-                class="form-control"
-                required
-            >
-                <option value="">Select a service type...</option>
-                <% if (serviceTypes && serviceTypes.length > 0) { %>
-                    <% serviceTypes.forEach(type => { %>
-                        <option
-                            value="<%= type.id %>"
-                            <%= formData?.service_type_id == type.id
-                                ? 'selected'
-                                : request.service_type_id === type.id
-                                    ? 'selected'
-                                    : '' %>
-                        >
-                            <%= type.name %>
-                        </option>
-                    <% }) %>
-                <% } else { %>
-                    <option value="" disabled>
-                        No service types available
-                    </option>
-                <% } %>
-            </select>
-
-        </div>
-
-       
-        <div class="form-group">
-
-            <label>Status</label>
-
-            <!-- Only employees and owners can modify the status -->
-            <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
-                
+            <!-- Service Type -->
+            <div class="form-group">
+                <label for="service_type_id">
+                    Service Type <span class="text-danger">*</span>
+                </label>
                 <select
-                    id="status"
-                    name="status"
+                    id="service_type_id"
+                    name="service_type_id"
                     class="form-control"
                     required
                 >
-                    <option value="Submitted"
-                        <%= formData?.status == 'Submitted' || (!formData && request.status === 'Submitted')
-                            ? 'selected'
-                            : '' %>
-                    >
-                        Submitted
-                    </option>
-
-                    <option value="In Progress"
-                        <%= formData?.status == 'In Progress' || (!formData && request.status === 'In Progress')
-                            ? 'selected'
-                            : '' %>
-                    >
-                        In Progress
-                    </option>
-
-                    <option value="Completed"
-                        <%= formData?.status == 'Completed' || (!formData && request.status === 'Completed')
-                            ? 'selected'
-                            : '' %>
-                    >
-                        Completed
-                    </option>
+                    <option value="">Select a service type...</option>
+                    <% if (serviceTypes && serviceTypes.length > 0) { %>
+                        <% serviceTypes.forEach(type => { %>
+                            <option
+                                value="<%= type.id %>"
+                                <%= formData?.service_type_id == type.id
+                                    ? 'selected'
+                                    : request.service_type_id === type.id
+                                        ? 'selected'
+                                        : '' %>
+                            >
+                                <%= type.name %>
+                            </option>
+                        <% }) %>
+                    <% } else { %>
+                        <option value="" disabled>No service types available</option>
+                    <% } %>
                 </select>
+            </div>
 
-            <% } else { %>
-                
-                <!-- Customers can only view the current status with styled badge -->
-                <div class="readonly-status">
-                    <span class="status-badge
-                        <%= request.status === 'Submitted'
-                            ? 'status-submitted'
-                            : request.status === 'In Progress'
-                                ? 'status-in-progress'
-                                : 'status-completed' %>">
-                        <%= request.status %>
-                    </span>
-                </div>
+            <!-- Status -->
+            <div class="form-group">
+                <label>Status</label>
+                <% if (user.roleName === 'employee' || user.roleName === 'owner') { %>
+                    <select
+                        id="status"
+                        name="status"
+                        class="form-control"
+                        required
+                    >
+                        <option value="Submitted"
+                            <%= formData?.status == 'Submitted' || (!formData && request.status === 'Submitted') ? 'selected' : '' %>
+                        >
+                            Submitted
+                        </option>
+                        <option value="In Progress"
+                            <%= formData?.status == 'In Progress' || (!formData && request.status === 'In Progress') ? 'selected' : '' %>
+                        >
+                            In Progress
+                        </option>
+                        <option value="Completed"
+                            <%= formData?.status == 'Completed' || (!formData && request.status === 'Completed') ? 'selected' : '' %>
+                        >
+                            Completed
+                        </option>
+                    </select>
+                <% } else { %>
+                    <!-- Customers can only view the current status -->
+                    <div class="readonly-status">
+                        <span class="status-badge
+                            <%= request.status === 'Submitted'
+                                ? 'status-submitted'
+                                : request.status === 'In Progress'
+                                    ? 'status-in-progress'
+                                    : 'status-completed' %>">
+                            <%= request.status %>
+                        </span>
+                    </div>
+                    <p class="status-note">
+                        Only dealership staff can update the service request status.
+                    </p>
+                    <!-- Hidden field to maintain current status value when form is submitted -->
+                    <input type="hidden" name="status" value="<%= request.status %>">
+                <% } %>
+            </div>
 
-                <p class="status-note">
-                    Only dealership staff can update the service request status.
-                </p>
+            <!-- Notes -->
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea
+                    id="notes"
+                    name="notes"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Add any additional notes or details..."
+                ><%= formData?.notes || request.notes || '' %></textarea>
+            </div>
 
-                <!-- Hidden field to maintain current status value when form is submitted -->
-                <input 
-                    type="hidden" 
-                    name="status" 
-                    value="<%= request.status %>"
-                />
-
-            <% } %>
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="notes">
-                Notes
-            </label>
-
-            <textarea
-                id="notes"
-                name="notes"
-                rows="5"
-                class="form-control"
-            ><%= formData?.notes || request.notes || '' %></textarea>
-
-        </div>
-
-        <div class="request-actions">
-
-            <a href="/service-requests" class="btn-secondary">
-                ← Back to Requests
-            </a>
-
-            <button
-                type="submit"
-                class="btn-primary"
-            >
-                Update Request
-            </button>
-
-        </div>
-
-    </form>
+            <!-- Actions -->
+            <div class="form-actions">
+                <a href="/service-requests" class="btn-secondary">
+                    ← Back to Requests
+                </a>
+                <button type="submit" class="btn-primary">
+                    Update Request
+                </button>
+            </div>
+        </form>
+    </div>
 
 </main>
 
