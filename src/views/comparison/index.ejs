@@ -7,10 +7,6 @@
         <p class="page-subtitle">Select up to 3 vehicles to compare side by side</p>
     </div>
 
-    <% if (messages && messages.error) { %>
-        <div class="flash error"><%= messages.error %></div>
-    <% } %>
-
     <form action="/compare" method="POST" class="compare-form glass-card">
         <!-- CSRF Token for Security -->
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
