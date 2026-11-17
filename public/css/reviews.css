@@ -1,18 +1,14 @@
 /* ==========================================
-   Reviews Section
+   Reviews Section (NeoMotor)
+========================================== */
+
+/* ==========================================
+   1. Reviews Section (Vehicle Detail)
 ========================================== */
 .reviews-section {
     margin-top: 3rem;
 }
 
-.reviews-section h2 {
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-}
-
-/* ==========================================
-   Reviews Header & Summary Badge
-========================================== */
 .reviews-header {
     display: flex;
     justify-content: space-between;
@@ -26,6 +22,12 @@
 
 .reviews-header h2 {
     margin: 0;
+    color: var(--primary);
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+
+[data-theme="light"] .reviews-header h2 {
+    text-shadow: none;
 }
 
 .reviews-summary-badge {
@@ -37,12 +39,13 @@
     border-radius: 50px;
     flex-wrap: wrap;
     transition: var(--transition);
+    border: 1px solid var(--border-color);
 }
 
 .avg-rating {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--primary);
 }
 
 .mini-stars {
@@ -57,6 +60,7 @@
 
 .mini-stars .star.filled {
     color: #fbbf24;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
 }
 
 .review-count {
@@ -65,15 +69,15 @@
 }
 
 /* ==========================================
-   Rating Breakdown (Progress Bars)
+   2. Rating Breakdown (Progress Bars)
 ========================================== */
 .rating-breakdown {
-    background-color: var(--bg-hover);
+    background-color: var(--bg-card);
     padding: 1.5rem;
     border-radius: var(--card-radius);
     margin-bottom: 2rem;
     border: 1px solid var(--border-color);
-    transition: var(--transition);
+    box-shadow: var(--shadow-md);
 }
 
 .breakdown-row {
@@ -94,7 +98,7 @@
     font-weight: 500;
 }
 
-/* --- Native <progress> styling --- */
+/* Native <progress> styling */
 .progress-bar {
     flex: 1;
     height: 8px;
@@ -106,7 +110,6 @@
     appearance: none;
 }
 
-/* For WebKit/Blink (Chrome, Edge, Safari) */
 .progress-bar::-webkit-progress-bar {
     background-color: var(--border-color);
     border-radius: 50px;
@@ -118,7 +121,6 @@
     transition: width 0.8s ease;
 }
 
-/* For Firefox */
 .progress-bar::-moz-progress-bar {
     background: linear-gradient(90deg, #fbbf24, #f59e0b);
     border-radius: 50px;
@@ -134,63 +136,30 @@
 }
 
 /* ==========================================
-   Review Cards
+   3. Review Cards
 ========================================== */
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 .review-card {
     background-color: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
     padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: var(--card-shadow);
+    box-shadow: var(--shadow-md);
     transition: var(--transition);
 }
 
 .review-card:hover {
     transform: translateX(4px);
-    box-shadow: var(--card-shadow-hover);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
 }
 
-.review-card h3 {
-    margin-top: 0;
-    color: var(--text-primary);
-}
-
-/* ==========================================
-   Review Comment & Date
-========================================== */
-.review-comment {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    text-align: left;
-    margin: 1rem 0;
-}
-
-.review-date {
-    display: block;
-    margin-top: 0.75rem;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-}
-
-/* ==========================================
-   Review Stars Display
-========================================== */
-.review-rating {
-    margin: 0.75rem 0;
-}
-
-.star {
-    color: var(--border-dark);
-    font-size: 1.2rem;
-}
-
-.star.filled {
-    color: #fbbf24;
-}
-
-/* ==========================================
-   Review Card Header (Enhanced)
-========================================== */
 .review-header {
     display: flex;
     align-items: center;
@@ -202,6 +171,7 @@
 .review-header h3 {
     margin: 0;
     font-size: 1.1rem;
+    color: var(--text-primary);
 }
 
 .review-stars {
@@ -221,10 +191,19 @@
 .review-header .review-date {
     margin-left: auto;
     margin-top: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.review-comment {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    text-align: left;
+    margin: 1rem 0;
 }
 
 /* ==========================================
-   Interactive Star Rating (Form)
+   4. Interactive Star Rating (Form)
 ========================================== */
 .star-rating {
     display: flex;
@@ -247,7 +226,7 @@
 }
 
 .star-rating label {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     color: var(--border-dark);
     cursor: pointer;
     transition: color 0.2s ease, transform 0.2s ease;
@@ -260,13 +239,13 @@
 .star-rating label:hover ~ label {
     color: #fbbf24;
     transform: scale(1.1);
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
 }
 
 .star-rating input:checked ~ label {
     color: #fbbf24;
 }
 
-/* Keyboard navigation focus ring */
 .star-rating input:focus-visible + label {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
@@ -274,7 +253,7 @@
 }
 
 /* ==========================================
-   Review Form
+   5. Review Form (Create/Edit)
 ========================================== */
 .review-form-section {
     margin-top: 3rem;
@@ -282,212 +261,136 @@
 
 .review-form {
     background-color: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     padding: 2rem;
     border-radius: var(--card-radius);
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    box-shadow: var(--shadow-md);
 }
 
 .review-form .form-group {
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .review-form label {
-    display: block;
     margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: var(--text-primary);
-}
-
-.review-form textarea,
-.review-form select,
-.review-form input:not([type="radio"]) {
-    width: 100%;
-    padding: 0.85rem;
-    border: 1px solid var(--border-dark);
-    border-radius: 8px;
-    font-size: 1rem;
-    font-family: inherit;
-    background: var(--bg-input);
-    color: var(--text-primary);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .review-form textarea {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
     resize: vertical;
-    min-height: 140px;
+    min-height: 150px;
 }
 
-.review-form textarea:focus,
-.review-form select:focus,
-.review-form input:not([type="radio"]):focus {
+.review-form textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-/* ==========================================
-   Review Actions (Buttons)
-========================================== */
 .review-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
     flex-wrap: wrap;
 }
 
 /* ==========================================
-   Login Prompt & Empty State
+   6. Review Edit Page
 ========================================== */
-.login-prompt {
-    background-color: var(--bg-hover);
-    padding: 2rem;
-    border-radius: var(--card-radius);
-    text-align: center;
-    margin: 2rem 0;
+.review-edit-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem 0;
+}
+
+.review-edit-card {
+    width: 100%;
+    max-width: 700px;
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
-    transition: var(--transition);
-}
-
-.login-prompt p {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-}
-
-.login-link {
-    color: var(--primary);
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.login-link:hover {
-    text-decoration: underline;
-}
-
-.empty-state {
-    background-color: var(--bg-card);
     border-radius: var(--card-radius);
-    padding: 3rem 2rem;
-    text-align: center;
-    color: var(--text-muted);
-    box-shadow: var(--card-shadow);
-    border: 1px dashed var(--border-dark);
-    transition: var(--transition);
-}
-
-.empty-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: 1rem;
-}
-
-.empty-state p {
-    margin: 0.25rem 0;
-}
-
-.empty-sub {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-top: 0.5rem;
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
 }
 
 /* ==========================================
-   Reviews List (Container)
+   7. Review Detail Page
 ========================================== */
-.reviews-list {
+.review-detail-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.review-detail-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
     gap: 1rem;
 }
 
-/* ==========================================
-   Validation
-========================================== */
-.text-danger {
-    color: var(--error);
-}
-
-.invalid-feedback {
-    margin-top: 0.5rem;
-    color: var(--error);
-    font-size: 0.9rem;
-}
-
-.invalid-feedback.d-block {
-    display: block;
-}
-
-/* ==========================================
-   Review Detail
-========================================== */
-.review-detail-header {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.review-detail-header h1 {
-    margin: 0;
-    color: var(--text-primary);
-}
-
-.btn-back {
-    background-color: var(--bg-nav);
-    color: var(--text-white);
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: var(--transition);
-}
-
-.btn-back:hover {
-    background-color: var(--text-secondary);
-    transform: translateX(-4px);
-}
-
 .review-detail-card {
-    background-color: var(--bg-card);
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    padding: 2rem;
-    box-shadow: var(--card-shadow);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
     margin-bottom: 2rem;
-    transition: var(--transition);
 }
 
 .review-detail-vehicle {
     margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .review-detail-vehicle h2 {
     margin: 0;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
 }
 
 .review-detail-vehicle h2 a {
     color: var(--primary);
     text-decoration: none;
+    transition: var(--transition);
 }
 
 .review-detail-vehicle h2 a:hover {
     text-decoration: underline;
+    text-shadow: 0 0 10px var(--primary);
 }
 
 .review-detail-meta {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .review-detail-meta h3 {
     margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: var(--text-primary);
 }
 
@@ -505,6 +408,7 @@
 
 .review-detail-rating .star.filled {
     color: #fbbf24;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
 }
 
 .rating-number {
@@ -519,11 +423,11 @@
 }
 
 .review-detail-comment {
-    background-color: var(--bg-hover);
-    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 2rem;
     border-radius: 8px;
-    margin: 1rem 0;
-    transition: var(--transition);
+    border-left: 4px solid var(--primary);
+    margin: 2rem 0;
 }
 
 .review-detail-comment p {
@@ -536,8 +440,7 @@
 .review-detail-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    padding-top: 2rem;
     border-top: 1px solid var(--border-color);
     flex-wrap: wrap;
 }
@@ -552,7 +455,80 @@
 }
 
 /* ==========================================
-   Responsive
+   8. Empty State & Login Prompt
+========================================== */
+.login-prompt {
+    background-color: var(--bg-card);
+    padding: 2rem;
+    border-radius: var(--card-radius);
+    text-align: center;
+    margin: 2rem 0;
+    border: 1px solid var(--border-color);
+}
+
+.login-prompt p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.login-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 8px var(--primary);
+}
+
+.empty-state {
+    background-color: var(--bg-card);
+    border-radius: var(--card-radius);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    box-shadow: var(--shadow-md);
+    border: 1px dashed var(--border-color);
+    margin-top: 2rem;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    margin: 0.25rem 0;
+}
+
+.empty-sub {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+/* ==========================================
+   9. Validation
+========================================== */
+.text-danger {
+    color: var(--error);
+}
+
+.invalid-feedback {
+    margin-top: 0.5rem;
+    color: var(--error);
+    font-size: 0.9rem;
+}
+
+.invalid-feedback.d-block {
+    display: block;
+}
+
+/* ==========================================
+   10. Responsive
 ========================================== */
 @media (max-width: 768px) {
     .reviews-header {
@@ -605,10 +581,6 @@
         padding: 1rem;
     }
 
-    .empty-state {
-        padding: 2rem 1rem;
-    }
-
     .review-form {
         padding: 1.5rem;
     }
@@ -638,12 +610,6 @@
         flex-direction: column;
     }
 
-    .review-detail-actions a,
-    .review-detail-actions button {
-        width: 100%;
-        text-align: center;
-    }
-
     .review-detail-navigation {
         flex-direction: column;
         align-items: stretch;
@@ -651,5 +617,9 @@
 
     .review-detail-navigation a {
         text-align: center;
+    }
+
+    .review-edit-card {
+        padding: 1.5rem;
     }
 }
