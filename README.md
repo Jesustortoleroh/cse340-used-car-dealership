@@ -65,7 +65,7 @@ _Entity-Relationship Diagram showing the database structure and relationships._
 
 ### Core Tables
 
-- `users` & `roles`: User accounts and permissions.
+- `users`, `roles`, `oauth_identities`: User accounts, permissions, and Google/GitHub identity links.
 - `vehicles`, `categories`, `dealers`, `listings`: The core inventory system.
 - `favorites`, `reviews`, `service_requests`: User interactions.
 - `contact_form`, `notifications`: Support and user engagement.
@@ -93,3 +93,29 @@ _Entity-Relationship Diagram showing the database structure and relationships._
     git clone https://github.com/jesustortoleroh/cse340-used-car-dealership.git
     cd cse340-used-car-dealership
     ```
+
+### Google and GitHub Sign-In
+
+Social sign-in is enabled per provider when its client ID and client secret are
+configured in the environment. Add these values to `.env` for local development
+or to your deployment's environment settings:
+
+```env
+OAUTH_CALLBACK_BASE_URL=http://localhost:3000
+# Add the client ID and secret for each provider you enable:
+# GOOGLE_CLIENT_ID=...
+# GOOGLE_CLIENT_SECRET=...
+# GITHUB_CLIENT_ID=...
+# GITHUB_CLIENT_SECRET=...
+```
+
+In Google Cloud Console, create a **Web application** OAuth client and add
+`http://localhost:3000/auth/google/callback` as an authorized redirect URI. In
+GitHub, create an OAuth App and set its authorization callback URL to
+`http://localhost:3000/auth/github/callback`. For production, set
+`OAUTH_CALLBACK_BASE_URL` to the public HTTPS origin and register the matching
+`/auth/google/callback` and `/auth/github/callback` URLs with each provider.
+
+Keep client secrets out of source control. New social accounts receive the
+`customer` role. Existing accounts are linked only when Google or GitHub
+provides a verified email matching the account's email address.

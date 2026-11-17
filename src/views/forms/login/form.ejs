@@ -60,6 +60,18 @@
                 </p>
             </div>
         </form>
+
+        <% if (oauthProviders.google || oauthProviders.github) { %>
+            <div class="oauth-options">
+                <p class="oauth-divider">Or continue with</p>
+                <% if (oauthProviders.google) { %>
+                    <a class="oauth-button" href="/auth/google">Continue with Google</a>
+                <% } %>
+                <% if (oauthProviders.github) { %>
+                    <a class="oauth-button" href="/auth/github">Continue with GitHub</a>
+                <% } %>
+            </div>
+        <% } %>
     </div>
 
 </main>

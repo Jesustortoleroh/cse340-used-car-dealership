@@ -62,6 +62,9 @@ if (isDevelopment && isSqlLoggingEnabled) {
                 throw error;
             }
         },
+        async connect() {
+            return pool.connect();
+        },
         async close() {
             await pool.end();
         }

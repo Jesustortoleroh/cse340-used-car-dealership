@@ -6,6 +6,12 @@ import { dealersListPage, dealerDetailPage } from './dealers/dealers.js';
 import { showContactForm, handleContactSubmission, showContactResponses, showInquiryDetail, updateInquiryStatus, updateInquiryPriority, deleteInquiry } from './forms/contact.js';
 import { showRegistrationForm, processRegistration, showAllUsers, showEditAccountForm, processEditAccount, processDeleteAccount } from './forms/registration.js';
 import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
+import {
+    startGoogleLogin,
+    googleLoginCallback,
+    startGitHubLogin,
+    gitHubLoginCallback
+} from './forms/socialAuth.js';
 import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
 import { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
 import { requireLogin, requireEmployee, requireOwner } from '../middleware/auth.js';
@@ -135,6 +141,10 @@ router.post('/register/:id/delete', requireOwner, processDeleteAccount);
 // ============================================
 router.get('/login', showLoginForm);
 router.post('/login', loginValidation, processLogin);
+router.get('/auth/google', startGoogleLogin);
+router.get('/auth/google/callback', googleLoginCallback);
+router.get('/auth/github', startGitHubLogin);
+router.get('/auth/github/callback', gitHubLoginCallback);
 router.get('/logout', processLogout);
 
 // ============================================

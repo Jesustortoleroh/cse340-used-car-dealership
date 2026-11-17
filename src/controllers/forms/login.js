@@ -6,6 +6,8 @@ import {
     getRecentRequests
 } from '../../models/analytics/analytics.js';
 import { updateLastLogin } from '../../models/profile/profile.js';
+import { oauthProviders } from '../../config/passport.js';
+import { createAuthenticatedSession } from '../../utils/authentication.js';
 
 /**
  * Display login form
@@ -13,7 +15,8 @@ import { updateLastLogin } from '../../models/profile/profile.js';
 const showLoginForm = (req, res) => {
     res.render('forms/login/form', {
         title: 'Dealership Login',
-        csrfToken: res.locals.csrfToken // Explicitly pass the CSRF token
+        csrfToken: res.locals.csrfToken,
+        oauthProviders
     });
 };
 
@@ -53,9 +56,7 @@ const processLogin = async (req, res) => {
         // Remove password before storing in session (Security best practice)
         delete user.password;
 
-        // Store user in session
-        req.session.user = user;
-        req.session.userId = user.id;
+        await createAuthenticatedSession(req, user);
 
         // Success message
         req.flash('success', `Welcome back to our dealership, ${user.name || user.email}!`);

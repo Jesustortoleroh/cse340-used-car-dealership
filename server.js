@@ -7,6 +7,7 @@ import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
 import compression from 'compression';
 import pinoHttp from 'pino-http';
+import passport from 'passport';
 
 // Configuration & Logger
 import { env } from './src/config/env.js';
@@ -22,6 +23,7 @@ import { notFoundHandler, globalErrorHandler } from './src/middleware/errorHandl
 // Database & Utils
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
+import { ensureSocialAuthSchema } from './src/models/forms/socialAuth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -102,6 +104,7 @@ app.use(
 );
 
 // Core Middleware
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 app.use(express.json({ limit: '100kb' }));
@@ -147,6 +150,7 @@ app.listen(env.PORT, async () => {
     try {
         await testConnection();
         await setupDatabase();
+        await ensureSocialAuthSchema();
         startSessionCleanup();
         logger.info(`🚀 Server running on http://127.0.0.1:${env.PORT} [${env.NODE_ENV}]`);
     } catch (error) {
