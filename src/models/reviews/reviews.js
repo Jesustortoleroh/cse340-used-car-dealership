@@ -10,17 +10,11 @@ const getReviewsByVehicleId = async (vehicleId) => {
             r.rating,
             r.comment,
             r.created_at,
-
             u.id AS user_id,
             u.name
-
         FROM reviews r
-
-        JOIN users u
-            ON u.id = r.user_id
-
+        JOIN users u ON u.id = r.user_id
         WHERE r.vehicle_id = $1
-
         ORDER BY r.created_at DESC
     `;
 
@@ -42,9 +36,7 @@ const getReviewById = async (reviewId) => {
             comment,
             created_at,
             updated_at
-
         FROM reviews
-
         WHERE id = $1
     `;
 
@@ -58,15 +50,8 @@ const getReviewById = async (reviewId) => {
  */
 const createReview = async (userId, vehicleId, rating, comment) => {
     const query = `
-        INSERT INTO reviews (
-            user_id,
-            vehicle_id,
-            rating,
-            comment
-        )
-
+        INSERT INTO reviews (user_id, vehicle_id, rating, comment)
         VALUES ($1, $2, $3, $4)
-
         RETURNING *
     `;
 
@@ -81,14 +66,11 @@ const createReview = async (userId, vehicleId, rating, comment) => {
 const updateReview = async (reviewId, rating, comment) => {
     const query = `
         UPDATE reviews
-
         SET
             rating = $1,
             comment = $2,
             updated_at = CURRENT_TIMESTAMP
-
         WHERE id = $3
-
         RETURNING *
     `;
 
@@ -156,7 +138,11 @@ const canUserModifyReview = (user, review) => {
     if (!user) {
         return false;
     }
-    return user.id === review.user_id || user.roleName === 'employee' || user.roleName === 'owner';
+    return (
+        user.id === review.user_id ||
+        user.roleName === 'employee' ||
+        user.roleName === 'owner'
+    );
 };
 
 export {

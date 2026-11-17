@@ -1,32 +1,32 @@
 -- ============================================
--- SEED FILE FOR USED CAR DEALERSHIP
+-- SEED FILE FOR NEOMOTOR USED CAR DEALERSHIP
 -- ============================================
 -- This file creates tables and inserts all initial data
--- Version: 2.0 - Improved with security, indexes, and constraints
+-- Version: 3.0 - Unified with all tables, indexes, triggers, and views
 
 BEGIN;
 
 -- ============================================
 -- 1. DROP EXISTING TABLES (in reverse dependency order)
 -- ============================================
-DROP TABLE IF EXISTS session CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS contact_form CASCADE;
 DROP TABLE IF EXISTS service_requests CASCADE;
 DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS favorites CASCADE;
 DROP TABLE IF EXISTS vehicle_images CASCADE;
-DROP TABLE IF EXISTS listings CASCADE;
 DROP TABLE IF EXISTS vehicle_specs CASCADE;
+DROP TABLE IF EXISTS listings CASCADE;
 DROP TABLE IF EXISTS vehicles CASCADE;
 DROP TABLE IF EXISTS dealers CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
-DROP TABLE IF EXISTS contact_form CASCADE;
 DROP TABLE IF EXISTS service_types CASCADE;
-DROP TABLE IF EXISTS favorites CASCADE;
-DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS session CASCADE;
 
 -- ============================================
--- 2. CREATE TABLES WITH ENHANCED SECURITY
+-- 2. CREATE TABLES
 -- ============================================
 
 -- 1. Roles table (no dependencies)
@@ -54,8 +54,7 @@ CREATE TABLE users (
     last_login TIMESTAMP,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles(id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 3. Categories table (no dependencies)
@@ -105,8 +104,7 @@ CREATE TABLE vehicles (
     available BOOLEAN DEFAULT true,
     views INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_vehicle_category FOREIGN KEY (category_id) REFERENCES categories(id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 6. Listings table (depends on vehicles and dealers)
@@ -227,7 +225,7 @@ CREATE TABLE session (
     expire TIMESTAMP NOT NULL
 );
 
--- 15. Notifications table
+-- 15. Notifications table (depends on users)
 CREATE TABLE notifications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -243,10 +241,12 @@ CREATE TABLE notifications (
 -- 3. CREATE INDEXES FOR PERFORMANCE
 -- ============================================
 
+-- Users
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role_id ON users(role_id);
 CREATE INDEX idx_users_is_active ON users(is_active);
 
+-- Vehicles
 CREATE INDEX idx_vehicles_category_id ON vehicles(category_id);
 CREATE INDEX idx_vehicles_dealer_id ON vehicles(dealer_id);
 CREATE INDEX idx_vehicles_price ON vehicles(price);
@@ -254,27 +254,37 @@ CREATE INDEX idx_vehicles_year ON vehicles(year);
 CREATE INDEX idx_vehicles_available ON vehicles(available) WHERE available = true;
 CREATE INDEX idx_vehicles_featured ON vehicles(featured) WHERE featured = true;
 
+-- Favorites
 CREATE INDEX idx_favorites_user_id ON favorites(user_id);
 CREATE INDEX idx_favorites_vehicle_id ON favorites(vehicle_id);
 
+-- Reviews
 CREATE INDEX idx_reviews_vehicle_id ON reviews(vehicle_id);
 CREATE INDEX idx_reviews_user_id ON reviews(user_id);
 CREATE INDEX idx_reviews_rating ON reviews(rating);
 
+-- Service Requests
 CREATE INDEX idx_service_requests_user_id ON service_requests(user_id);
 CREATE INDEX idx_service_requests_status ON service_requests(status);
 CREATE INDEX idx_service_requests_vehicle_id ON service_requests(vehicle_id);
 
+-- Contact Form
 CREATE INDEX idx_contact_form_email ON contact_form(email);
 CREATE INDEX idx_contact_form_status ON contact_form(status);
 
+-- Listings
 CREATE INDEX idx_listings_dealer_id ON listings(dealer_id);
 CREATE INDEX idx_listings_vehicle_id ON listings(vehicle_id);
 CREATE INDEX idx_listings_availability ON listings(availability);
 
+-- Notifications
 CREATE INDEX idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX idx_notifications_is_read ON notifications(is_read);
 CREATE INDEX idx_notifications_created_at ON notifications(created_at);
+
+-- Vehicle Child Tables (Missing indexes)
+CREATE INDEX idx_vehicle_images_vehicle_id ON vehicle_images(vehicle_id);
+CREATE INDEX idx_vehicle_specs_vehicle_id ON vehicle_specs(vehicle_id);
 
 -- ============================================
 -- 4. CREATE TRIGGERS FOR UPDATED_AT
@@ -416,7 +426,7 @@ INSERT INTO vehicles (name, slug, description, price, category_id, dealer_id, ye
 ('Chevrolet Malibu 2021', 'chevrolet-malibu-2021', 'Midsize sedan with spacious interior and comfortable ride quality.', 17500.00, 1, 9, 2021, 20000, 'Automatic', 'Gasoline', 'White', 'Good', false, true),
 ('Tesla Model 3 2022', 'tesla-model-3-2022', 'Electric sedan with autopilot, long range, and instant acceleration.', 45000.00, 6, 10, 2022, 5000, 'Automatic', 'Electric', 'Red', 'Excellent', true, true),
 ('Ford F-150 2021', 'ford-f-150-2021', 'Best-selling pickup truck with EcoBoost engine and advanced towing technology.', 38000.00, 3, 1, 2021, 10000, 'Automatic', 'Gasoline', 'Black', 'Excellent', true, true),
-('Honda CR-V 2020', 'honda-cr-v-2020', 'Reliable SUV with great cargo space and excellent safety ratings.', 22000.00, 2, 2, 2020, 25000, 'Automatic', 'Gasoline', 'Silver', 'Good', false, true);
+('Honda CR-V 2020', 'honda-crv-2020', 'Reliable SUV with great cargo space and excellent safety ratings.', 22000.00, 2, 2, 2020, 25000, 'Automatic', 'Gasoline', 'Silver', 'Good', false, true);
 
 -- Insert vehicle images
 INSERT INTO vehicle_images (vehicle_id, image_url, is_primary, caption) VALUES

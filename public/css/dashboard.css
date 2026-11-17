@@ -1,44 +1,128 @@
 /* ==========================================
-   Dashboard Layout
+   Dashboard Page (NeoMotor)
+========================================== */
+.dashboard-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Section Titles (Global for Dashboard) */
+.section-title {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+[data-theme="light"] .section-title {
+    text-shadow: none;
+}
+
+/* ==========================================
+   Analytics Section
+========================================== */
+.analytics-section {
+    margin-bottom: 4rem;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.analytics-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    border-radius: var(--card-radius);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    border: 1px solid var(--border-color);
+}
+
+.analytics-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.analytics-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+
+.analytics-card:hover .analytics-icon {
+    transform: scale(1.1);
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+}
+
+.analytics-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.analytics-label {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.analytics-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.analytics-link:hover {
+    text-shadow: 0 0 8px var(--primary);
+    transform: translateX(5px);
+}
+
+/* ==========================================
+   Dashboard Container
 ========================================== */
 .dashboard-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 3rem;
 }
 
-/* Cards base styles */
-.user-profile,
-.dashboard-actions {
-    background-color: var(--bg-card);
+/* User Profile */
+.user-profile {
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
 }
 
-.user-profile:hover,
-.dashboard-actions:hover {
-    box-shadow: var(--card-shadow-hover);
+.user-profile h2 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
 }
 
-/* Section Titles */
-.user-profile h2,
-.dashboard-actions h2 {
-    margin-top: 0;
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.75rem;
-}
-
-/* Dashboard subtitle */
 .dashboard-subtitle {
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-/* User Details (using DL, DT, DD semantics) */
+/* User Details */
 .user-details {
     display: grid;
     gap: 1rem;
@@ -47,268 +131,168 @@
 
 .detail-item {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Label | Value */
-    gap: 1rem;
+    grid-template-columns: 180px 1fr;
     align-items: center;
     padding: 0.75rem 1rem;
-    background-color: var(--bg-hover);
+    background: rgba(255, 255, 255, 0.02);
     border-radius: 8px;
+    border-left: 2px solid transparent;
     transition: var(--transition);
 }
 
-.label {
-    font-weight: bold;
-    color: var(--text-primary);
-    margin: 0;
+.detail-item:hover {
+    background: var(--bg-hover);
+    border-left-color: var(--primary);
 }
 
-.value {
-    color: var(--text-secondary);
-    margin: 0;
+.detail-item .label {
+    color: var(--text-muted);
     font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
 }
 
-/* Dashboard Links */
-.dashboard-actions ul {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0 0;
+.detail-item .value {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin: 0;
 }
 
-.dashboard-actions li {
-    margin-bottom: 0.75rem;
-}
-
-.dashboard-actions a {
-    display: block;
-    padding: 0.85rem 1rem;
-    background-color: var(--bg-nav);
-    color: var(--text-white);
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 8px;
-    transition: var(--transition);
-}
-
-.dashboard-actions a:hover {
-    background-color: var(--primary);
-    transform: translateY(-2px);
-}
-
-/* ==========================================
-   Role Badges
-========================================== */
+/* Role Badges */
 .role-badge {
     display: inline-block;
     padding: 0.35rem 0.75rem;
-    border-radius: 999px;
+    border-radius: 50px;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .role-customer {
     background: var(--info-bg);
-    color: var(--info-text);
+    color: var(--info);
+    border: 1px solid var(--info);
 }
 
 .role-employee {
     background: var(--success-bg);
-    color: var(--success-text);
+    color: var(--success);
+    border: 1px solid var(--success);
 }
 
 .role-owner {
     background: var(--warning-bg);
-    color: var(--warning-text);
+    color: var(--warning);
+    border: 1px solid var(--warning);
 }
 
 /* ==========================================
-   Buttons (Edit / Delete)
+   Quick Access Cards Grid
 ========================================== */
-.request-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn-edit,
-.btn-delete {
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-    border: none;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn-edit {
-    background: var(--info);
-    color: var(--text-white);
-}
-
-.btn-edit:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
-}
-
-.btn-delete {
-    background: var(--error);
-    color: var(--text-white);
-}
-
-.btn-delete:hover {
-    background: #c0392b;
-    transform: translateY(-1px);
-}
-
-.delete-form {
-    display: inline;
-}
-
-/* ==========================================
-   Dashboard Cards Grid (Quick Access)
-========================================== */
-.dashboard-cards {
-    margin: 0 0 1rem 0;
-}
-
-.dashboard-cards h2 {
-    margin-top: 0;
-    color: var(--text-primary);
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 0.75rem;
-}
-
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
 
 .dashboard-card {
-    display: block;
-    text-decoration: none;
-    background-color: var(--bg-card);
+    background: var(--bg-card);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    padding: 1.5rem;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
+    padding: 2rem 1.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
     text-align: center;
-    border: 2px solid transparent;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
 }
 
 .dashboard-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-6px);
     border-color: var(--primary);
-}
-
-/* Accessibility: Focus states for keyboard navigation */
-.dashboard-card:focus-visible,
-.dashboard-actions a:focus-visible,
-.btn-edit:focus-visible,
-.btn-delete:focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
+    box-shadow: var(--shadow-lg);
 }
 
 .card-icon {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     display: block;
+    transition: var(--transition);
+}
+
+.dashboard-card:hover .card-icon {
+    transform: scale(1.1);
+    text-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
 }
 
 .dashboard-card h3 {
-    color: var(--text-primary);
-    margin: 0.5rem 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
 }
 
 .dashboard-card p {
     color: var(--text-muted);
-    margin: 0;
     font-size: 0.9rem;
 }
 
 /* ==========================================
-   Analytics Section
+   Dashboard Actions (Lists)
 ========================================== */
-.analytics-section {
-    margin-bottom: 2rem;
-}
-
-.analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.analytics-card {
+.dashboard-actions {
     background: var(--bg-card);
-    padding: 1.5rem 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
     border-radius: var(--card-radius);
-    text-align: center;
-    box-shadow: var(--card-shadow);
-    transition: var(--transition);
-    border: 1px solid transparent;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
 }
 
-.analytics-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--card-shadow-hover);
-    border-color: var(--primary);
+.action-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
 }
 
-.analytics-icon {
-    font-size: 2.5rem;
+.action-list li a {
     display: block;
-    margin-bottom: 0.5rem;
-}
-
-.analytics-number {
-    font-size: 2.8rem;
-    font-weight: bold;
-    color: var(--text-primary);
-    line-height: 1.2;
-}
-
-.analytics-label {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin: 0.5rem 0;
-}
-
-.analytics-link {
-    color: var(--primary);
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
     text-decoration: none;
-    font-size: 0.85rem;
     font-weight: 500;
     transition: var(--transition);
 }
 
-.analytics-link:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
-
-/* Employee & Owner specific styling */
-.employee-analytics .analytics-card {
-    border-left: 4px solid var(--primary);
-}
-
-.owner-analytics .analytics-card {
-    border-left: 4px solid var(--warning);
+.action-list li a:hover {
+    background: var(--bg-hover);
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: translateX(5px);
 }
 
 /* ==========================================
-   Responsive Design
+   Accessibility Focus States
+========================================== */
+.dashboard-card:focus-visible,
+.dashboard-actions a:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ==========================================
+   Responsive
 ========================================== */
 @media (max-width: 768px) {
     .detail-item {
-        grid-template-columns: 1fr; /* Stack label and value vertically on mobile */
+        grid-template-columns: 1fr;
         gap: 0.25rem;
     }
 
@@ -322,7 +306,7 @@
     }
 
     .dashboard-card {
-        padding: 1rem;
+        padding: 1.5rem;
     }
 
     .card-icon {
@@ -339,7 +323,7 @@
     }
 
     .analytics-number {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .analytics-icon {
@@ -354,7 +338,7 @@
     }
 
     .dashboard-card {
-        padding: 0.75rem;
+        padding: 1rem;
     }
 
     .card-icon {
@@ -375,15 +359,15 @@
     }
 
     .analytics-card {
-        padding: 1rem 0.75rem;
+        padding: 1.5rem 1rem;
     }
 
     .analytics-number {
-        font-size: 1.6rem;
+        font-size: 2rem;
     }
 
     .analytics-icon {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
     }
 
     .analytics-label {

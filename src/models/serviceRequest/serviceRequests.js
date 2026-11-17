@@ -4,7 +4,6 @@ import db from '../db.js';
  * Get all service requests
  */
 const getAllServiceRequests = async () => {
-
     const query = `
         SELECT
             sr.*,
@@ -26,7 +25,6 @@ const getAllServiceRequests = async () => {
  * Get a service request by ID
  */
 const getServiceRequestById = async (requestId) => {
-
     const query = `
         SELECT
             sr.*,
@@ -48,7 +46,6 @@ const getServiceRequestById = async (requestId) => {
  * Get service requests for one user
  */
 const getServiceRequestsByUserId = async (userId) => {
-
     const query = `
         SELECT
             sr.*,
@@ -69,7 +66,6 @@ const getServiceRequestsByUserId = async (userId) => {
  * Get all service types
  */
 const getAllServiceTypes = async () => {
-
     const query = `
         SELECT id, name, description
         FROM service_types
@@ -84,7 +80,6 @@ const getAllServiceTypes = async () => {
  * Get service type by ID
  */
 const getServiceTypeById = async (typeId) => {
-
     const query = `
         SELECT id, name, description
         FROM service_types
@@ -98,33 +93,19 @@ const getServiceTypeById = async (typeId) => {
 /**
  * Create service request
  */
-const createServiceRequest = async (
-    userId,
-    serviceTypeId,
-    vehicleId,
-    description
-) => {
-
+const createServiceRequest = async (userId, serviceTypeId, vehicleId, description) => {
     const query = `
-        INSERT INTO service_requests (
-            user_id,
-            service_type_id,
-            vehicle_id,
-            description
-        )
+        INSERT INTO service_requests (user_id, service_type_id, vehicle_id, description)
         VALUES ($1, $2, $3, $4)
         RETURNING *
     `;
 
-    const result = await db.query(
-        query,
-        [
-            userId,
-            serviceTypeId,
-            vehicleId || null,
-            description
-        ]
-    );
+    const result = await db.query(query, [
+        userId,
+        serviceTypeId,
+        vehicleId || null,
+        description
+    ]);
 
     return result.rows[0];
 };
@@ -132,11 +113,7 @@ const createServiceRequest = async (
 /**
  * Update request status
  */
-const updateServiceRequestStatus = async (
-    requestId,
-    status
-) => {
-
+const updateServiceRequestStatus = async (requestId, status) => {
     const query = `
         UPDATE service_requests
         SET
@@ -153,11 +130,7 @@ const updateServiceRequestStatus = async (
 /**
  * Update notes
  */
-const updateServiceRequestNotes = async (
-    requestId,
-    notes
-) => {
-
+const updateServiceRequestNotes = async (requestId, notes) => {
     const query = `
         UPDATE service_requests
         SET
@@ -172,33 +145,9 @@ const updateServiceRequestNotes = async (
 };
 
 /**
- * Update full service request (status + notes)
- */
-const updateServiceRequest = async (
-    requestId,
-    status,
-    notes
-) => {
-
-    const query = `
-        UPDATE service_requests
-        SET
-            status = $1,
-            notes = $2,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE id = $3
-        RETURNING *
-    `;
-
-    const result = await db.query(query, [status, notes, requestId]);
-    return result.rows[0] || null;
-};
-
-/**
  * Delete service request
  */
 const deleteServiceRequest = async (requestId) => {
-
     const query = `
         DELETE FROM service_requests
         WHERE id = $1
@@ -217,6 +166,5 @@ export {
     createServiceRequest,
     updateServiceRequestStatus,
     updateServiceRequestNotes,
-    updateServiceRequest,
     deleteServiceRequest
 };

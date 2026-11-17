@@ -8,7 +8,7 @@ import { showRegistrationForm, processRegistration, showAllUsers, showEditAccoun
 import { showLoginForm, processLogin, processLogout, showDashboard } from './forms/login.js';
 import { processCreateReview, showEditReview, processUpdateReview, processDeleteReview } from '../controllers/reviews/reviews.js';
 import { showServiceRequests, showCreateRequestForm, processCreateRequest, showEditRequestForm, processUpdateRequest, processDeleteRequest } from '../controllers/serviceRequests/serviceRequests.js';
-import { requireLogin } from '../middleware/auth.js';
+import { requireLogin, requireEmployee, requireOwner } from '../middleware/auth.js';
 import { contactValidation, registrationValidation, loginValidation, updateAccountValidation, reviewValidation, serviceRequestValidation } from '../middleware/validation/forms.js';
 import { addFavoriteController, removeFavoriteController, favoritesListPage } from '../controllers/favorites/favorites.js';
 import { profilePage } from '../controllers/profile/profile.js';
@@ -17,7 +17,10 @@ import { showNotifications, getUnreadCountAjax, markAsReadController, markAllAsR
 
 const router = Router();
 
-// Add login-specific styles to all login routes
+// ============================================
+// Asset Injection Middleware
+// ============================================
+
 router.use('/login', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/login.css">');
     next();
@@ -69,21 +72,8 @@ router.use('/profile', (req, res, next) => {
     next();
 });
 
-// Notifications CSS
 router.use('/notifications', (req, res, next) => {
     res.addStyle('<link rel="stylesheet" href="/css/notifications.css">');
-    next();
-});
-
-// Add theme styles globally
-router.use((req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/theme.css">');
-    res.addStyle('<link rel="stylesheet" href="/css/theme-toggle.css">');
-    next();
-});
-
-router.use('/error', (req, res, next) => {
-    res.addStyle('<link rel="stylesheet" href="/css/error.css">');
     next();
 });
 
@@ -92,49 +82,77 @@ router.use('/compare', (req, res, next) => {
     next();
 });
 
+// ============================================
 // Basic Pages
+// ============================================
 router.get('/', homePage);
 router.get('/about', aboutPage);
 router.get('/test-error', testErrorPage);
 
-// Dealers routes
+// ============================================
+// Dealers
+// ============================================
 router.get('/dealers', dealersListPage);
 router.get('/dealers/:dealerSlug', dealerDetailPage);
 
-// Vehicles routes
+// ============================================
+// Vehicles
+// ============================================
 router.get('/vehicles', vehiclesPage);
 router.get('/vehicles/:slugId', vehicleDetailPage);
 
-// Contact form routes
+// ============================================
+// Contact Form (Public)
+// ============================================
 router.get('/contact', showContactForm);
 router.post('/contact', contactValidation, handleContactSubmission);
-router.get('/contact/responses', requireLogin, showContactResponses);
-router.get('/contact/:id', requireLogin, showInquiryDetail);
-router.post('/contact/:id/status', requireLogin, updateInquiryStatus);
-router.post('/contact/:id/priority', requireLogin, updateInquiryPriority);
-router.post('/contact/:id/delete', requireLogin, deleteInquiry);
 
-// Registration routes
+// ============================================
+// Contact Responses (Protected: Staff Only)
+// ============================================
+router.get('/contact/responses', requireEmployee, showContactResponses);
+router.get('/contact/:id', requireEmployee, showInquiryDetail);
+router.post('/contact/:id/status', requireEmployee, updateInquiryStatus);
+router.post('/contact/:id/priority', requireEmployee, updateInquiryPriority);
+router.post('/contact/:id/delete', requireOwner, deleteInquiry);
+
+// ============================================
+// Registration (Public)
+// ============================================
 router.get('/register', showRegistrationForm);
 router.post('/register', registrationValidation, processRegistration);
-router.get('/register/list', requireLogin, showAllUsers);
+
+// ============================================
+// User Management (Protected: Owner Only)
+// ============================================
+router.get('/register/list', requireOwner, showAllUsers);
 router.get('/register/:id/edit', requireLogin, showEditAccountForm);
 router.post('/register/:id/edit', requireLogin, updateAccountValidation, processEditAccount);
-router.post('/register/:id/delete', requireLogin, processDeleteAccount);
+router.post('/register/:id/delete', requireOwner, processDeleteAccount);
 
-// Login routes
+// ============================================
+// Login / Logout
+// ============================================
 router.get('/login', showLoginForm);
 router.post('/login', loginValidation, processLogin);
 router.get('/logout', processLogout);
+
+// ============================================
+// Dashboard (Protected)
+// ============================================
 router.get('/dashboard', requireLogin, showDashboard);
 
-// Reviews routes
+// ============================================
+// Reviews (Protected)
+// ============================================
 router.post('/reviews/create', requireLogin, reviewValidation, processCreateReview);
 router.get('/reviews/:id/edit', requireLogin, showEditReview);
 router.post('/reviews/:id/edit', requireLogin, reviewValidation, processUpdateReview);
 router.post('/reviews/:id/delete', requireLogin, processDeleteReview);
 
-// Service Requests routes
+// ============================================
+// Service Requests (Protected)
+// ============================================
 router.get('/service-requests', requireLogin, showServiceRequests);
 router.get('/service-requests/create', requireLogin, showCreateRequestForm);
 router.post('/service-requests/create', requireLogin, serviceRequestValidation, processCreateRequest);
@@ -143,20 +161,28 @@ router.post('/service-requests/:id/edit', requireLogin, processUpdateRequest);
 router.post('/service-requests/:id/delete', requireLogin, processDeleteRequest);
 router.get('/service-requests/manage', requireLogin, showServiceRequests);
 
-// Favorites routes
+// ============================================
+// Favorites (Protected)
+// ============================================
 router.get('/favorites', requireLogin, favoritesListPage);
 router.post('/favorites/:vehicleId/add', requireLogin, addFavoriteController);
 router.post('/favorites/:vehicleId/remove', requireLogin, removeFavoriteController);
 
-// Profile routes
+// ============================================
+// Profile (Protected)
+// ============================================
 router.get('/profile', requireLogin, profilePage);
 
-// Comparison routes
+// ============================================
+// Comparison (Public)
+// ============================================
 router.get('/compare', comparisonPage);
 router.post('/compare', compareVehiclesController);
 router.get('/compare/:vehicleId', getVehicleDetails);
 
-// Notifications routes
+// ============================================
+// Notifications (Protected)
+// ============================================
 router.get('/notifications', requireLogin, showNotifications);
 router.get('/notifications/unread', requireLogin, getUnreadCountAjax);
 router.post('/notifications/:id/read', requireLogin, markAsReadController);

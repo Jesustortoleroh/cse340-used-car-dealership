@@ -2,6 +2,7 @@ import db from './db.js';
 import fs from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from '../config/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,27 +29,19 @@ const setupDatabase = async () => {
          */
         hasData = false;
     }
-    
+
     if (hasData) {
-        console.log('Vehicles database already seeded ✅');
+        logger.info('Vehicles database already seeded ✅');
         return true;
     }
-    
+
     // No vehicles found - run full seed
-    console.log('Seeding vehicles database...');
+    logger.info('Seeding vehicles database...');
     const seedPath = join(__dirname, 'sql', 'seed.sql');
     const seedSQL = fs.readFileSync(seedPath, 'utf8');
     await db.query(seedSQL);
-    console.log('Vehicles database seeded successfully ✅');
+    logger.info('Vehicles database seeded successfully ✅');
 
-    // Run practice.sql if it exists (for student assignments)
-    const practicePath = join(__dirname, 'sql', 'practice.sql');
-    if (fs.existsSync(practicePath)) {
-        const practiceSQL = fs.readFileSync(practicePath, 'utf8');
-        await db.query(practiceSQL);
-        console.log('Practice tables verified ✅');
-    }
-    
     return true;
 };
 
@@ -57,7 +50,7 @@ const setupDatabase = async () => {
  */
 const testConnection = async () => {
     const result = await db.query('SELECT NOW() as current_time');
-    console.log('Database connection successful:', result.rows[0].current_time);
+    logger.info({ time: result.rows[0].current_time }, 'Database connection successful');
     return true;
 };
 

@@ -1,4 +1,3 @@
-import { validationResult } from 'express-validator';
 import {
     getAllServiceRequests,
     getServiceRequestById,
@@ -15,7 +14,7 @@ import { notifyServiceUpdate } from '../../models/notifications/notificationTrig
 /**
  * Show service requests
  */
-const showServiceRequests = async (req, res) => {
+const showServiceRequests = async (req, res, next) => {
     try {
         let requests = [];
 
@@ -27,70 +26,48 @@ const showServiceRequests = async (req, res) => {
 
         res.render('serviceRequests/list', {
             title: 'Service Requests',
-            requests,
-            user: req.session?.user || null
+            requests
         });
     } catch (error) {
-        console.error('Error loading service requests:', error);
-
-        req.flash('error', 'Unable to load service requests.');
-        res.redirect('/dashboard');
+        next(error);
     }
 };
 
 /**
  * Show create form
  */
-const showCreateRequestForm = async (req, res) => {
+const showCreateRequestForm = async (req, res, next) => {
     try {
         const serviceTypes = await getAllServiceTypes();
         const vehicles = await getAllVehicles();
 
-        // Retrieve session data if exists (to display validation errors)
-        const formData = req.session?.formData || {};
-        const errors = req.session?.errors || {};
-
-        // Clear session after retrieving
-        delete req.session.formData;
-        delete req.session.errors;
+        // Get form data from flash if available
+        let formData = {};
+        const formDataFlash = req.flash('formData');
+        if (formDataFlash.length) {
+            try {
+                formData = JSON.parse(formDataFlash[0]);
+            } catch {
+                formData = {};
+            }
+        }
 
         res.render('serviceRequests/create', {
             title: 'New Service Request',
             serviceTypes,
             vehicles,
-            formData,
-            errors,
-            user: req.session?.user || null
+            formData
         });
     } catch (error) {
-        console.error('Error loading create form:', error);
-
-        req.flash('error', 'Unable to load service request form.');
-        res.redirect('/service-requests');
+        next(error);
     }
 };
 
 /**
  * Create service request
  */
-const processCreateRequest = async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        // Format errors for the view
-        const formattedErrors = {};
-        errors.array().forEach((error) => {
-            formattedErrors[error.path] = error.msg;
-        });
-
-        // Save in session to keep data between redirects
-        req.session.formData = req.body;
-        req.session.errors = formattedErrors;
-
-        return res.redirect('/service-requests/create');
-    }
-
-    // Extract validated data from the request body
+const processCreateRequest = async (req, res, next) => {
+    // Validation is handled by handleValidationErrors middleware
     const { service_type_id, vehicle_id, description } = req.body;
 
     try {
@@ -104,17 +81,14 @@ const processCreateRequest = async (req, res) => {
         req.flash('success', 'Service request submitted successfully.');
         res.redirect('/service-requests');
     } catch (error) {
-        console.error('Error creating service request:', error);
-
-        req.flash('error', 'Unable to submit service request.');
-        res.redirect('/service-requests/create');
+        next(error);
     }
 };
 
 /**
  * Show edit form
  */
-const showEditRequestForm = async (req, res) => {
+const showEditRequestForm = async (req, res, next) => {
     try {
         const request = await getServiceRequestById(parseInt(req.params.id));
 
@@ -123,18 +97,20 @@ const showEditRequestForm = async (req, res) => {
             return res.redirect('/service-requests');
         }
 
-        // Check if the user has permission to edit this request
         const serviceTypes = await getAllServiceTypes();
 
-        // Retrieve session data if exists (to display validation errors)
-        const formData = req.session?.formData || {};
-        const errors = req.session?.errors || {};
+        // Get form data from flash if available
+        let formData = {};
+        const formDataFlash = req.flash('formData');
+        if (formDataFlash.length) {
+            try {
+                formData = JSON.parse(formDataFlash[0]);
+            } catch {
+                formData = {};
+            }
+        }
 
-        // Clear session after retrieving
-        delete req.session.formData;
-        delete req.session.errors;
-
-        // If no session formData, use request data as default values
+        // If no formData from flash, use request data as default values
         const defaultFormData =
             Object.keys(formData).length === 0
                 ? {
@@ -148,31 +124,24 @@ const showEditRequestForm = async (req, res) => {
             title: 'Edit Service Request',
             request,
             serviceTypes,
-            formData: defaultFormData,
-            errors,
-            user: req.session?.user || null
+            formData: defaultFormData
         });
     } catch (error) {
-        console.error('Error loading edit form:', error);
-
-        req.flash('error', 'Unable to load service request.');
-        res.redirect('/service-requests');
+        next(error);
     }
 };
 
-// Update service request
-const processUpdateRequest = async (req, res) => {
+/**
+ * Update service request
+ */
+const processUpdateRequest = async (req, res, next) => {
     const requestId = parseInt(req.params.id);
-    const { service_type_id, status, notes } = req.body;
+    // Removed service_type_id from destructuring as it's not used here
+    const { status, notes } = req.body;
     const userRole = req.session.user.roleName;
     const userId = req.session.user.id;
 
-    // Define valid statuses for validation
-    const validStatuses = ['Submitted', 'In Progress', 'Completed'];
-
-    // Role-based validation: Only employees and owners can update status
     try {
-        // Verify that the request exists
         const request = await getServiceRequestById(requestId);
         if (!request) {
             req.flash('error', 'Service request not found.');
@@ -185,42 +154,15 @@ const processUpdateRequest = async (req, res) => {
             return res.redirect('/service-requests');
         }
 
-        // Basic validation for common fields
-        const errors = {};
-        if (!service_type_id) {
-            errors.service_type_id = 'Service type is required';
-        }
-
-        // Validate status only if user is staff (since they can modify it)
+        // Staff can update everything
         if (userRole === 'employee' || userRole === 'owner') {
-            if (!status) {
-                errors.status = 'Status is required';
-            } else if (!validStatuses.includes(status)) {
-                errors.status =
-                    'Invalid status value. Must be: Submitted, In Progress, or Completed';
-            }
-        }
-
-        // If there are errors, save in session and redirect
-        if (Object.keys(errors).length > 0) {
-            req.session.formData = { service_type_id, status, notes };
-            req.session.errors = errors;
-
-            req.flash('error', 'Please fix the validation errors.');
-            return res.redirect(`/service-requests/${requestId}/edit`);
-        }
-
-        // Staff (employees and owners) can update everything
-        if (userRole === 'employee' || userRole === 'owner') {
-            // Update status
             const updatedRequest = await updateServiceRequestStatus(requestId, status);
 
-            // Update notes if provided
             if (notes !== undefined) {
                 await updateServiceRequestNotes(requestId, notes.trim() || '');
             }
 
-            // ⭐ Notificar al usuario sobre el cambio de estado
+            // Notify user about status change
             if (updatedRequest) {
                 const vehicleName = request.vehicle_name || 'your vehicle';
                 await notifyServiceUpdate(request.user_id, requestId, status, vehicleName);
@@ -229,7 +171,6 @@ const processUpdateRequest = async (req, res) => {
             req.flash('success', 'Service request updated successfully.');
         } else {
             // Customers can ONLY update notes
-            // Status remains unchanged
             if (notes !== undefined) {
                 await updateServiceRequestNotes(requestId, notes.trim() || '');
                 req.flash('success', 'Service request notes updated successfully.');
@@ -240,21 +181,17 @@ const processUpdateRequest = async (req, res) => {
 
         res.redirect('/service-requests');
     } catch (error) {
-        console.error('Error updating service request:', error);
-
-        req.flash('error', 'Unable to update service request.');
-        res.redirect(`/service-requests/${requestId}/edit`);
+        next(error);
     }
 };
 
 /**
- * Delete request
+ * Delete service request
  */
-const processDeleteRequest = async (req, res) => {
-    try {
-        const requestId = parseInt(req.params.id);
+const processDeleteRequest = async (req, res, next) => {
+    const requestId = parseInt(req.params.id);
 
-        // Verify that the request exists before deleting
+    try {
         const request = await getServiceRequestById(requestId);
         if (!request) {
             req.flash('error', 'Service request not found.');
@@ -262,15 +199,11 @@ const processDeleteRequest = async (req, res) => {
         }
 
         await deleteServiceRequest(requestId);
-
         req.flash('success', 'Service request deleted successfully.');
+        res.redirect('/service-requests');
     } catch (error) {
-        console.error('Error deleting service request:', error);
-
-        req.flash('error', 'Unable to delete service request.');
+        next(error);
     }
-
-    res.redirect('/service-requests');
 };
 
 export {

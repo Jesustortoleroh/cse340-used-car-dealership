@@ -35,10 +35,8 @@ const profilePage = async (req, res, next) => {
             profile,
             favoriteCount,
             reviewCount,
-            serviceRequestCount,
-            user: req.session.user,
-            isLoggedIn: true,
-            messages: req.flash()
+            serviceRequestCount
+            // Flash messages are handled globally by header.ejs
         });
 
     } catch (error) {

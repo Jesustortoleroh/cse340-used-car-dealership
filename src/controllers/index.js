@@ -1,9 +1,9 @@
-// Controllers for basic pages (Used Car Dealership)
+// Controllers for basic pages (NeoMotor)
 
 // Home page
 const homePage = (req, res) => {
     res.render('home', {
-        title: 'Used Car Dealership'
+        title: 'NeoMotor | Premium Used Vehicles'
     });
 };
 
@@ -16,7 +16,7 @@ const aboutPage = (req, res) => {
 
 // Test error (for testing 500 errors)
 const testErrorPage = (req, res, next) => {
-    const err = new Error('Test server error for Used Car Dealership');
+    const err = new Error('Test server error for NeoMotor');
     err.status = 500;
     next(err);
 };

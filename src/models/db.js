@@ -1,4 +1,6 @@
 import { Pool } from 'pg';
+import { env } from '../config/env.js';
+import { logger } from '../config/logger.js';
 
 /**
  * Connection pool for PostgreSQL database.
@@ -8,9 +10,9 @@ import { Pool } from 'pg';
  * to avoid the overhead of creating new connections for each request.
  */
 const pool = new Pool({
-    connectionString: process.env.DB_URL,
+    connectionString: env.DB_URL,
     ssl: {
-        // Neon requires SSL. Node.js automatically recognizes Let's Encrypt 
+        // Neon requires SSL. Node.js automatically recognizes Let's Encrypt
         // certificates, so you don't need to pass a .pem file.
         require: true
     }
@@ -18,15 +20,18 @@ const pool = new Pool({
 
 // Handle unexpected errors on idle clients
 pool.on('error', (err) => {
-    console.error('Unexpected error on idle PostgreSQL client', err);
+    logger.error({ err }, 'Unexpected error on idle PostgreSQL client');
     process.exit(-1);
 });
 
 // Variable to hold the database interface (wrapped or raw pool)
 let db;
 
-// Ensure NODE_ENV exists before using .includes to avoid errors
-if (process.env.NODE_ENV && process.env.NODE_ENV.includes('dev') && process.env.ENABLE_SQL_LOGGING === 'true') {
+// Use the centralized env config for consistent environment detection
+const isDevelopment = env.NODE_ENV === 'development';
+const isSqlLoggingEnabled = env.ENABLE_SQL_LOGGING === 'true';
+
+if (isDevelopment && isSqlLoggingEnabled) {
     /**
      * In development mode, wrap the pool to provide query logging.
      * This helps with debugging by showing all executed queries in the console.
@@ -37,17 +42,17 @@ if (process.env.NODE_ENV && process.env.NODE_ENV.includes('dev') && process.env.
                 const start = Date.now();
                 const res = await pool.query(text, params);
                 const duration = Date.now() - start;
-                console.log('Executed query:', {
-                    text: text.replace(/\s+/g, ' ').trim(),
+                logger.debug({
+                    query: text.replace(/\s+/g, ' ').trim(),
                     duration: `${duration}ms`,
                     rows: res.rowCount
-                });
+                }, 'Executed query');
                 return res;
             } catch (error) {
-                console.error('Error in query:', {
-                    text: text.replace(/\s+/g, ' ').trim(),
+                logger.error({
+                    query: text.replace(/\s+/g, ' ').trim(),
                     error: error.message
-                });
+                }, 'Query error');
                 throw error;
             }
         },
